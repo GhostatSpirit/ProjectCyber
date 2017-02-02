@@ -43,6 +43,7 @@ public class PlayerMovement: MonoBehaviour {
 	SpriteRenderer mySpriteRenderer;
 	InputDevice myInputDevice;
 
+    public bool drawEnabled = true;
 
 	AudioSource myAudioSource;
 
@@ -94,11 +95,12 @@ public class PlayerMovement: MonoBehaviour {
 //		float horizontal = Input.GetAxis (horizontalAxisName);
 //		float vertical = Input.GetAxis(verticalAxisName);
 		myInputDevice = GetComponent<DeviceReceiver>().GetDevice();
+
 		
 		if(myInputDevice == null){
 			return;
 		}
-			
+		
 		float horizontal = myInputDevice.LeftStickX;
 		float vertical = myInputDevice.LeftStickY;
 
@@ -161,9 +163,6 @@ public class PlayerMovement: MonoBehaviour {
 		if (moveEnabled) {
 			myRigidbody.velocity = moveVector * moveSpeed * Time.deltaTime * 10f;
 		}
-
-		
-
     }
 
 	void ResetSound(){

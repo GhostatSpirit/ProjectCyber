@@ -32,7 +32,6 @@ public class Enemy_Movement : MonoBehaviour
         else
         {
             Debug.Log("Hit");
-            rb.velocity = new Vector2(-movement.x, -movement.y);
         }
 
 
