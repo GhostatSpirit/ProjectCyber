@@ -23,6 +23,12 @@ public class Line
         pts[1] = p;
         pts2D[1] = new Vector2(p.x, p.y);
     }
+
+    public void setStart(Vector3 p)
+    {
+        pts[0] = p;
+        pts2D[0] = new Vector2(p.x, p.y);
+    }
 }
 
 public class DrawBarrier : MonoBehaviour 

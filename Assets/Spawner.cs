@@ -15,7 +15,7 @@ public class Spawner : MonoBehaviour {
     public float startInterval;
 	// Use this for initialization
 	void Start () {
-       StartCoroutine( Spawn());
+       StartCoroutine(Spawn());
     }
 	
 	// Update is called once per frame

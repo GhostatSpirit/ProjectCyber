@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Enemy_Movement : MonoBehaviour
 {
+    public bool moveEnabled = true;
     public Vector2 speed = new Vector2(36, 36);
     private Vector2 movement;
     public GameObject target;
@@ -27,7 +28,7 @@ public class Enemy_Movement : MonoBehaviour
         movement = new Vector2(speed.x * 28f, speed.y * 28f);
 
         rch = Physics2D.Linecast(start_pos, end_pos, 1);
-        if (rch.collider == null)
+        if (rch.collider == null && moveEnabled)
             rb.velocity = movement;
         else
         {
