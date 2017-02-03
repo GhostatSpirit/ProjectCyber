@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerEnergy : MonoBehaviour {
-	public float initialEnergy = 100f;
+	public float initialEnergy = 0f;
 	public float maxEnergy = 100f;
+	public Text displayText;
 
 	float playerEnergy;
 	// Use this for initialization
@@ -14,7 +16,9 @@ public class PlayerEnergy : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if(displayText != null){
+			displayText.text = Mathf.Round(playerEnergy).ToString();
+		}
 	}
 
 	// subtract the used energy and return the remaining energy
