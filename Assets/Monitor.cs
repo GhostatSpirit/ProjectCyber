@@ -18,6 +18,7 @@ public class Monitor : MonoBehaviour {
     public float forceMagnitude = 50f;
     public float explosionRadius = 50f;
     public float explosionFreezeTime = 2f;
+    public float dragCoeff = 5f;
 
     public bool enableVisulization = false;
 
@@ -99,14 +100,15 @@ public class Monitor : MonoBehaviour {
 
     IEnumerator disableMove(Rigidbody2D rb)
     {
-        for(float i = 0; i < explosionFreezeTime; i += Time.deltaTime)
-        {
+        rb.drag = dragCoeff;
+        for (float i = 0; i < explosionFreezeTime; i += Time.deltaTime)
+        {            
             if (rb.GetComponent<PlayerMovement>() != null)
                 yield return rb.GetComponent<PlayerMovement>().moveEnabled = false;
             else
                 yield return rb.GetComponent<Enemy_Movement>().moveEnabled = false;
         }
-
+        rb.drag = 0;
         if (rb.GetComponent<PlayerMovement>() != null)
             yield return rb.GetComponent<PlayerMovement>().moveEnabled = true;
         else
