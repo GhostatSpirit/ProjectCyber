@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour {
 
+    public GameObject target;
     public GameObject enemy;
     public Vector3 spawnCenter;
-    public int enemyCount;
+    public int spawnAreaSize = 20;
+    public int enemyCount = 20;
+
+    public float waveInterval;
+    public float singleInterval;
+    public float startInterval;
 	// Use this for initialization
 	void Start () {
-        Spawn();
+       StartCoroutine( Spawn());
     }
 	
 	// Update is called once per frame
@@ -17,13 +23,19 @@ public class Spawner : MonoBehaviour {
 		
 	}
 
-    void Spawn()
+    IEnumerator Spawn()
     {
-        for (int i = 0; i < enemyCount; i++)
+        yield return new WaitForSeconds(startInterval);
+        while (true)
         {
-            Vector3 spawnPosition = new Vector3(Random.Range(spawnCenter.x - 20, spawnCenter.x + 20), Random.Range(spawnCenter.y - 20, spawnCenter.y + 20), spawnCenter.z);
-            Instantiate(enemy, spawnPosition, Quaternion.identity, transform);
+            for (int i = 0; i < enemyCount; i++)
+            {
+                Vector3 spawnPosition = new Vector3(Random.Range(spawnCenter.x - spawnAreaSize, spawnCenter.x + spawnAreaSize), Random.Range(spawnCenter.y - spawnAreaSize, spawnCenter.y + spawnAreaSize), spawnCenter.z);
+                Instantiate(enemy, spawnPosition, Quaternion.identity, transform);
+                enemy.GetComponent<Enemy_Movement>().target = target;
+                yield return new WaitForSeconds(singleInterval);
+            }
+            yield return new WaitForSeconds(waveInterval);
         }
-
     }
 }

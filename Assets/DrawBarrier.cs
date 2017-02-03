@@ -29,6 +29,7 @@ public class DrawBarrier : MonoBehaviour
 {
     public GameObject player;
     public Material LineMat;
+    public float BarrierLifeTime = 2;
 
     InputDevice myInputDevice;
     float RTrigger = 0f;
@@ -64,6 +65,7 @@ public class DrawBarrier : MonoBehaviour
             if (!prevStatus)
             {
                 CrntBarrier = new GameObject("BarrierEntity");
+                CrntBarrier.layer = 8;
                 CrntBarrier.transform.parent = transform;
                 CrntBarrier.AddComponent<TriggerEvent>();
                 CrntLine = new Line(player.transform.position, player.transform.position);
@@ -79,7 +81,7 @@ public class DrawBarrier : MonoBehaviour
             {
                 CrntEC.points = CrntLine.pts2D;
                 if (Barriers.Count != 0)
-                    Destroy(Barriers.Dequeue(), 3);
+                    Destroy(Barriers.Dequeue(), BarrierLifeTime);
             }
         }
 
@@ -87,6 +89,7 @@ public class DrawBarrier : MonoBehaviour
         {
             CrntLine.setEnd(player.transform.position);
             CrntLR.SetPositions(CrntLine.pts);
+            player.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
         }
 
         prevStatus = status;
