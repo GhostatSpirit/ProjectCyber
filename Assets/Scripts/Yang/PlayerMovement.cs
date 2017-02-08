@@ -98,7 +98,6 @@ public class PlayerMovement: MonoBehaviour {
 		if(myInputDevice == null){
 			return;
 		}
-			
 		float horizontal = myInputDevice.LeftStickX;
 		float vertical = myInputDevice.LeftStickY;
 
@@ -152,6 +151,7 @@ public class PlayerMovement: MonoBehaviour {
 
 		}
 
+
 	}
 
     void FixedUpdate() {
@@ -160,6 +160,9 @@ public class PlayerMovement: MonoBehaviour {
 		}
 		if (moveEnabled) {
 			myRigidbody.velocity = moveVector * moveSpeed * Time.deltaTime * 10f;
+//			if(moveVector.magnitude != 0){
+//				transform.up = new Vector2 (-moveVector.x, -moveVector.y);
+//			}
 		}
 
 		
