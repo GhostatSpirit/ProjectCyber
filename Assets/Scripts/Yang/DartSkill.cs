@@ -89,7 +89,7 @@ public class DartSkill : MonoBehaviour {
 
 	void FixedUpdate() {
 		if(darting){
-			myRigidbody.velocity = dartDirection * dartSpeed * Time.deltaTime * 10f;
+			myRigidbody.velocity = dartDirection * dartSpeed * Time.fixedDeltaTime * 10f;
 		}
 			
 	}
