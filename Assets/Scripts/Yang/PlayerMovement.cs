@@ -55,6 +55,20 @@ public class PlayerMovement: MonoBehaviour {
 		moveEnabled = true;
 		turnEnabled = true;
 
+		// check if sprites with different facings is null
+		// if is null, replace it with the default sprite
+		Sprite defaultSprite = mySpriteRenderer.sprite;
+
+		downSprite = downSprite ?? defaultSprite;
+		downLeftSprite = downLeftSprite ?? defaultSprite;
+		downRightSprite = downRightSprite ?? defaultSprite;
+		leftSprite = leftSprite ?? defaultSprite;
+		rightSprite = rightSprite ?? defaultSprite;
+		upSprite = upSprite ?? defaultSprite;
+		upLeftSprite = upLeftSprite ?? defaultSprite;
+		upRightSprite = upRightSprite ?? defaultSprite;
+
+
 		switch(initialFacing){
 		case Direction.DOWN:
 			mySpriteRenderer.sprite = downSprite;
