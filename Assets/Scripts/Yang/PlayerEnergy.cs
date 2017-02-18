@@ -24,8 +24,8 @@ public class PlayerEnergy : MonoBehaviour {
 	// subtract the used energy and return the remaining energy
 	public float UseEnergy(float deltaEnergy){
 		playerEnergy -= deltaEnergy;
-		if(deltaEnergy > 0f){
-			deltaEnergy = 0f;
+		if(playerEnergy < 0f){
+			playerEnergy = 0f;
 		}
 		return playerEnergy;
 	}
