@@ -15,6 +15,9 @@ public class WallTransparency : MonoBehaviour {
 
 	public string[] playerTags = { "AI", "Hacker" };
 
+	public string playerBackLayerName = "Midground";
+	public string playerFrontLayerName = "Foreground";
+
 	SpriteRenderer wallSprite;
 	float defaultOpacity = 1f;
 
@@ -39,7 +42,7 @@ public class WallTransparency : MonoBehaviour {
 				newColor.a = opacity;
 				wallSprite.color = newColor;
 //				// change the sorting layer from midground to foreground
-//				wallSprite.sortingOrder = SortingLayer.GetLayerValueFromName ("Foreground");
+				wallSprite.sortingLayerName = playerFrontLayerName;
 			}
 		}
 	}
@@ -55,7 +58,7 @@ public class WallTransparency : MonoBehaviour {
 				newColor.a = defaultOpacity;
 				wallSprite.color = newColor;
 //				// change the sorting layer from midground to foreground
-//				wallSprite.sortingOrder = SortingLayer.GetLayerValueFromName ("Foreground");
+				wallSprite.sortingLayerName = playerBackLayerName;
 			}
 
 		}
