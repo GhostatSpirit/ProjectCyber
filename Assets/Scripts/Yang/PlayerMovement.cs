@@ -108,7 +108,7 @@ public class PlayerMovement: MonoBehaviour {
 //		float horizontal = Input.GetAxis (horizontalAxisName);
 //		float vertical = Input.GetAxis(verticalAxisName);
 		myInputDevice = GetComponent<DeviceReceiver>().GetDevice();
-		
+
 		if(myInputDevice == null){
 			return;
 		}

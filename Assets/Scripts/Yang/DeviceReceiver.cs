@@ -12,6 +12,8 @@ public class DeviceReceiver : MonoBehaviour {
 	public Transform deviceAssigner;
 	InputDevice playerDevice;
 
+	[HideInInspector] public float someFloat;
+
 	// Use this for initialization
 	void Start () {
 		
