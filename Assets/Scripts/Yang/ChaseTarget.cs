@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent (typeof(Rigidbody2D))]
-public class ChasePlayer : MonoBehaviour {
+public class ChaseTarget : MonoBehaviour {
 
 	public Transform target;
 	public float rotationSpeed = 90f;
