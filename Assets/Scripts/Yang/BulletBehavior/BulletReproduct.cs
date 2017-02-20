@@ -44,7 +44,9 @@ public class BulletReproduct : MonoBehaviour {
 			Quaternion newBulletRot = transform.rotation;
 			Vector3 shooterEuler = transform.rotation.eulerAngles;
 			newBulletRot.eulerAngles = new Vector3 (shooterEuler.x, shooterEuler.y, angleZ);
-			GameObject bulletObj = Instantiate (bulletPrefab, transform.position, newBulletRot);
+
+			GameObject bulletObj = Instantiate (bulletPrefab, transform.position, newBulletRot) as GameObject;
+
 			bulletObj.SetActive (true);
 			bulletObj.GetComponent<ChaseTarget> ().target = null;
 
