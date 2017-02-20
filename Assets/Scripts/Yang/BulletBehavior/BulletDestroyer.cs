@@ -24,9 +24,8 @@ public class BulletDestroyer : MonoBehaviour {
 	}
 
     void OnCollisionEnter2D(Collision2D coll) {
-		deflectCount++;
-		if(deflectCount >= maxDeflectCount){
-			DestroyBullet ();
+		if(coll.transform.tag != "Enemy"){
+			Destroy (this.gameObject);
 		}
     }
 

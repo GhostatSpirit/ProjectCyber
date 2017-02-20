@@ -43,7 +43,9 @@ public class PlayerShoot : MonoBehaviour {
 		}
 
 		if(myInputDevice.RightTrigger.WasPressed){
-			ShootWave ();
+			if (bulletPrefab != null && isCooledDown) {
+				ShootWave ();
+			}
 		}
 
 //		float triggerAxis = Input.GetAxis (shootTriggerName);
@@ -65,14 +67,6 @@ public class PlayerShoot : MonoBehaviour {
 	}
 
 	void ShootWave(){
-		if(bulletPrefab == null){
-			return;
-		}
-		if(!isCooledDown){
-			return;
-		}
-		// check if there are enough bullets
-
 		// instantiate the bullet prefabs
 
 		float midAngleZ = transform.rotation.eulerAngles.z;
@@ -88,7 +82,7 @@ public class PlayerShoot : MonoBehaviour {
 			// set init velocity of the bullet
 			bulletObj.GetComponent<Rigidbody2D> ().velocity = bulletObj.transform.up.normalized * initialVelocity;
 			// tell the bulletObj the init velocity
-			bulletObj.GetComponent<BulletDeflect> ().initialVelocity = initialVelocity;
+			//bulletObj.GetComponent<BulletDeflect> ().initialVelocity = initialVelocity;
 		}
 
 		// play shoot sound
