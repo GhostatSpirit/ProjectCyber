@@ -57,7 +57,7 @@ public class FindTarget : MonoBehaviour {
 		}
 
 		if(lockedTargetTransform.tag != targetTag){
-			Debug.Log ("target becomes friend");
+			//Debug.Log ("target becomes friend");
 			lockedTargetTransform = null;
 			if(chaser != null){
 				//Debug.Log("set null!");

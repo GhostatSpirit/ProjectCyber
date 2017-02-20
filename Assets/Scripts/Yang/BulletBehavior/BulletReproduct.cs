@@ -46,6 +46,7 @@ public class BulletReproduct : MonoBehaviour {
 			newBulletRot.eulerAngles = new Vector3 (shooterEuler.x, shooterEuler.y, angleZ);
 			GameObject bulletObj = Instantiate (bulletPrefab, transform.position, newBulletRot);
 			bulletObj.SetActive (true);
+			bulletObj.GetComponent<ChaseTarget> ().target = null;
 
 			// set init velocity of the bullet
 			// bulletObj.GetComponent<Rigidbody2D> ().velocity = bulletObj.transform.up.normalized * initialVelocity;
