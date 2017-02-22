@@ -25,10 +25,11 @@ public class ChaseTarget : MonoBehaviour {
 			return;		// cannot find the target transform, wait for next frame
 		}
 
-		Vector2 point2Self =  (Vector2)transform.position - (Vector2)target.transform.position;
+		Vector2 point2Self = (Vector2)transform.position - (Vector2)target.transform.position;
 		point2Self.Normalize ();
 
-		rotSpeedFactor = Vector3.Cross (point2Self, transform.up).z;
+		// rotSpeedFactor = Vector3.Cross (point2Self, transform.up).z;
+		rotSpeedFactor = -  Vector3.Cross (transform.up, point2Self).z;
 		//Debug.Log (rotSpeedFactor);
 
 

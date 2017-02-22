@@ -8,6 +8,9 @@ public class PlayerAim : MonoBehaviour {
 	//public string horizontalAxisName = "Horizontal";
 	//public string verticalAxisName = "Vertical";
 
+	public enum Stick {LEFTSTICK, RIGHTSTICK};
+
+	public Stick aimStick = Stick.RIGHTSTICK;
 	public int playerIndex = 0;
 	public Transform deviceAssigner;
 	InputDevice myInputDevice;
@@ -29,9 +32,17 @@ public class PlayerAim : MonoBehaviour {
 		if(myInputDevice == null){
 			return;
 		}
+
+		float horizontal = 0f, vertical = 0f;
 		// get the axis values, construct a vector and normalize it
-		float horizontal = myInputDevice.RightStickX;
-		float vertical = myInputDevice.RightStickY;
+		if(aimStick == Stick.LEFTSTICK){
+			horizontal = myInputDevice.LeftStickX;
+			vertical = myInputDevice.LeftStickY;
+		} else if( aimStick == Stick.RIGHTSTICK){
+			horizontal = myInputDevice.RightStickX;
+			vertical = myInputDevice.RightStickY;
+		}
+
 
 		moveVector = new Vector3(horizontal, vertical, 0f);
 

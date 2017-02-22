@@ -24,6 +24,8 @@ public class BulletReproduct : MonoBehaviour {
 				// set the enemy to friend
 				coll.gameObject.layer = this.gameObject.layer;
 				coll.gameObject.tag = this.tag;
+				// stop the enemy from chasing the player
+				coll.transform.GetComponent<ChaseTarget> ().enabled = false;
 				// reproduce the bullets
 				reproduced = true;
 				Invoke ("ReproduceBullets", 0.1f);
