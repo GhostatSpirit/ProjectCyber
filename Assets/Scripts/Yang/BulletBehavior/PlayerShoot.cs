@@ -18,8 +18,9 @@ public class PlayerShoot : MonoBehaviour {
 	//private bool m_isAxisInUse;
 	private bool isCooledDown;
 
+	PlayerEnergy energySys;
+	public float energyConsume = 10f;
 	//public bool isPS4Controller;
-
 	public AudioClip shootSound;
 
 	public int bulletCount = 3;
@@ -31,6 +32,7 @@ public class PlayerShoot : MonoBehaviour {
 	void Start () {
 		isCooledDown = true;
 		myAudioSource = transform.parent.GetComponent<AudioSource> ();
+		energySys = transform.parent.GetComponent<PlayerEnergy> ();
 		//myInputDevice = InputManager.Devices [deviceIndex];
 	}
 	
@@ -44,7 +46,10 @@ public class PlayerShoot : MonoBehaviour {
 
 		if(myInputDevice.RightTrigger.WasPressed){
 			if (bulletPrefab != null && isCooledDown) {
-				ShootWave ();
+				if (energySys.UseEnergy(energyConsume)) {
+					// if we sucessfully used the energy, shoot wave
+					ShootWave ();
+				}
 			}
 		}
 

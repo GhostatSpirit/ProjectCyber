@@ -21,8 +21,20 @@ public class PlayerEnergy : MonoBehaviour {
 		}
 	}
 
-	// subtract the used energy and return the remaining energy
-	public float UseEnergy(float deltaEnergy){
+	// subtract the used energy if we have remaining energy
+	// if failed, return false and keep the energy unchanged
+	public bool UseEnergy(float deltaEnergy){
+		if(playerEnergy >= deltaEnergy){
+			playerEnergy -= deltaEnergy;
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+	// subtract the additional energy and return the remaining energy
+	public float SubstractEnergy(float deltaEnergy){
 		playerEnergy -= deltaEnergy;
 		if(playerEnergy < 0f){
 			playerEnergy = 0f;
@@ -39,7 +51,7 @@ public class PlayerEnergy : MonoBehaviour {
 		return playerEnergy;
 	}
 
-	public float GetEnergy(float deltaEnergy){
+	public float GetEnergy(){
 		return playerEnergy;
 	}
 

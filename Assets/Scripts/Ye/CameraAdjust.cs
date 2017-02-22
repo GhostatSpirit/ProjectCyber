@@ -2,33 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent (typeof(Camera))]
 public class CameraAdjust : MonoBehaviour {
-    public Camera Main  ;
+    Camera Main;
     public float Max;
     public float Min;
-    public float Initial;
-    public float ratio;
-    public float AHDistance;
 
-    public GameObject AI()
-    {
-        GameObject Ai;
-        Ai = GameObject.FindGameObjectWithTag("AI");
-        return Ai;
-    }
+    float Initial;
+    float ratio = 0f;
+    float AHDistance;
 
-    public GameObject Hacker()
-    {
-        GameObject Hack;
-        Hack = GameObject.FindGameObjectWithTag("Hacker");
-        return Hack;
-    }
+	public GameObject AI;
+	public GameObject Hacker;
     // Use this for initialization
     void Start () {
         Main = gameObject.GetComponent<Camera>();
         Main.orthographicSize = 6;
-        Vector2 AIPos = AI().transform.position;
-        Vector2 HackerPos = Hacker().transform.position;
+        Vector2 AIPos = AI.transform.position;
+        Vector2 HackerPos = Hacker.transform.position;
         Vector3 Temp = new Vector3((AIPos.x + HackerPos.x) / 2, (AIPos.y + HackerPos.y) / 2 , -3);
         gameObject.transform.position = Temp;
         Initial = Vector2.Distance(AIPos, HackerPos);
@@ -36,8 +27,8 @@ public class CameraAdjust : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Vector2 AIPos = AI().transform.position;
-        Vector2 HackerPos = Hacker().transform.position;
+        Vector2 AIPos = AI.transform.position;
+        Vector2 HackerPos = Hacker.transform.position;
         Vector3 Temp = new Vector3((AIPos.x + HackerPos.x) / 2, (AIPos.y + HackerPos.y) / 2 , -3);
         gameObject.transform.position = Temp;
         /*/

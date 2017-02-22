@@ -27,6 +27,10 @@ public class DartSkill : MonoBehaviour {
 	float defaultColliderWidth;
 	float newColliderWidth;
 
+	// how much energy will one dart consume?
+	float energyConsume = 10f;
+	PlayerEnergy energySys;
+
 	bool coolDown = true;
 
 	// variable for counting how many enemies the player killed in one dart
@@ -38,6 +42,7 @@ public class DartSkill : MonoBehaviour {
 		myCapsuleColl = GetComponent<CapsuleCollider2D> ();
 		defaultColliderWidth = myCapsuleColl.size.x;
 		newColliderWidth = defaultColliderWidth * colliderAmpFactor;
+		energySys = GetComponent<PlayerEnergy> ();
 	}
 	
 	// Update is called once per frame
@@ -47,15 +52,19 @@ public class DartSkill : MonoBehaviour {
 			return;
 		}
 
-		if(myInputDevice.Action1.IsPressed && !darting && coolDown){
+		if(myInputDevice.Action1.IsPressed && !darting && 
+			coolDown && energySys.UseEnergy(energyConsume)){
+
 			// starting the darting skill
 			darting = true;
+
 			if(GetComponent<PlayerMovement>() != null){
 				// stop the player from moving around
 				GetComponent<PlayerMovement> ().moveEnabled = false;
 			} else{
 				Debug.Log ("DartSkill: Failed to Find PlayerMovement Script");
 			}
+
 			// get the dart Direction
 			dartDirection = myRigidbody.velocity.normalized;
 			// reset the timer
