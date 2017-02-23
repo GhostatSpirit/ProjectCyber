@@ -15,9 +15,9 @@ public class LineCut : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "EnemyLine" && other.gameObject.GetComponent<LineRenderer>().startColor != Color.clear && other.gameObject.GetComponent<LineRenderer>().endColor != Color.clear)
+        
+        if (other.gameObject.tag == "EnemyLine" && other.gameObject.GetComponentInParent<ControlStatus>().controller == ControlStatus.Controller.Boss ) // && other.gameObject.GetComponent<LineRenderer>().startColor != Color.clear && other.gameObject.GetComponent<LineRenderer>().endColor != Color.clear)
         {
-            Debug.Log("Hit");
             /*/
             AIrb = GetComponent<Rigidbody2D>();
             AIPos = AIrb.position;
@@ -39,7 +39,7 @@ public class LineCut : MonoBehaviour {
             /*/
             GameObject TargetLine = other.gameObject;
             ControlStatus TargetCS = TargetLine.GetComponentInParent<ControlStatus>();
-            TargetCS.BossControl = 0;
+            TargetCS.controller = ControlStatus.Controller.None;
         }
     }
 }

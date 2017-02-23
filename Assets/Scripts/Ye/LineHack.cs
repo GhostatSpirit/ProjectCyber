@@ -7,9 +7,14 @@ public class LineHack : MonoBehaviour
 {
 
     InputDevice myInputDevice;
+
+    public Material HackLineMat;
+    public float width;
     static GameObject myLine;
     GameObject Initial;
     public float speed;
+    float Status;
+    
 
     GameObject FindClosestEnemy()
     {
@@ -39,29 +44,38 @@ public class LineHack : MonoBehaviour
         myLine.transform.position = gameObject.transform.position;
         myLine.AddComponent<LineRenderer>();
         LineRenderer lr = myLine.GetComponent<LineRenderer>();
-        lr.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
+        //lr.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
+        lr.material = HackLineMat;
         //Color color = Color.clear;
-        lr.startWidth = 0.03f;
-        lr.endWidth = 0.03f;
+        lr.startWidth = width;
+        lr.endWidth = width;
         //lr.startColor = color;
         //lr.endColor = color;
         //lr.SetPosition(0, Initial.GetComponent<ControlStatus>().Boss().transform.position);
         //lr.SetPosition(1, FindClosestEnemy().transform.position);
         myLine.transform.SetParent(gameObject.transform);
+        Status = 0;
     }
 
     void Draw(GameObject start , GameObject end )
     {
         LineRenderer lr= myLine.GetComponent<LineRenderer>();
-        Color color = Color.yellow; 
+        lr.material = HackLineMat;
+        Color color = Color.white; 
         lr.startColor = color;
         lr.endColor = color;
         lr.SetPosition(0, start.transform.position);
         lr.SetPosition(1, end.transform.position);
+        lr.textureMode = LineTextureMode.Tile;
+
+        float length = Vector2.Distance(start.transform.position, end.transform.position);
+        lr.material.SetTextureScale("_MainTex", new Vector2(length * 2, 1));
     } 
+
     void Clean()
     {
         LineRenderer lr = myLine.GetComponent<LineRenderer>();
+        lr.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
         Color color = Color.clear;
         lr.startColor = color;
         lr.endColor = color;
@@ -80,20 +94,20 @@ public class LineHack : MonoBehaviour
 
         float horizontal = myInputDevice.LeftStickX;
         float vertical = myInputDevice.LeftStickY;
-
+        /*/
         if (myInputDevice.RightTrigger.IsPressed == true)
         {
             if (FindClosestEnemy()==true)
             {
-                if (myLine.GetComponent<LineRenderer>().startColor != Color.yellow)
+                if (Status == 0 )
                 {
-
                     GameObject Enemy = FindClosestEnemy();
                     ControlStatus CS = Enemy.GetComponent<ControlStatus>();
-                    if (CS.BossControl == 0)
+                    if (CS.controller == ControlStatus.Controller.None)
                     {
                         Initial = Enemy;
-                        CS.BossControl = -1;
+                        CS.controller = ControlStatus.Controller.Hacker;
+                        
                     }
                     else
                     {
@@ -104,19 +118,21 @@ public class LineHack : MonoBehaviour
         }
         if (Initial != null)
         {
-            if (Initial.GetComponent<ControlStatus>().BossControl == -1)
+            if (Initial.GetComponent<ControlStatus>().controller == ControlStatus.Controller.Hacker)
             {
                 Draw(gameObject, Initial);
+                Status = 1;
             }
 
-            if (Initial.transform.position == Initial.GetComponent<ControlStatus>().Boss().transform.position)
+            if (Initial.transform.position == Initial.GetComponent<ControlStatus>().Boss.transform.position)
             {
                 Clean();
-                Initial.GetComponent<ControlStatus>().BossControl = -2;
+                Initial.GetComponent<ControlStatus>().controller = ControlStatus.Controller.Destroyer;
                 Initial = null;
+                Status = 0;
             }
         }
-
+        /*/
         
 
         /*/
