@@ -90,10 +90,10 @@ public class LineHack : MonoBehaviour
 
                     GameObject Enemy = FindClosestEnemy();
                     ControlStatus CS = Enemy.GetComponent<ControlStatus>();
-                    if (CS.BossControl == 0)
+					if (CS.controller == ControlStatus.Controller.None)
                     {
                         Initial = Enemy;
-                        CS.BossControl = -1;
+						CS.controller = ControlStatus.Controller.Hacker;
                     }
                     else
                     {
