@@ -3,61 +3,67 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ControlStatus : MonoBehaviour {
+    public enum Controller { Boss, None, Hacker, Destroyer };
+    public Controller controller = Controller.Boss;//old version use bosscontrol 
 
-	public enum Controller {Boss, None, Hacker, Destroyer};
-
-	public Controller controller = Controller.Boss;
-
-    public int BossControl;
-    GameObject BossLine;
+    GameObject ControlLine;
     
-    //public float speed;
-    
+    public Material EnemyLineMaterial;
+    public Material PlayerLineMateial;
 
+    public float speed;
+    
+    public GameObject Boss;
+    public GameObject Hacker;
+
+    public float width;
+
+    /*/
     public GameObject Boss()
     {
         GameObject Bo;
         Bo = GameObject.FindGameObjectWithTag("Boss");
         return Bo;
     }
+    /*/
 
     void Start()
     {
+        ControlLine = new GameObject();
+        ControlLine.transform.position = gameObject.transform.position;
 
-        BossLine = new GameObject();
-        BossLine.transform.position = gameObject.transform.position;
-        BossLine.AddComponent<LineRenderer>();
-        
-		LineRenderer lr = BossLine.GetComponent<LineRenderer>();
-        lr.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
-        Color color = Color.blue;
-        lr.startWidth = 0.05f;
-        lr.endWidth = 0.05f;
+        ControlLine.AddComponent<LineRenderer>();
+        LineRenderer lr = ControlLine.GetComponent<LineRenderer>();
+        lr.material = EnemyLineMaterial;
+        Color color = Color.white;
+        lr.startWidth = width;
+        lr.endWidth = width;
         lr.startColor = color;
         lr.endColor = color;
         lr.SetPosition(0, gameObject.transform.position);
-        lr.SetPosition(1, Boss().transform.position);
-        
-		BossLine.AddComponent<EdgeCollider2D>();
-        EdgeCollider2D BossLineEC = BossLine.GetComponent<EdgeCollider2D>();
+        lr.SetPosition(1, Boss.transform.position);
+
+        ControlLine.AddComponent<EdgeCollider2D>();
+        EdgeCollider2D BossLineEC = ControlLine.GetComponent<EdgeCollider2D>();
         BossLineEC.isTrigger = true;
-        
-		Vector2[] temparray = new Vector2[2];
+        Vector2[] temparray = new Vector2[2];
         temparray[0] = new Vector2(0, 0);
-        temparray[1] = new Vector2(Boss().transform.position.x- gameObject.transform.position.x, Boss().transform.position.y - gameObject.transform.position.y);
+        temparray[1] = new Vector2(Boss.transform.position.x- gameObject.transform.position.x, Boss.transform.position.y - gameObject.transform.position.y);
         BossLineEC.points = temparray;
-        
-		//Debug.Log(BossLineEC.points[0]);
-        //Debug.Log(BossLineEC.points[1]);
-        BossLine.tag = "EnemyLine";
-        BossLine.transform.SetParent(gameObject.transform);
-        Debug.Log(gameObject.name + BossLine.transform.position);
+
+        // Debug.Log(BossLineEC.points[0]);
+        // Debug.Log(BossLineEC.points[1]);
+
+        ControlLine.tag = "EnemyLine";
+        ControlLine.transform.SetParent(gameObject.transform);
+        // Debug.Log(gameObject.name + ControlLine.transform.position);
     }
 
-    void Draw(GameObject start, GameObject end)
+    void Draw(GameObject start, GameObject end, Material Mat)
     {
-        LineRenderer lr = BossLine.GetComponent<LineRenderer>();
-        Color color = Color.blue;
+        LineRenderer lr = ControlLine.GetComponent<LineRenderer>();
+        lr.material = Mat;
+        Color color = Color.white;
         lr.startColor = color;
         lr.endColor = color;
         lr.SetPosition(0, start.transform.position);
@@ -66,7 +72,8 @@ public class ControlStatus : MonoBehaviour {
 
     void Clean()
     {
-        LineRenderer lr = BossLine.GetComponent<LineRenderer>();
+        LineRenderer lr = ControlLine.GetComponent<LineRenderer>();
+        lr.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply")); ;
         Color color = Color.clear;
         lr.startColor = color;
         lr.endColor = color;
@@ -74,23 +81,48 @@ public class ControlStatus : MonoBehaviour {
     
     void Update()
     {
-		if (controller == Controller.Boss)  // Controlled by Boss
+        /*/
+        if (BossControl == 1)  // Controlled by Boss
         {
             Draw(gameObject,Boss());
         }
-		if (controller == Controller.None)  // Uncontrolled
+        if (BossControl == 0)  // Uncontrolled
         { 
             Clean();
         }
-		if (controller == Controller.Hacker) // Controlled by Hacker
+        if (BossControl == -1) // Controlled by Hacker
         {
             Clean();
-            //gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, Boss().transform.position, speed * Time.deltaTime);
+            gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, Boss().transform.position, speed * Time.deltaTime);
         }
-		if (controller == Controller.Destroyer)
+        if (BossControl == -2)
         {
             Destroy(gameObject);
         }
+        /*/
+
+        if(controller == Controller.Boss)
+        {
+            Draw(gameObject, Boss, EnemyLineMaterial);
+            ControlLine.tag = "EnemyLine";
+        }
+        if (controller == Controller.None)
+        {
+            Clean();// DO sth; Cleanlean the ControlLine
+        }
+        if (controller == Controller.Hacker)
+        {
+            Draw(gameObject, Hacker, PlayerLineMateial);
+            ControlLine.tag = "PlayerLine";
+        }
+        if (controller == Controller.Destroyer)
+        {
+            // Destroy Line
+        }
+
+
+
+
     }
     
 }

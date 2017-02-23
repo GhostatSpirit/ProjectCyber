@@ -2,22 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent (typeof(Camera))]
 public class CameraAdjust : MonoBehaviour {
-    Camera Main;
+    Camera Main  ;
     public float Max;
     public float Min;
-
+    public GameObject AI;
+    public GameObject Hacker;
     float Initial;
-    float ratio = 0f;
+    float ratio;
     float AHDistance;
+    /*/
+    public GameObject AI()
+    {
+        GameObject Ai;
+        Ai = GameObject.FindGameObjectWithTag("AI");
+        return Ai;
+    }
 
-	public GameObject AI;
-	public GameObject Hacker;
+    public GameObject Hacker()
+    {
+        GameObject Hack;
+        Hack = GameObject.FindGameObjectWithTag("Hacker");
+        return Hack;
+    }
+    /*/
     // Use this for initialization
     void Start () {
         Main = gameObject.GetComponent<Camera>();
-        Main.orthographicSize = 6;
+        Main.orthographicSize = Min;
         Vector2 AIPos = AI.transform.position;
         Vector2 HackerPos = Hacker.transform.position;
         Vector3 Temp = new Vector3((AIPos.x + HackerPos.x) / 2, (AIPos.y + HackerPos.y) / 2 , -3);
