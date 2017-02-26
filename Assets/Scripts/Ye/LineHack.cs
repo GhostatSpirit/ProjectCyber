@@ -11,7 +11,7 @@ public class LineHack : MonoBehaviour
     public Material HackLineMat;
     public float width;
     static GameObject myLine;
-    GameObject Initial;
+    //GameObject Initial;
     public float speed;
     float Status;
     
@@ -39,7 +39,7 @@ public class LineHack : MonoBehaviour
     void Start()
     {
         speed = 15f;
-        Initial = FindClosestEnemy();
+        //Initial = FindClosestEnemy();
         myLine = new GameObject();
         myLine.transform.position = gameObject.transform.position;
         myLine.AddComponent<LineRenderer>();

@@ -8,7 +8,7 @@ public class CameraAdjust : MonoBehaviour {
     public float Min;
     public GameObject AI;
     public GameObject Hacker;
-    float Initial;
+    //float Initial;
     float ratio;
     float AHDistance;
     /*/
@@ -34,7 +34,7 @@ public class CameraAdjust : MonoBehaviour {
         Vector2 HackerPos = Hacker.transform.position;
         Vector3 Temp = new Vector3((AIPos.x + HackerPos.x) / 2, (AIPos.y + HackerPos.y) / 2 , -3);
         gameObject.transform.position = Temp;
-        Initial = Vector2.Distance(AIPos, HackerPos);
+        //Initial = Vector2.Distance(AIPos, HackerPos);
     }
 	
 	// Update is called once per frame
@@ -100,7 +100,7 @@ public class CameraAdjust : MonoBehaviour {
             size = Max;
         Main.orthographicSize = size;
 
-        Initial = AHDistance;
+        //Initial = AHDistance;
 
     }
 }
