@@ -30,6 +30,9 @@ public class ChaseTarget : MonoBehaviour {
 
 		// rotSpeedFactor = Vector3.Cross (point2Self, transform.up).z;
 		rotSpeedFactor = -  Vector3.Cross (transform.up, point2Self).z;
+		if(rotSpeedFactor < 0f){
+			rotSpeedFactor = -rotSpeedFactor;
+		}
 		//Debug.Log (rotSpeedFactor);
 
 
@@ -43,7 +46,17 @@ public class ChaseTarget : MonoBehaviour {
 
 	void FixedUpdate(){
 		myRigidbody.velocity = transform.up * moveSpeed * Time.fixedDeltaTime;
-		//Debug.Log (transform.up);
-		myRigidbody.angularVelocity = rotationSpeed * rotSpeedFactor;
+
+		// update rotation of this object
+		Vector2 point2Target = (Vector2)target.transform.position - (Vector2)transform.position;
+		point2Target.Normalize ();
+		float zAngle = Mathf.Atan2 (point2Target.y, point2Target.x) * Mathf.Rad2Deg - 90f;
+		Quaternion desiredRot = Quaternion.Euler (0f, 0f, zAngle);
+
+		float finalRotSpeed = rotationSpeed * rotSpeedFactor * Time.fixedDeltaTime;
+		transform.rotation =
+			Quaternion.RotateTowards (transform.rotation, desiredRot, finalRotSpeed);
+
+		//myRigidbody.angularVelocity = rotationSpeed * rotSpeedFactor;
 	}
 }

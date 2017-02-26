@@ -17,6 +17,11 @@ public class KillPlayer : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D coll){
 		if(coll.gameObject.GetComponent<PlayerMovement>() != null){
 			// target is a player
+			if(coll.gameObject.GetComponent<DartSkill>() != null){
+				if(coll.gameObject.GetComponent<DartSkill>().darting == true){
+					return;
+				}
+			}
 			coll.gameObject.GetComponent<PlayerMovement> ().enabled = false;
 			coll.gameObject.GetComponent<SpriteRenderer> ().color = Color.red;
 		}

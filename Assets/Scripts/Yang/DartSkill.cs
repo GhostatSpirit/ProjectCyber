@@ -3,6 +3,7 @@ using System.Collections;
 using InControl;
 
 [RequireComponent (typeof(DeviceReceiver))]
+[RequireComponent (typeof(LineCut))]
 public class DartSkill : MonoBehaviour {
 	[HideInInspector]public bool darting = false;
 	public float dartSpeed = 20f;
@@ -36,6 +37,9 @@ public class DartSkill : MonoBehaviour {
 	// variable for counting how many enemies the player killed in one dart
 	int killCount = 0;
 
+	// LineCut class for enabling AI to cut lines
+	LineCut linecut;
+
 	// Use this for initialization
 	void Start () {
 		myRigidbody = GetComponent<Rigidbody2D>();
@@ -43,6 +47,7 @@ public class DartSkill : MonoBehaviour {
 		defaultColliderWidth = myCapsuleColl.size.x;
 		newColliderWidth = defaultColliderWidth * colliderAmpFactor;
 		energySys = GetComponent<PlayerEnergy> ();
+		linecut = GetComponent<LineCut> ();
 	}
 	
 	// Update is called once per frame
@@ -57,6 +62,8 @@ public class DartSkill : MonoBehaviour {
 
 			// starting the darting skill
 			darting = true;
+			// AI can cut lines now
+			linecut.couldCut = true;
 
 			if(GetComponent<PlayerMovement>() != null){
 				// stop the player from moving around
@@ -79,6 +86,10 @@ public class DartSkill : MonoBehaviour {
 		if(timer > dartDuration && darting){
 			// stop darting skill
 			darting = false;
+
+			// AI can no longer cut lines now
+			linecut.couldCut = false;
+
 			// Invoke StartMovement after delay
 			Invoke ("StartMovement", startMovementDelay);
 			// stop the player

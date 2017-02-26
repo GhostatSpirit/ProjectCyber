@@ -120,7 +120,14 @@ public class ControlStatus : MonoBehaviour {
             // Destroy Line
         }
 
-
+		// Update edge collider
+		EdgeCollider2D BossLineEC = ControlLine.GetComponent<EdgeCollider2D>();
+		BossLineEC.isTrigger = true;
+		Vector2[] temparray = new Vector2[2];
+		Vector3 Boss2Self = Boss.transform.position - transform.position;
+		temparray[0] = new Vector2(0, 0);
+		temparray[1] = ControlLine.transform.InverseTransformVector (Boss2Self);
+		BossLineEC.points = temparray;
 
 
     }

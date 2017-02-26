@@ -12,11 +12,17 @@ public class LineCut : MonoBehaviour {
     Vector2 LineEnd;
     Vector2 Hit;
 
+	public bool couldCut = false;
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        
-        if (other.gameObject.tag == "EnemyLine" && other.gameObject.GetComponentInParent<ControlStatus>().controller == ControlStatus.Controller.Boss ) // && other.gameObject.GetComponent<LineRenderer>().startColor != Color.clear && other.gameObject.GetComponent<LineRenderer>().endColor != Color.clear)
+		ControlStatus cs = other.gameObject.GetComponentInParent<ControlStatus> ();
+		if(cs == null){
+			return;
+		}
+		bool controlledByBoss = 
+			cs.controller == ControlStatus.Controller.Boss;
+		if (other.gameObject.tag == "EnemyLine" && controlledByBoss && couldCut ) // && other.gameObject.GetComponent<LineRenderer>().startColor != Color.clear && other.gameObject.GetComponent<LineRenderer>().endColor != Color.clear)
         {
             /*/
             AIrb = GetComponent<Rigidbody2D>();
