@@ -50,7 +50,7 @@ public class ControlStatus : MonoBehaviour {
         temparray[0] = new Vector2(0, 0);
         temparray[1] = new Vector2(Boss.transform.position.x- gameObject.transform.position.x, Boss.transform.position.y - gameObject.transform.position.y);
         BossLineEC.points = temparray;
-
+         
         // Debug.Log(BossLineEC.points[0]);
         // Debug.Log(BossLineEC.points[1]);
 
@@ -109,6 +109,7 @@ public class ControlStatus : MonoBehaviour {
         if (controller == Controller.None)
         {
             Clean();// DO sth; Cleanlean the ControlLine
+
         }
         if (controller == Controller.Hacker)
         {
