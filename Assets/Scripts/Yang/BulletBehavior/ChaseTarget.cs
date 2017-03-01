@@ -4,14 +4,54 @@ using UnityEngine;
 
 [RequireComponent (typeof(Rigidbody2D))]
 public class ChaseTarget : MonoBehaviour {
+	/* A definition of all the target group this object could chase. */
+	public enum Target {Player, Boss, None};
+	public Target targetGroup = Target.Player;
 
+	public List<Transform> playerTargets;
+	public List<Transform> bossTargets;
 
+	// the ONE specific this object would chase at a specific moment
 	public Transform target;
+
 	public float rotationSpeed = 90f;
 	public float moveSpeed = 20f;
 
 	Rigidbody2D myRigidbody;
 	float rotSpeedFactor;
+
+	Transform PickTarget(){
+		/* pick the specfic target that:
+		 * 1. belongs to targetGroup
+		 * 2. is closest to this object
+		 * 3. if targetGroup is none, return null
+		 */
+		Transform new_target = null;
+
+		if (targetGroup == Target.Player || targetGroup == Target.Boss) {
+			List<Transform> targets;
+			if(targetGroup == Target.Player){
+				targets = playerTargets;
+			} else{
+				targets = bossTargets;
+			}
+
+			if (targets.Count != 0) {
+				float dist = Mathf.Infinity;
+				foreach (Transform trans in targets) {
+					float newDist = Vector3.Distance (this.transform.position, trans.position);
+					if (newDist < dist) {
+						new_target = trans;
+					}
+				}
+			} else {
+				new_target = null;
+			}
+		} else{
+			new_target = null;
+		}
+		return new_target;
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -20,6 +60,8 @@ public class ChaseTarget : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		target = PickTarget ();
+
 		if(target == null){
 			rotSpeedFactor = 0f;
 			return;		// cannot find the target transform, wait for next frame

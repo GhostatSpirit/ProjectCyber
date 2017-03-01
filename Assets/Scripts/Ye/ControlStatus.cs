@@ -1,136 +1,153 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using System.Collections.ObjectModel;
+
+/* Controller enum definition - could be used everywhere
+ * This enum specifies all the possible controllers of a controllable object
+ */
+public enum Controller { Boss, None, Hacker, Destroyer };
+
 
 public class ControlStatus : MonoBehaviour {
-    public enum Controller { Boss, None, Hacker, Destroyer };
-    public Controller controller = Controller.Boss;//old version use bosscontrol 
 
-    GameObject ControlLine;
-    
-    public Material EnemyLineMaterial;
-    public Material PlayerLineMateial;
 
-    public float speed;
+	public Controller initialController = Controller.Boss;
+
+	[HideInInspector] public Controller controller{
+		get{
+			return controller;
+		}
+		set{
+			Controller oldController = controller;
+			Controller newController = value;
+			// trigger an event accordingly 
+			// if the old & new controllers matches certain combination
+			if(oldController == Controller.Boss && newController == Controller.None){
+				if (OnCutByPlayer != null) {
+					OnCutByPlayer (this.transform);
+				}
+			}
+			else if(oldController == Controller.Hacker && newController == Controller.Boss){
+				if (OnCutByEnemy != null) {
+					OnCutByEnemy (this.transform);
+				}
+			}
+			else if(oldController == Controller.None && newController == Controller.Hacker){
+				if (OnLinkedByPlayer != null) {
+					OnLinkedByPlayer (this.transform);
+				}
+			}
+			else if(oldController == Controller.None && newController == Controller.Boss){
+				if (OnLinkedByEnemy != null) {
+					OnLinkedByEnemy (this.transform);
+				}
+			}
+			// reset the actions and change the controller value
+			ResetActions ();
+			controller = value;
+		}
+	}
     
     public GameObject Boss;
     public GameObject Hacker;
 
-    public float width;
+	// events for triggering different behaviors when the controller changes
+	public event Action<Transform> OnCutByPlayer;	 // transform -> controllable object's transform
+	public event Action<Transform> OnCutByEnemy;
+	public event Action<Transform> OnLinkedByPlayer;
+	public event Action<Transform> OnLinkedByEnemy;
 
-    /*/
-    public GameObject Boss()
-    {
-        GameObject Bo;
-        Bo = GameObject.FindGameObjectWithTag("Boss");
-        return Bo;
-    }
-    /*/
+	// StopMovement: constants
+	public float changeDragFactor = 100f;
+
 
     void Start()
     {
-        ControlLine = new GameObject();
-        ControlLine.transform.position = gameObject.transform.position;
-
-        ControlLine.AddComponent<LineRenderer>();
-        LineRenderer lr = ControlLine.GetComponent<LineRenderer>();
-        lr.material = EnemyLineMaterial;
-        Color color = Color.white;
-        lr.startWidth = width;
-        lr.endWidth = width;
-        lr.startColor = color;
-        lr.endColor = color;
-        lr.SetPosition(0, gameObject.transform.position);
-        lr.SetPosition(1, Boss.transform.position);
-
-        ControlLine.AddComponent<EdgeCollider2D>();
-        EdgeCollider2D BossLineEC = ControlLine.GetComponent<EdgeCollider2D>();
-        BossLineEC.isTrigger = true;
-        Vector2[] temparray = new Vector2[2];
-        temparray[0] = new Vector2(0, 0);
-        temparray[1] = new Vector2(Boss.transform.position.x- gameObject.transform.position.x, Boss.transform.position.y - gameObject.transform.position.y);
-        BossLineEC.points = temparray;
-         
-        // Debug.Log(BossLineEC.points[0]);
-        // Debug.Log(BossLineEC.points[1]);
-
-        ControlLine.tag = "EnemyLine";
-        ControlLine.transform.SetParent(gameObject.transform);
-        // Debug.Log(gameObject.name + ControlLine.transform.position);
-    }
-
-    void Draw(GameObject start, GameObject end, Material Mat)
-    {
-        LineRenderer lr = ControlLine.GetComponent<LineRenderer>();
-        lr.material = Mat;
-        Color color = Color.white;
-        lr.startColor = color;
-        lr.endColor = color;
-        lr.SetPosition(0, start.transform.position);
-        lr.SetPosition(1, end.transform.position);
-    }
-
-    void Clean()
-    {
-        LineRenderer lr = ControlLine.GetComponent<LineRenderer>();
-        lr.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply")); ;
-        Color color = Color.clear;
-        lr.startColor = color;
-        lr.endColor = color;
-    }
-    
-    void Update()
-    {
-        /*/
-        if (BossControl == 1)  // Controlled by Boss
-        {
-            Draw(gameObject,Boss());
-        }
-        if (BossControl == 0)  // Uncontrolled
-        { 
-            Clean();
-        }
-        if (BossControl == -1) // Controlled by Hacker
-        {
-            Clean();
-            gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, Boss().transform.position, speed * Time.deltaTime);
-        }
-        if (BossControl == -2)
-        {
-            Destroy(gameObject);
-        }
-        /*/
-
-        if(controller == Controller.Boss)
-        {
-            Draw(gameObject, Boss, EnemyLineMaterial);
-            ControlLine.tag = "EnemyLine";
-        }
-        if (controller == Controller.None)
-        {
-            Clean();// DO sth; Cleanlean the ControlLine
-
-        }
-        if (controller == Controller.Hacker)
-        {
-            Draw(gameObject, Hacker, PlayerLineMateial);
-            ControlLine.tag = "PlayerLine";
-        }
-        if (controller == Controller.Destroyer)
-        {
-            // Destroy Line
-        }
-
-		// Update edge collider
-		EdgeCollider2D BossLineEC = ControlLine.GetComponent<EdgeCollider2D>();
-		BossLineEC.isTrigger = true;
-		Vector2[] temparray = new Vector2[2];
-		Vector3 Boss2Self = Boss.transform.position - transform.position;
-		temparray[0] = new Vector2(0, 0);
-		temparray[1] = ControlLine.transform.InverseTransformVector (Boss2Self);
-		BossLineEC.points = temparray;
-
+		controller = initialController;
 
     }
+
+	void ResetActions(){
+		OnCutByPlayer = null;
+		OnCutByPlayer += ChaseNone;
+		OnCutByPlayer += StopMovement;
+
+		OnCutByEnemy = null;
+		OnCutByEnemy += ChaseNone;
+		OnCutByEnemy += StopMovement;
+
+		OnLinkedByPlayer = null;
+		OnCutByEnemy += ChaseBoss;
+		OnLinkedByPlayer += StartMovement;
+
+		OnLinkedByEnemy = null;
+		OnCutByEnemy += ChasePlayer;
+		OnLinkedByEnemy += StartMovement;
+
+	}
+
+	// methods for the events above
+
+	/* StopMovement:
+	 * 1. stop the enemy from chasing the target
+	 * 2. increase linear drag and angular drag
+	 */
+	void StopMovement(Transform objTrans){
+		ChaseTarget ct = this.transform.GetComponent<ChaseTarget> ();
+		if(ct != null){
+			ct.enabled = false;
+		}
+		Rigidbody2D myRigidbody2D = this.transform.GetComponent<Rigidbody2D> ();
+		if(myRigidbody2D != null){
+			// increase my drag
+			myRigidbody2D.angularDrag *= changeDragFactor;
+			myRigidbody2D.drag *= changeDragFactor;
+		}
+	}
+
+	/* StartMovement:
+	 * 1. start the enemy from chasing the target again
+	 * 2. reset the linear/angular drag
+	 */
+	void StartMovement(Transform objTrans){
+		ChaseTarget ct = this.transform.GetComponent<ChaseTarget> ();
+		if(ct != null){
+			ct.enabled = true;
+		}
+		Rigidbody2D myRigidbody2D = this.transform.GetComponent<Rigidbody2D> ();
+		if(myRigidbody2D != null){
+			// increase my drag
+			myRigidbody2D.angularDrag /= changeDragFactor;
+			myRigidbody2D.drag /= changeDragFactor;
+		}
+	}
+
+	/* ChasePlayer:
+	 * 1. set the targetGroup as "Player" in ChaseTarget
+	 */
+	void ChasePlayer(Transform objTrans){
+		ChaseTarget ct = this.transform.GetComponent<ChaseTarget> ();
+		if(ct != null){
+			ct.targetGroup = ct.Target.Player;
+		}
+	}
+
+	void ChaseNone(Transform objTrans){
+		ChaseTarget ct = this.transform.GetComponent<ChaseTarget> ();
+		if(ct != null){
+			ct.targetGroup = ct.Target.None;
+		}
+	}
+
+
+	void ChaseBoss(Transform objTrans){
+		ChaseTarget ct = this.transform.GetComponent<ChaseTarget> ();
+		if(ct != null){
+			ct.targetGroup = ct.Target.Boss;
+		}
+	}
+
     
 }

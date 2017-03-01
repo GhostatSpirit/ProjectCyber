@@ -9,7 +9,7 @@ public class BulletDestroyer : MonoBehaviour {
 	//public Transform shotFrom;
 
     private Vector2 initialPos;
-	private int deflectCount = 0;
+//	private int deflectCount = 0;
 
 	// Use this for initialization
 	void Start () {

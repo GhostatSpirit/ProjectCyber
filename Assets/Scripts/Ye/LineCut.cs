@@ -21,7 +21,7 @@ public class LineCut : MonoBehaviour {
 			return;
 		}
 		bool controlledByBoss = 
-			cs.controller == ControlStatus.Controller.Boss;
+			cs.controller == Controller.Boss;
 		if (other.gameObject.tag == "EnemyLine" && controlledByBoss && couldCut ) // && other.gameObject.GetComponent<LineRenderer>().startColor != Color.clear && other.gameObject.GetComponent<LineRenderer>().endColor != Color.clear)
         {
             /*/
@@ -45,7 +45,7 @@ public class LineCut : MonoBehaviour {
             /*/
             GameObject TargetLine = other.gameObject;
             ControlStatus TargetCS = TargetLine.GetComponentInParent<ControlStatus>();
-            TargetCS.controller = ControlStatus.Controller.None;
+            TargetCS.controller = Controller.None;
         }
     }
 }
