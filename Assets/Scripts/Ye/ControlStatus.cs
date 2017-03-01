@@ -13,11 +13,12 @@ public enum Controller { Boss, None, Hacker, Destroyer };
 public class ControlStatus : MonoBehaviour {
 
 
-	public Controller initialController = Controller.Boss;
+	private Controller m_controller = Controller.Boss;
+
 
 	[HideInInspector] public Controller controller{
 		get{
-			return controller;
+			return m_controller;
 		}
 		set{
 			Controller oldController = controller;
@@ -46,7 +47,7 @@ public class ControlStatus : MonoBehaviour {
 			}
 			// reset the actions and change the controller value
 			ResetActions ();
-			controller = value;
+			m_controller = value;
 		}
 	}
     
@@ -65,11 +66,12 @@ public class ControlStatus : MonoBehaviour {
 
     void Start()
     {
-		controller = initialController;
+		controller = m_controller;
 
     }
 
 	void ResetActions(){
+		
 		OnCutByPlayer = null;
 		OnCutByPlayer += ChaseNone;
 		OnCutByPlayer += StopMovement;
@@ -125,27 +127,32 @@ public class ControlStatus : MonoBehaviour {
 	}
 
 	/* ChasePlayer:
-	 * 1. set the targetGroup as "Player" in ChaseTarget
+	 * set the targetGroup as "Player" in ChaseTarget
 	 */
 	void ChasePlayer(Transform objTrans){
-		ChaseTarget ct = this.transform.GetComponent<ChaseTarget> ();
+		VirusTargetPicker ct = this.transform.GetComponent<VirusTargetPicker> ();
 		if(ct != null){
-			ct.targetGroup = ct.Target.Player;
+			ct.targetGroup = VirusTargetPicker.Target.Player;
 		}
 	}
 
+	/* ChaseNone:
+	 * set the targetGroup as "None" in ChaseTarget
+	 */
 	void ChaseNone(Transform objTrans){
-		ChaseTarget ct = this.transform.GetComponent<ChaseTarget> ();
+		VirusTargetPicker ct = this.transform.GetComponent<VirusTargetPicker> ();
 		if(ct != null){
-			ct.targetGroup = ct.Target.None;
+			ct.targetGroup = VirusTargetPicker.Target.None;
 		}
 	}
 
-
+	/* ChaseBoss:
+	 * set the targetGroup as "Boss" in ChaseTarget
+	 */
 	void ChaseBoss(Transform objTrans){
-		ChaseTarget ct = this.transform.GetComponent<ChaseTarget> ();
+		VirusTargetPicker ct = this.transform.GetComponent<VirusTargetPicker> ();
 		if(ct != null){
-			ct.targetGroup = ct.Target.Boss;
+			ct.targetGroup = VirusTargetPicker.Target.Boss;
 		}
 	}
 
