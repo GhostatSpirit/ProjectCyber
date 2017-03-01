@@ -19,6 +19,11 @@ public class LineUpdate : MonoBehaviour {
 
 	public float lineWidth;
 
+
+	// private field for LineRenderer and EdgeCollider
+	LineRenderer lr;
+	EdgeCollider2D LineEC;
+
 	// a read-only Boss property that reads Boss from ControlStatus
 	GameObject Boss{
 		get{
@@ -45,8 +50,9 @@ public class LineUpdate : MonoBehaviour {
 		ControlLine = new GameObject();
 		ControlLine.transform.position = gameObject.transform.position;
 
+		// create and initialize LineRenderer
 		ControlLine.AddComponent<LineRenderer>();
-		LineRenderer lr = ControlLine.GetComponent<LineRenderer>();
+		lr = ControlLine.GetComponent<LineRenderer>();
 		lr.material = EnemyLineMaterial;
 		Color color = Color.white;
 		lr.startWidth = lineWidth;
@@ -56,17 +62,16 @@ public class LineUpdate : MonoBehaviour {
 		lr.SetPosition(0, gameObject.transform.position);
 		lr.SetPosition(1, Boss.transform.position);
 
+		// create and initialize EdgeCollider2D
 		ControlLine.AddComponent<EdgeCollider2D>();
-		EdgeCollider2D BossLineEC = ControlLine.GetComponent<EdgeCollider2D>();
-		BossLineEC.isTrigger = true;
+		LineEC = ControlLine.GetComponent<EdgeCollider2D>();
+		LineEC.isTrigger = true;
 		Vector2[] temparray = new Vector2[2];
 		temparray[0] = new Vector2(0, 0);
 		temparray[1] = new Vector2(Boss.transform.position.x- gameObject.transform.position.x, Boss.transform.position.y - gameObject.transform.position.y);
-		BossLineEC.points = temparray;
+		LineEC.points = temparray;
 
-		// Debug.Log(BossLineEC.points[0]);
-		// Debug.Log(BossLineEC.points[1]);
-
+		// initialize the tag as "EnemyLine"
 		ControlLine.tag = "EnemyLine";
 
 		// rename this new game object
@@ -78,23 +83,15 @@ public class LineUpdate : MonoBehaviour {
 
 	void Draw(GameObject start, GameObject end, Material Mat)
 	{
-		LineRenderer lr = ControlLine.GetComponent<LineRenderer>();
 		lr.material = Mat;
 		Color color = Color.white;
 		lr.startColor = color;
 		lr.endColor = color;
 		lr.SetPosition(0, start.transform.position);
 		lr.SetPosition(1, end.transform.position);
+		lr.enabled = true;
 	}
-
-	void Clean()
-	{
-		LineRenderer lr = ControlLine.GetComponent<LineRenderer>();
-		lr.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply")); ;
-		Color color = Color.clear;
-		lr.startColor = color;
-		lr.endColor = color;
-	}
+		
 
 	// Update is called once per frame
 	void Update () {
@@ -103,30 +100,33 @@ public class LineUpdate : MonoBehaviour {
 		if(controller == Controller.Boss)
 		{
 			Draw(gameObject, Boss, EnemyLineMaterial);
+			LineEC.enabled = true;
 			ControlLine.tag = "EnemyLine";
 		}
 		if (controller == Controller.None)
 		{
-			Clean();// DO sth; Cleanlean the ControlLine
+			lr.enabled = false;
+			LineEC.enabled = false;
+			ControlLine.tag = "Untagged";
 
 		}
 		if (controller == Controller.Hacker)
 		{
 			Draw(gameObject, Hacker, PlayerLineMateial);
+			LineEC.enabled = true;
 			ControlLine.tag = "PlayerLine";
 		}
 
 
 
 		// Update edge collider
-		EdgeCollider2D BossLineEC = ControlLine.GetComponent<EdgeCollider2D>();
-		BossLineEC.isTrigger = true;
+		LineEC.isTrigger = true;
 		Vector2[] temparray = new Vector2[2];
 		Vector3 Boss2Self = Boss.transform.position - transform.position;
 		temparray[0] = new Vector2(0, 0);
 		temparray[1] = ControlLine.transform.InverseTransformVector (Boss2Self);
-		BossLineEC.points = temparray;
-
+		LineEC.points = temparray;
 
 	}
+		
 }

@@ -61,13 +61,30 @@ public class ControlStatus : MonoBehaviour {
 	public event Action<Transform> OnLinkedByEnemy;
 
 	// StopMovement: constants
+	Rigidbody2D myRigidbody2D;
 	public float changeDragFactor = 100f;
-
+	float oldDrag;
+	float increasedDrag{
+		get{
+			float originalFactor = (oldDrag == 0f) ? 1f : oldDrag;
+			return originalFactor * changeDragFactor;
+		}
+	}
+	float oldAngularDrag;
+	float increasedAngularDrag{
+		get{
+			float originalFactor = (oldAngularDrag == 0f) ? 1f : oldAngularDrag;
+			return originalFactor  * changeDragFactor;
+		}
+	}
 
     void Start()
     {
-		controller = m_controller;
+		myRigidbody2D = this.transform.GetComponent<Rigidbody2D> ();
 
+		controller = m_controller;
+		oldDrag = (myRigidbody2D != null) ? myRigidbody2D.drag : 0f;
+		oldAngularDrag = (myRigidbody2D != null) ? myRigidbody2D.angularDrag : 0f;
     }
 
 	void ResetActions(){
@@ -101,11 +118,10 @@ public class ControlStatus : MonoBehaviour {
 		if(ct != null){
 			ct.enabled = false;
 		}
-		Rigidbody2D myRigidbody2D = this.transform.GetComponent<Rigidbody2D> ();
 		if(myRigidbody2D != null){
 			// increase my drag
-			myRigidbody2D.angularDrag *= changeDragFactor;
-			myRigidbody2D.drag *= changeDragFactor;
+			myRigidbody2D.angularDrag = increasedDrag;
+			myRigidbody2D.drag = increasedAngularDrag;
 		}
 	}
 
@@ -118,13 +134,31 @@ public class ControlStatus : MonoBehaviour {
 		if(ct != null){
 			ct.enabled = true;
 		}
-		Rigidbody2D myRigidbody2D = this.transform.GetComponent<Rigidbody2D> ();
 		if(myRigidbody2D != null){
 			// increase my drag
-			myRigidbody2D.angularDrag /= changeDragFactor;
-			myRigidbody2D.drag /= changeDragFactor;
+			myRigidbody2D.angularDrag = oldDrag;
+			myRigidbody2D.drag = oldAngularDrag;
 		}
 	}
+
+
+
+	/* Paralyze
+	 * stop the enemy from chasing the target 
+	 * in a given amount of time (seconds)
+	 */
+	public void Paralyze(float time){
+		// first stop this object
+		StopMovement (this.transform);
+		// then start this object after a given amont of time
+		StartCoroutine (StartMoveIE (this.transform, time));
+	}
+	// IEnumerator for invoking a function with parameters
+	IEnumerator StartMoveIE(Transform trans, float delay){
+		yield return new WaitForSeconds (delay);
+		StartMovement (trans);
+	}
+
 
 	/* ChasePlayer:
 	 * set the targetGroup as "Player" in ChaseTarget

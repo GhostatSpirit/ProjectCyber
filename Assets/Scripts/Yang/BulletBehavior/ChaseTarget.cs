@@ -47,6 +47,9 @@ public class ChaseTarget : MonoBehaviour {
 	void FixedUpdate(){
 		myRigidbody.velocity = transform.up * moveSpeed * Time.fixedDeltaTime;
 
+		if(target == null){
+			return;
+		}
 		// update rotation of this object
 		Vector2 point2Target = (Vector2)target.transform.position - (Vector2)transform.position;
 		point2Target.Normalize ();

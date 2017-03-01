@@ -24,7 +24,7 @@ public class BulletDestroyer : MonoBehaviour {
 	}
 
     void OnCollisionEnter2D(Collision2D coll) {
-		if(coll.transform.tag != "Enemy"){
+		if(coll.transform.tag == "Immovable" || coll.transform.tag == "Boss"){
 			Destroy (this.gameObject);
 		}
     }
