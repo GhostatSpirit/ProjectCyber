@@ -39,6 +39,9 @@ public class DartSkill : MonoBehaviour {
 
 	// LineCut class for enabling AI to cut lines
 	LineCut linecut;
+	// HeathSys class, enabling immune when darting
+	HealthSystem healthSys;
+	public float extraImmuneTime = 0.5f;
 
 	// Use this for initialization
 	void Start () {
@@ -46,8 +49,11 @@ public class DartSkill : MonoBehaviour {
 		myCapsuleColl = GetComponent<CapsuleCollider2D> ();
 		defaultColliderWidth = myCapsuleColl.size.x;
 		newColliderWidth = defaultColliderWidth * colliderAmpFactor;
+
 		energySys = GetComponent<PlayerEnergy> ();
+
 		linecut = GetComponent<LineCut> ();
+		healthSys = GetComponent<HealthSystem>();
 	}
 	
 	// Update is called once per frame
@@ -60,7 +66,7 @@ public class DartSkill : MonoBehaviour {
 		if(myInputDevice.Action1.IsPressed && !darting && 
 			coolDown && energySys.UseEnergy(energyConsume)){
 
-			// starting the darting skill
+			// CAUTION: starting the darting skill
 			darting = true;
 			// AI can cut lines now
 			linecut.couldCut = true;
@@ -80,11 +86,16 @@ public class DartSkill : MonoBehaviour {
 			myCapsuleColl.size = new Vector2(newColliderWidth, myCapsuleColl.size.y);
 			// reset the kill count
 			killCount = 0;
+
+			// start the immune buff
+			if(healthSys){
+				healthSys.StartImmune();
+			}
 		}
 
 		timer += Time.deltaTime;
 		if(timer > dartDuration && darting){
-			// stop darting skill
+			// CAUTION: stop darting skill
 			darting = false;
 
 			// AI can no longer cut lines now
@@ -103,8 +114,17 @@ public class DartSkill : MonoBehaviour {
 			}
 			// reset the size of the collider
 			myCapsuleColl.size = new Vector2(defaultColliderWidth, myCapsuleColl.size.y);
+
+			// end the immune buff 
+			Invoke ("EndImmune", extraImmuneTime);
 		}
 
+	}
+
+	void EndImmune(){
+		if(healthSys){
+			healthSys.EndImmune();
+		}
 	}
 
 	void FixedUpdate() {
@@ -136,4 +156,5 @@ public class DartSkill : MonoBehaviour {
 		}
 
 	}
+
 }

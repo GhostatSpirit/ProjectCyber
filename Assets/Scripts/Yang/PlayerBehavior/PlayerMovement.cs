@@ -173,7 +173,9 @@ public class PlayerMovement: MonoBehaviour {
 			return;
 		}
 		if (moveEnabled) {
-			myRigidbody.velocity = moveVector * moveSpeed * Time.deltaTime * 10f;
+			if (myRigidbody.bodyType != RigidbodyType2D.Static) {
+				myRigidbody.velocity = moveVector * moveSpeed * Time.deltaTime * 10f;
+			}
 //			if(moveVector.magnitude != 0){
 //				transform.up = new Vector2 (-moveVector.x, -moveVector.y);
 //			}

@@ -7,7 +7,7 @@ public class FindTarget : MonoBehaviour {
 	Transform lockedTargetTransform;
 	ChaseTarget chaser;
 
-	public string targetTag = "Enemy";
+	public ObjectType targetType = ObjectType.None;
 
 	void Start(){
 		lockedTargetTransform = null;
@@ -18,7 +18,7 @@ public class FindTarget : MonoBehaviour {
 	}
 	// Use this for initialization
 	void OnTriggerEnter2D(Collider2D other){
-		if(lockedTargetTransform == null && other.tag == targetTag){
+		if(lockedTargetTransform == null && TypeMatches(other.transform)){
 			//Debug.Log ("entering!");
 			// enemy enters our sight, let's lock it
 			lockedTargetTransform = other.transform;
@@ -29,7 +29,7 @@ public class FindTarget : MonoBehaviour {
 	}
 
 	void OnTriggerStay2D(Collider2D other){
-		if(lockedTargetTransform == null && other.tag == targetTag){
+		if(lockedTargetTransform == null && TypeMatches(other.transform)){
 			//Debug.Log ("entering!");
 			// enemy enters our sight, let's lock it
 			lockedTargetTransform = other.transform;
@@ -56,13 +56,26 @@ public class FindTarget : MonoBehaviour {
 			return;
 		}
 
-		if(lockedTargetTransform.tag != targetTag){
+		if(lockedTargetTransform.gameObject.layer == this.gameObject.layer){
 			//Debug.Log ("target becomes friend");
 			lockedTargetTransform = null;
 			if(chaser != null){
 				//Debug.Log("set null!");
 				chaser.target = null;
 			}
+		}
+	}
+
+	bool TypeMatches(Transform trans){
+		ObjectIdentity oi = trans.GetComponent<ObjectIdentity> ();
+		if(oi == null){
+			return false;
+		}
+		if(oi.objType == targetType){
+			return true;
+		}
+		else {
+			return false;
 		}
 	}
 }

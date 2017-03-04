@@ -31,7 +31,7 @@ public class VirusTargetPicker : MonoBehaviour {
 				float dist = Mathf.Infinity;
 				foreach (Transform trans in targets) {
 					float newDist = Vector3.Distance (this.transform.position, trans.position);
-					Debug.Log (newDist);
+//					Debug.Log (newDist);
 					if (newDist < dist) {
 						dist = newDist;
 						new_target = trans;

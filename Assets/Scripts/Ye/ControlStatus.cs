@@ -54,11 +54,32 @@ public class ControlStatus : MonoBehaviour {
     public GameObject Boss;
     public GameObject Hacker;
 
+	public LayerMask enemyLayer;
+	public LayerMask friendLayer;
+
 	// events for triggering different behaviors when the controller changes
 	public event Action<Transform> OnCutByPlayer;	 // transform -> controllable object's transform
 	public event Action<Transform> OnCutByEnemy;
 	public event Action<Transform> OnLinkedByPlayer;
 	public event Action<Transform> OnLinkedByEnemy;
+
+
+	// read only controller transform
+	// if controlled by hacker, return hacker transform
+	// if controlled by boss, return boss transform
+	// if controlled by none, return null
+	[HideInInspector]public Transform controllerTransfrom{
+		get{
+			switch(this.controller){
+			case(Controller.Hacker):
+				return Hacker.transform;
+			case(Controller.Boss):
+				return Boss.transform;
+			default:
+				return null;
+			}
+		}
+	}
 
 	// StopMovement: constants
 	Rigidbody2D myRigidbody2D;
@@ -98,13 +119,21 @@ public class ControlStatus : MonoBehaviour {
 		OnCutByEnemy += StopMovement;
 
 		OnLinkedByPlayer = null;
-		OnCutByEnemy += ChaseBoss;
+		OnLinkedByPlayer += ChaseBoss;
 		OnLinkedByPlayer += StartMovement;
+		OnLinkedByPlayer += ChangeLayerToFriend;
 
 		OnLinkedByEnemy = null;
-		OnCutByEnemy += ChasePlayer;
+		OnLinkedByEnemy += ChasePlayer;
 		OnLinkedByEnemy += StartMovement;
+		OnLinkedByEnemy += ChangeLayerToEnemy;
+	}
 
+	void ResetActionsToNull(){
+		OnCutByPlayer = null;
+		OnCutByEnemy = null;
+		OnLinkedByPlayer = null;
+		OnLinkedByEnemy = null;
 	}
 
 	// methods for the events above
@@ -190,5 +219,24 @@ public class ControlStatus : MonoBehaviour {
 		}
 	}
 
-    
+	void ChangeLayerToFriend(Transform objTrans){
+//		Debug.Log (friendLayer.value);
+		this.gameObject.layer = LayerMaskToLayerNum(friendLayer);
+
+	}
+
+	void ChangeLayerToEnemy(Transform objTrans){
+		this.gameObject.layer = LayerMaskToLayerNum(enemyLayer);
+	}
+
+	// translate layerMask value into layer number [0 - 31]
+	int LayerMaskToLayerNum(LayerMask layerMask){
+		int layerNumber = 0;
+		int layer = layerMask.value;
+		while(layer > 0){
+			layer = layer >> 1;
+			layerNumber++;
+		}
+		return layerNumber;
+	}
 }

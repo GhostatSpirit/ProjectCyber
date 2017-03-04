@@ -8,18 +8,18 @@ public class BulletHit : MonoBehaviour {
 
 	public GameObject bulletPrefab;
 
-	public string enemyTag = "Enemy";
+	public ObjectType targetType = ObjectType.None;
 
 	public float paralyzeTime = 2f;
 
-	public int bulletCount = 3;
+	public int bulletCount = 2;
 	public float deltaAngle = 10f;
 
 	bool reproduced = false;
 
 
 	void OnCollisionEnter2D(Collision2D coll){
-		if(coll.transform.tag == enemyTag && coll.gameObject.layer != this.gameObject.layer){
+		if(TypeMatches(coll.transform) && coll.gameObject.layer != this.gameObject.layer){
 			if (HasControlStatus (coll.transform)) {
 				// the colliding object must have control status
 				ControlStatus targetCS = coll.transform.GetComponent<ControlStatus> ();
@@ -29,24 +29,24 @@ public class BulletHit : MonoBehaviour {
 					// if the enemy is controlled by something else,
 					// paralyze the target
 					targetCS.Paralyze (paralyzeTime);
-
-					// destory this bullet
-					Destroy (transform.gameObject);
+					// bullet will destroy by itself
 					return;
 				}
 
 				// if the enemy is not connected to anything right now...
 				if (!reproduced) {
-					// set the enemy to friend
+					// the target is now acquired by the HACKER!
+					targetCS.controller = Controller.Hacker;
+
+					// modify layer so it wont collide
 					coll.gameObject.layer = this.gameObject.layer;
-					coll.gameObject.tag = this.tag;
 					// stop the enemy from chasing the player
-					coll.transform.GetComponent<ChaseTarget> ().enabled = false;
 					// reproduce the bullets
 					reproduced = true;
-					Invoke ("ReproduceBullets", 0.1f);
-					transform.gameObject.SetActive (false);
-					Destroy (gameObject, 0.2f);
+
+					ReproduceBullets ();
+
+					Destroy (gameObject);
 				}
 			}
 		}
@@ -91,5 +91,18 @@ public class BulletHit : MonoBehaviour {
 			return false;
 		}
 		return (cs.controller == Controller.None);
+	}
+
+	bool TypeMatches(Transform trans){
+		ObjectIdentity oi = trans.GetComponent<ObjectIdentity> ();
+		if(oi == null){
+			return false;
+		}
+		if(oi.objType == targetType){
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 }
