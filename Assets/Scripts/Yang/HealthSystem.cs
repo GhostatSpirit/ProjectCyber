@@ -85,7 +85,9 @@ public class HealthSystem : MonoBehaviour {
 		if(hd){
 			hd.canHurtOther = false;
 		}
-		GetComponent<SpriteRenderer> ().color = Color.green;
+		if (GetComponent<SpriteRenderer> ().color == Color.white) {
+			GetComponent<SpriteRenderer> ().color = Color.green;
+		}
 		isImmune = true;
 	}
 
@@ -95,7 +97,9 @@ public class HealthSystem : MonoBehaviour {
 		if(hd){
 			hd.canHurtOther = true;
 		}
-		GetComponent<SpriteRenderer> ().color = Color.white;
+		if (GetComponent<SpriteRenderer> ().color == Color.green) {
+			GetComponent<SpriteRenderer> ().color = Color.white;
+		}
 		isImmune = false;
 	}
 
