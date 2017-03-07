@@ -9,7 +9,7 @@ public class ChaseTarget : MonoBehaviour {
 
 	public float rotationSpeed = 90f;
 	public float moveSpeed = 20f;
-
+    public bool moveEnabled = true;
 	Rigidbody2D myRigidbody;
 	float rotSpeedFactor;
 
@@ -45,21 +45,26 @@ public class ChaseTarget : MonoBehaviour {
 	}
 
 	void FixedUpdate(){
-		myRigidbody.velocity = transform.up * moveSpeed * Time.fixedDeltaTime;
+        if (moveEnabled)
+        {
+            myRigidbody.velocity = transform.up * moveSpeed * Time.fixedDeltaTime;
 
-		if(target == null){
-			return;
-		}
-		// update rotation of this object
-		Vector2 point2Target = (Vector2)target.transform.position - (Vector2)transform.position;
-		point2Target.Normalize ();
-		float zAngle = Mathf.Atan2 (point2Target.y, point2Target.x) * Mathf.Rad2Deg - 90f;
-		Quaternion desiredRot = Quaternion.Euler (0f, 0f, zAngle);
+            if (target == null)
+            {
+                return;
+            }
+            // update rotation of this object
+            Vector2 point2Target = (Vector2)target.transform.position - (Vector2)transform.position;
+            point2Target.Normalize();
+            float zAngle = Mathf.Atan2(point2Target.y, point2Target.x) * Mathf.Rad2Deg - 90f;
+            Quaternion desiredRot = Quaternion.Euler(0f, 0f, zAngle);
 
-		float finalRotSpeed = rotationSpeed * rotSpeedFactor * Time.fixedDeltaTime;
-		transform.rotation =
-			Quaternion.RotateTowards (transform.rotation, desiredRot, finalRotSpeed);
+            float finalRotSpeed = rotationSpeed * rotSpeedFactor * Time.fixedDeltaTime;
+            transform.rotation =
+                Quaternion.RotateTowards(transform.rotation, desiredRot, finalRotSpeed);
 
-		//myRigidbody.angularVelocity = rotationSpeed * rotSpeedFactor;
-	}
+            //myRigidbody.angularVelocity = rotationSpeed * rotSpeedFactor;
+        }
+
+    }
 }
