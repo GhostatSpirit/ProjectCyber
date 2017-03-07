@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using InControl;
-
+using UnityEngine.SceneManagement;
 public class Reload : MonoBehaviour
 {
     InputDevice myInputDevice;
@@ -15,7 +15,8 @@ public class Reload : MonoBehaviour
         }
         if (myInputDevice.Action2.IsPressed)
         {
-            Application.LoadLevel(Application.loadedLevel);
+			
+			SceneManager.LoadScene (SceneManager.GetActiveScene().buildIndex);
         }
     }
 }

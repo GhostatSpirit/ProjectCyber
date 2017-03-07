@@ -13,7 +13,7 @@ public class LineHack : MonoBehaviour
     static GameObject myLine;
     //GameObject Initial;
     public float speed;
-    float Status;
+//    float Status;
     
 
     GameObject FindClosestEnemy()
@@ -54,7 +54,7 @@ public class LineHack : MonoBehaviour
         //lr.SetPosition(0, Initial.GetComponent<ControlStatus>().Boss().transform.position);
         //lr.SetPosition(1, FindClosestEnemy().transform.position);
         myLine.transform.SetParent(gameObject.transform);
-        Status = 0;
+       // Status = 0;
     }
 
     void Draw(GameObject start , GameObject end )
