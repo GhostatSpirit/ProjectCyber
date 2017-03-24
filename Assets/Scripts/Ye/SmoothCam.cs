@@ -53,6 +53,6 @@ public class SmoothCam : MonoBehaviour {
         Initial = size;
 
         //Main.orthographicSize = (Screen.height / 100f ) / 4f;
-        transform.position = Vector3.Lerp (transform.position, targetPosition, 0.01f) + new Vector3(0, 0, -10);
+        transform.position = Vector3.Lerp (transform.position, targetPosition, 0.01f);
     }
 }
