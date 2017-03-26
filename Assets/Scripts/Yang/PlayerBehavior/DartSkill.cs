@@ -79,7 +79,7 @@ public class DartSkill : MonoBehaviour {
 			}
 
 			// get the dart Direction
-			dartDirection = myRigidbody.velocity.normalized;
+			dartDirection = GetComponent<PlayerMovement> ().faceDirection;
 			// reset the timer
 			timer = 0f;
 			// amplify the size of the collider
@@ -148,12 +148,7 @@ public class DartSkill : MonoBehaviour {
 	}
 
 	void OnCollisionEnter2D(Collision2D coll){
-		if(coll.gameObject.tag == "AIEnemy" && darting){
-			// let the enemy die
-			coll.gameObject.GetComponent<DeathHandler> ().LetDead ();
-			// add the kill count by one
-			killCount++;
-		}
+
 
 	}
 

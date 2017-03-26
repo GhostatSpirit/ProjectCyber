@@ -11,30 +11,7 @@ public class LineCut : MonoBehaviour {
 	// Transform means the cutter's transform, i.e. this.transform
 	public event Action<Transform> OnLineCut;
 
-    void OnTriggerEnter2D(Collider2D other)
-    {
-		ControlStatus cs = other.gameObject.GetComponentInParent<ControlStatus> ();
-		if(cs == null){
-			return;
-		}
-		bool controlledByBoss = 
-			cs.controller == Controller.Boss;
-		
-		if (other.gameObject.tag == "EnemyLine" && controlledByBoss && couldCut ) // && other.gameObject.GetComponent<LineRenderer>().startColor != Color.clear && other.gameObject.GetComponent<LineRenderer>().endColor != Color.clear)
-        {
-			// reaching an enemyline, cut it
-			if(OnLineCut != null){
-				OnLineCut (this.transform);
-			}
-            GameObject TargetLine = other.gameObject;
-            ControlStatus TargetCS = TargetLine.GetComponentInParent<ControlStatus>();
-            TargetCS.controller = Controller.None;
-
-        }
-    }
-
-	void OnTriggerStay2D(Collider2D other)
-	{
+	void LineCutBehavior(Collider2D other){
 		ControlStatus cs = other.gameObject.GetComponentInParent<ControlStatus> ();
 		if(cs == null){
 			return;
@@ -53,6 +30,21 @@ public class LineCut : MonoBehaviour {
 			TargetCS.controller = Controller.None;
 
 		}
+	}
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+		LineCutBehavior (other);
+    }
+
+	void OnTriggerStay2D(Collider2D other)
+	{
+		LineCutBehavior (other);
+	}
+
+	void OnTriggerExit2D(Collider2D other)
+	{
+		LineCutBehavior (other);
 	}
 
 

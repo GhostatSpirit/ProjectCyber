@@ -46,7 +46,6 @@ public class ControlStatus : MonoBehaviour {
 				}
 			}
 			// reset the actions and change the controller value
-			ResetActions ();
 			m_controller = value;
 		}
 	}
@@ -106,6 +105,7 @@ public class ControlStatus : MonoBehaviour {
 		controller = m_controller;
 		oldDrag = (myRigidbody2D != null) ? myRigidbody2D.drag : 0f;
 		oldAngularDrag = (myRigidbody2D != null) ? myRigidbody2D.angularDrag : 0f;
+		ResetActions ();
     }
 
 	void ResetActions(){
@@ -122,11 +122,13 @@ public class ControlStatus : MonoBehaviour {
 		OnLinkedByPlayer += ChaseBoss;
 		OnLinkedByPlayer += StartMovement;
 		OnLinkedByPlayer += ChangeLayerToFriend;
+		OnLinkedByPlayer += SetParentToHacker;
 
 		OnLinkedByEnemy = null;
 		OnLinkedByEnemy += ChasePlayer;
 		OnLinkedByEnemy += StartMovement;
 		OnLinkedByEnemy += ChangeLayerToEnemy;
+		OnLinkedByEnemy += SetParentToBoss;
 	}
 
 	void ResetActionsToNull(){
@@ -177,15 +179,13 @@ public class ControlStatus : MonoBehaviour {
 	 * in a given amount of time (seconds)
 	 */
 	public void Paralyze(float time){
-		// first stop this object
-		StopMovement (this.transform);
-		// then start this object after a given amont of time
-		StartCoroutine (StartMoveIE (this.transform, time));
-	}
-	// IEnumerator for invoking a function with parameters
-	IEnumerator StartMoveIE(Transform trans, float delay){
-		yield return new WaitForSeconds (delay);
-		StartMovement (trans);
+		// set the paralyze time in VirusStateControl
+		// and change the state to paralyze
+		VirusStateControl sc = GetComponent<VirusStateControl> ();
+		if(sc){
+			sc.paralyzeTime = time;
+			sc.virusState = VirusStateControl.VirusState.Paralyze;
+		}
 	}
 
 
@@ -229,6 +229,7 @@ public class ControlStatus : MonoBehaviour {
 		this.gameObject.layer = LayerMaskToLayerNum(enemyLayer);
 	}
 
+
 	// translate layerMask value into layer number [0 - 31]
 	int LayerMaskToLayerNum(LayerMask layerMask){
 		int layerNumber = 0;
@@ -239,4 +240,13 @@ public class ControlStatus : MonoBehaviour {
 		}
 		return layerNumber;
 	}
+
+	void SetParentToHacker(Transform objTrans){
+		this.transform.SetParent(Hacker.transform);
+	}
+
+	void SetParentToBoss(Transform objTrans){
+		this.transform.SetParent(Boss.transform);
+	}
+
 }

@@ -44,8 +44,8 @@ public class VirusManager : MonoBehaviour {
 			Quaternion newRot = new Quaternion();
 			newRot.eulerAngles = new Vector3 (0f, 0f, curAngle - 90f);
 			// instantiate the virus
-			//GameObject newVirus = Instantiate (virusPrefab, virusNewPos, newRot);
-			Instantiate (virusPrefab, virusNewPos, newRot);
+			GameObject newVirus = Instantiate (virusPrefab, virusNewPos, newRot);
+			newVirus.transform.SetParent (this.transform);
 		
 			curAngle += deltaAngle;
 		}

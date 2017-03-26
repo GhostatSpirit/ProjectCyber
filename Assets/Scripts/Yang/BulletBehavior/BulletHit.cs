@@ -38,6 +38,8 @@ public class BulletHit : MonoBehaviour {
 					// the target is now acquired by the HACKER!
 					targetCS.controller = Controller.Hacker;
 
+					// set the target's 
+
 					// modify layer so it wont collide
 					coll.gameObject.layer = this.gameObject.layer;
 					// stop the enemy from chasing the player
