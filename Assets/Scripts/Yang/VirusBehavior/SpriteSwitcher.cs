@@ -17,13 +17,16 @@ public class SpriteSwitcher : MonoBehaviour {
 		if (spRenderer) {
 			switch (defaultController) {
 			case Controller.Boss:
-				spRenderer.sprite = BossControlSprite;
+				if(BossControlSprite)
+					spRenderer.sprite = BossControlSprite;
 				break;
 			case Controller.Hacker:
-				spRenderer.sprite = HackerControlSprite;
+				if(HackerControlSprite)
+					spRenderer.sprite = HackerControlSprite;
 				break;
 			case Controller.None:
-				spRenderer.sprite = NoneControlSprite;
+				if(NoneControlSprite)
+					spRenderer.sprite = NoneControlSprite;
 				break;
 			}
 		}
@@ -35,24 +38,30 @@ public class SpriteSwitcher : MonoBehaviour {
 			cs.OnCutByEnemy += SpriteToNone;
 			cs.OnCutByPlayer += SpriteToNone;
 		}
+		else{
+			Debug.LogError ("cannot find control status");
+		}
 	}
 
-	void SpriteToBoss(Transform virusTrans){
+	public void SpriteToBoss(Transform virusTrans){
 		spRenderer = virusTrans.GetComponent<SpriteRenderer> ();
-		if(renderer && BossControlSprite){
+		Debug.Log ("Changing Sprite to Boss");
+		if(spRenderer && BossControlSprite){
 			spRenderer.sprite = BossControlSprite;
 		}
 	}
 
-	void SpriteToHacker(Transform virusTrans){
+	public void SpriteToHacker(Transform virusTrans){
 		spRenderer = virusTrans.GetComponent<SpriteRenderer> ();
-		if(renderer && HackerControlSprite){
+		Debug.Log ("Changing Sprite to hacker");
+		if(spRenderer && HackerControlSprite){
 			spRenderer.sprite = HackerControlSprite;
 		}
 	}
 
-	void SpriteToNone(Transform virusTrans){
+	public void SpriteToNone(Transform virusTrans){
 		spRenderer = virusTrans.GetComponent<SpriteRenderer> ();
+		Debug.Log ("Changing Sprite to none");
 		if(spRenderer && NoneControlSprite){
 			spRenderer.sprite = NoneControlSprite;
 		}

@@ -67,7 +67,9 @@ public class VirusStateControl : MonoBehaviour {
 		}
 	}
 
-	VirusState m_virusState;
+
+
+	public VirusState m_virusState;
 
 
 	public event Action<Transform> OnIdleStart;
@@ -91,12 +93,13 @@ public class VirusStateControl : MonoBehaviour {
 	public float stopRotAngle = 20f;
 
 
-
+	Vector3 releasePos;
 
 	void ResetActions(){
 		OnIdleStart = null;
 		OnIdleStart += StopChase;
 		OnIdleStart += StartPosReceiver;
+		OnIdleEnd += SetReleasePos;
 
 		OnIdleEnd = null;
 		OnIdleEnd += StopPosReceiver;
@@ -135,6 +138,15 @@ public class VirusStateControl : MonoBehaviour {
 
 		tp = GetComponent<VirusTargetPicker> ();
 		vpm = transform.parent.GetComponent<VirusPosManager> ();
+
+		ControlStatus cs = GetComponent<ControlStatus> ();
+		if(cs){
+			cs.OnCutByEnemy += StopStateControl;
+			cs.OnCutByPlayer += StopStateControl;
+
+			cs.OnLinkedByEnemy += StartStateControl;
+			cs.OnLinkedByPlayer += StartStateControl;
+		}
 	}
 
 
@@ -232,13 +244,14 @@ public class VirusStateControl : MonoBehaviour {
 				{
 					// if the player presses the buttom, release this virus
 					// state switch from Idle to Chase is managed in Hacker's script
+
 					break;
 				}
 			case VirusState.Chase:
 				{
 					Transform newTarget = tp.PickTarget ();
 					float dist = 
-						Vector3.Distance (transform.position, transform.parent.position);
+						Vector3.Distance (transform.position, releasePos);
 					tp.SetNewTarget (newTarget);
 					if(dist > maxControlDistance){
 						HealthSystem hs = GetComponent<HealthSystem> ();
@@ -278,7 +291,7 @@ public class VirusStateControl : MonoBehaviour {
 		if(ct != null){
 			ct.enabled = true;
 			ct.rotationSpeed = defaultRotSpeed;
-			ct.moveSpeed = 0f;
+			ct.moveSpeed = defaultMoveSpeed / 10f;
 		}
 	}
 
@@ -341,6 +354,20 @@ public class VirusStateControl : MonoBehaviour {
 		if(tp){
 			tp.SetNewTarget (null);
 		}
+	}
+
+	public void StopStateControl(Transform virusTrans){
+		this.enabled = false;
+	}
+
+	public void StartStateControl(Transform virusTrans){
+		this.enabled = true;
+		// default behaviour is to set status as return
+		virusState = VirusState.Return;
+	}
+
+	public void SetReleasePos(Transform virusTrans){
+		releasePos = transform.position;
 	}
 
 

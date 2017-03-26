@@ -39,7 +39,7 @@ public class NotifyBoss : MonoBehaviour {
 	void Notify(Transform objTrans){
 		VirusManager vm = (bossTrans != null) ? bossTrans.GetComponent<VirusManager> () : null;
 		if(vm != null){
-			vm.LoseOneVirus ();
+//			vm.LoseOneVirus ();
 		}
 	}
 }

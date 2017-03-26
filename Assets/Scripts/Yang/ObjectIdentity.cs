@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum ObjectType
 {
-	AI, Hacker, Virus, Boss, Wall, HackerBullet, None
+	AI, Hacker, Virus, Boss, Wall, HackerBullet, Line, None
 };
 
 

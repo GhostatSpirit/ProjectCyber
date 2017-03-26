@@ -98,6 +98,8 @@ public class ControlStatus : MonoBehaviour {
 		}
 	}
 
+
+
     void Start()
     {
 		myRigidbody2D = this.transform.GetComponent<Rigidbody2D> ();
@@ -105,30 +107,36 @@ public class ControlStatus : MonoBehaviour {
 		controller = m_controller;
 		oldDrag = (myRigidbody2D != null) ? myRigidbody2D.drag : 0f;
 		oldAngularDrag = (myRigidbody2D != null) ? myRigidbody2D.angularDrag : 0f;
-		ResetActions ();
+		BindVirusActions ();
+
+		hd = GetComponent<HurtAndDamage> ();
     }
 
-	void ResetActions(){
+	void BindVirusActions(){
 		
-		OnCutByPlayer = null;
+		//OnCutByPlayer = null;
 		OnCutByPlayer += ChaseNone;
 		OnCutByPlayer += StopMovement;
+		OnCutByPlayer += StartImmune;
 
-		OnCutByEnemy = null;
+		//OnCutByEnemy = null;
 		OnCutByEnemy += ChaseNone;
 		OnCutByEnemy += StopMovement;
+		OnCutByEnemy += StartImmune;
 
-		OnLinkedByPlayer = null;
+		//OnLinkedByPlayer = null;
 		OnLinkedByPlayer += ChaseBoss;
 		OnLinkedByPlayer += StartMovement;
 		OnLinkedByPlayer += ChangeLayerToFriend;
 		OnLinkedByPlayer += SetParentToHacker;
+		OnLinkedByPlayer += EndImmune;
 
-		OnLinkedByEnemy = null;
+		//OnLinkedByEnemy = null;
 		OnLinkedByEnemy += ChasePlayer;
 		OnLinkedByEnemy += StartMovement;
 		OnLinkedByEnemy += ChangeLayerToEnemy;
 		OnLinkedByEnemy += SetParentToBoss;
+		OnLinkedByEnemy += EndImmune;
 	}
 
 	void ResetActionsToNull(){
@@ -149,6 +157,11 @@ public class ControlStatus : MonoBehaviour {
 		if(ct != null){
 			ct.enabled = false;
 		}
+		VirusPosReceiver pr = this.transform.GetComponent<VirusPosReceiver> ();
+		if(pr != null){
+			pr.enabled = false;
+		}
+
 		if(myRigidbody2D != null){
 			// increase my drag
 			myRigidbody2D.angularDrag = increasedDrag;
@@ -165,6 +178,11 @@ public class ControlStatus : MonoBehaviour {
 		if(ct != null){
 			ct.enabled = true;
 		}
+		VirusPosReceiver pr = this.transform.GetComponent<VirusPosReceiver> ();
+		if(pr != null){
+			pr.enabled = true;
+		}
+
 		if(myRigidbody2D != null){
 			// increase my drag
 			myRigidbody2D.angularDrag = oldDrag;
@@ -230,6 +248,21 @@ public class ControlStatus : MonoBehaviour {
 	}
 
 
+	HurtAndDamage hd;
+	void StartImmune(Transform objTrans){
+		if(hd){
+			hd.canHurtOther = false;
+			hd.canHurtSelf = false;
+		}
+	}
+
+	void EndImmune(Transform objTrans){
+		if(hd){
+			hd.canHurtOther = true;
+			hd.canHurtSelf = true;
+		}
+	}
+
 	// translate layerMask value into layer number [0 - 31]
 	int LayerMaskToLayerNum(LayerMask layerMask){
 		int layerNumber = 0;
@@ -248,5 +281,6 @@ public class ControlStatus : MonoBehaviour {
 	void SetParentToBoss(Transform objTrans){
 		this.transform.SetParent(Boss.transform);
 	}
+
 
 }

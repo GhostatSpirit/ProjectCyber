@@ -71,14 +71,30 @@ public class LineUpdate : MonoBehaviour {
 		temparray[1] = new Vector2(Boss.transform.position.x- gameObject.transform.position.x, Boss.transform.position.y - gameObject.transform.position.y);
 		LineEC.points = temparray;
 
+		// set the objectIdentity to line
+		ObjectIdentity oi = ControlLine.AddComponent<ObjectIdentity> ();
+		oi.objType = ObjectType.Line;
+
 		// initialize the tag as "EnemyLine"
 		ControlLine.tag = "EnemyLine";
+		// set the layer as "EnemyLine"
+		// ControlLine.layer = LayerMaskToLayerNum(LayerMask.GetMask ("EnemyLine"));
 
 		// rename this new game object
 		ControlLine.name = "ControlLine";
 
 		ControlLine.transform.SetParent(gameObject.transform);
 		// Debug.Log(gameObject.name + ControlLine.transform.position);
+
+		// modify the actions
+		ControlStatus cs = GetComponent<ControlStatus> ();
+		if(cs){
+			cs.OnCutByEnemy += DisableLine;
+			cs.OnCutByPlayer += DisableLine;
+			cs.OnLinkedByEnemy += EnableLine;
+			cs.OnLinkedByPlayer += EnableLine;
+		}
+
 	}
 
 	void Draw(GameObject start, GameObject end, Material Mat)
@@ -89,7 +105,7 @@ public class LineUpdate : MonoBehaviour {
 		lr.endColor = color;
 		lr.SetPosition(0, start.transform.position);
 		lr.SetPosition(1, end.transform.position);
-		lr.enabled = true;
+		//lr.enabled = true;
 	}
 		
 
@@ -100,20 +116,20 @@ public class LineUpdate : MonoBehaviour {
 		if(controller == Controller.Boss)
 		{
 			Draw(gameObject, Boss, EnemyLineMaterial);
-			LineEC.enabled = true;
+			//LineEC.enabled = true;
 			ControlLine.tag = "EnemyLine";
 		}
 		if (controller == Controller.None)
 		{
-			lr.enabled = false;
-			LineEC.enabled = false;
+			// lr.enabled = false;
+			//LineEC.enabled = false;
 			ControlLine.tag = "Untagged";
 
 		}
 		if (controller == Controller.Hacker)
 		{
 			Draw(gameObject, Hacker, PlayerLineMateial);
-			LineEC.enabled = true;
+			//LineEC.enabled = true;
 			ControlLine.tag = "PlayerLine";
 		}
 
@@ -128,5 +144,35 @@ public class LineUpdate : MonoBehaviour {
 		LineEC.points = temparray;
 
 	}
+
+	public void EnableLine(Transform virusTrans){
+		if(LineEC){
+			LineEC.enabled = true;
+		}
+		if(lr){
+			lr.enabled = true;
+		}
+	}
+
+	public void DisableLine(Transform virusTrans){
+		if(LineEC){
+			LineEC.enabled = false;
+		}
+		if(lr){
+			lr.enabled = false;
+		}
+	}
+
+	// translate layerMask value into layer number [0 - 31]
+	int LayerMaskToLayerNum(LayerMask layerMask){
+		int layerNumber = 0;
+		int layer = layerMask.value;
+		while(layer > 0){
+			layer = layer >> 1;
+			layerNumber++;
+		}
+		return layerNumber - 1;
+	}
+
 		
 }

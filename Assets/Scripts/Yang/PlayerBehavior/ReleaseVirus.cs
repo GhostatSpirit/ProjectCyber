@@ -7,6 +7,9 @@ public class ReleaseVirus : MonoBehaviour {
 
 	InputDevice myInputDevice;
 
+	// a static object
+	public Transform releasedVirusParent;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -36,10 +39,30 @@ public class ReleaseVirus : MonoBehaviour {
 				if(sc){
 					if(sc.virusState == VirusStateControl.VirusState.Idle){
 						// change the state to "chase"
+						sc.OnChaseStart += SetReleaseParent;
+						sc.OnChaseStart += DisableLineRenderer;
+
 						sc.virusState = VirusStateControl.VirusState.Chase;
+
+						sc.OnChaseStart -= SetReleaseParent;
+						sc.OnChaseStart -= DisableLineRenderer;
 					}
 				}
 			}
+		}
+	}
+
+	public void SetReleaseParent(Transform virusTrans){
+		virusTrans.parent = releasedVirusParent;
+	}
+
+	public void DisableLineRenderer(Transform virusTrans){
+		LineRenderer lr = virusTrans.GetComponentInChildren<LineRenderer> ();
+
+		if(lr){
+			lr.enabled = false;
+		}else{
+			Debug.Log ("cannot find linerenderer");
 		}
 	}
 }

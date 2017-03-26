@@ -9,7 +9,8 @@ public class VirusTargetPicker : MonoBehaviour {
 	public Target targetGroup = Target.Player;
 
 	ObjectType[] playerTargets = { ObjectType.Virus, ObjectType.AI, ObjectType.Hacker };
-	ObjectType[] bossTargets = { ObjectType.Boss, ObjectType.Virus };
+	//ObjectType[] playerTargets = { ObjectType.Virus, ObjectType.AI, ObjectType.Hacker };
+	ObjectType[] bossTargets = { ObjectType.Boss};
 
 
 //	public List<Transform> playerTargets;

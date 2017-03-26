@@ -21,15 +21,24 @@ public class VirusPosManager : MonoBehaviour {
 
 	List<Transform> virusList;
 
+	FieldOfView fov;
+
 	// Use this for initialization
 	void Start () {
 		virusList = new List<Transform> ();
 		virusList.Clear ();
 		facing = Vector3.zero;
+
+		fov = GetComponent<FieldOfView> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if(fov){
+			facing = fov.facing;
+		}
+
+
 		virusList.Clear ();
 		// get all childs which is a virus
 		foreach(Transform child in transform){

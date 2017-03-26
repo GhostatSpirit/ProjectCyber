@@ -145,7 +145,7 @@ public class HealthSystem : MonoBehaviour {
 	}
 
 	/* StopMovement:
-	 * stop this object froming moving by changing body type to "Static"
+	 * stop this object froming moving
 	 */
 	void StopMovement (Transform trans){
 		Rigidbody2D myRigidbody = GetComponent<Rigidbody2D> ();
