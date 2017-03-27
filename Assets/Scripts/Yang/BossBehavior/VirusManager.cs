@@ -72,6 +72,12 @@ public class VirusManager : MonoBehaviour {
 			}
 			newVirus.transform.parent = transform;
 
+			// stop the virus from changing its virusState until it is
+			// reaching the spreadRadius
+			VirusStateControl vsc = newVirus.GetComponent<VirusStateControl> ();
+			vsc.enabled = false;
+			StartCoroutine (EnableStateChange (newVirus.transform));
+
 		}
 //		if(virusPrefab == null || respawnCount == 0){
 //			return;
@@ -98,6 +104,29 @@ public class VirusManager : MonoBehaviour {
 //		currentCount += respawnCount;
 	}
 
+	IEnumerator EnableStateChange(Transform virusTrans){
+
+		yield return new WaitUntil (() => {return ReachingSpreadRadius(virusTrans);});
+		VirusStateControl vsc = virusTrans.GetComponent<VirusStateControl>();
+		if(vsc){
+			vsc.enabled = true;
+		}
+	}
+
+	bool ReachingSpreadRadius(Transform virusTrans){
+		VirusPosManager vpm = GetComponent<VirusPosManager>();
+		float radius = 0f;
+		if(vpm){
+			radius = vpm.spreadRadius;
+		}
+		if(virusTrans == null){
+			return true;
+		}
+		float dist = Vector3.Distance (transform.position, virusTrans.position);
+
+		// 0.75 is a magic number
+		return (dist >= 0.75 * radius);
+	}
 //	public void LoseOneVirus(){
 //		currentCount--;
 //	}

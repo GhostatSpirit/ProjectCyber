@@ -45,7 +45,7 @@ public class SpriteSwitcher : MonoBehaviour {
 
 	public void SpriteToBoss(Transform virusTrans){
 		spRenderer = virusTrans.GetComponent<SpriteRenderer> ();
-		Debug.Log ("Changing Sprite to Boss");
+//		Debug.Log ("Changing Sprite to Boss");
 		if(spRenderer && BossControlSprite){
 			spRenderer.sprite = BossControlSprite;
 		}
@@ -53,7 +53,7 @@ public class SpriteSwitcher : MonoBehaviour {
 
 	public void SpriteToHacker(Transform virusTrans){
 		spRenderer = virusTrans.GetComponent<SpriteRenderer> ();
-		Debug.Log ("Changing Sprite to hacker");
+//		Debug.Log ("Changing Sprite to hacker");
 		if(spRenderer && HackerControlSprite){
 			spRenderer.sprite = HackerControlSprite;
 		}
@@ -61,7 +61,7 @@ public class SpriteSwitcher : MonoBehaviour {
 
 	public void SpriteToNone(Transform virusTrans){
 		spRenderer = virusTrans.GetComponent<SpriteRenderer> ();
-		Debug.Log ("Changing Sprite to none");
+//		Debug.Log ("Changing Sprite to none");
 		if(spRenderer && NoneControlSprite){
 			spRenderer.sprite = NoneControlSprite;
 		}

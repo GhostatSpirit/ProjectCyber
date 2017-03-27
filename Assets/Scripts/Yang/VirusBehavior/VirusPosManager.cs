@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class VirusPosManager : MonoBehaviour {
 
-	// the max number of virus this object could control at a time
-	public int maxVirusCount = 4;
-
 	// the distance that the virus children would keep with this object
 	public float spreadRadius = 3f;
 
@@ -14,7 +11,11 @@ public class VirusPosManager : MonoBehaviour {
 	[Range(0, 360)]
 	public float intervalAngle = 20f;
 
-	public Vector3 facing;
+	// the speed that every child virus will follow
+	public float moveSpeed = 3f;
+	public float rotSpeed = 5f;
+
+	[HideInInspector]public Vector3 facing;
 
 	// the amount of virus that is alive for now
 	int virusCount = 0;
@@ -46,7 +47,15 @@ public class VirusPosManager : MonoBehaviour {
 			ObjectIdentity oi = child.GetComponent<ObjectIdentity> ();
 			if(oi && oi.objType == ObjectType.Virus){
 				// append it to the virus list
-				virusList.Add(child);
+				// only append idle and controlling
+				VirusStateControl sc = child.GetComponent<VirusStateControl> ();
+				ControlStatus cs = child.GetComponent<ControlStatus> ();
+				bool controlling = (cs.controller != Controller.None);
+				bool nowIdle = (sc.virusState == VirusStateControl.VirusState.Idle);
+
+				if (sc && controlling && nowIdle) {
+					virusList.Add (child);
+				}
 			}
 		}
 		virusCount = virusList.Count;
@@ -82,6 +91,10 @@ public class VirusPosManager : MonoBehaviour {
 				Vector3 newPos = transform.position + dirToVirus * spreadRadius;
 				//Debug.Log (newPos);
 				receiver.desiredPos = newPos;
+
+				// set child virus speed
+				receiver.moveSpeed = moveSpeed;
+				receiver.rotSpeed = rotSpeed;
 			}
 
 			rotCursor = Quaternion.AngleAxis (intervalAngle, Vector3.forward) * rotCursor;

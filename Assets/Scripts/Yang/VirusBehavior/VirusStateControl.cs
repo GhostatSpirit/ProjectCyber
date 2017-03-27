@@ -231,6 +231,7 @@ public class VirusStateControl : MonoBehaviour {
 			switch (virusState) {
 			case VirusState.Return:
 				{
+					StopPosReceiver(this.transform);
 					tp.SetParentAsTarget ();
 					float dist = 
 						Vector3.Distance (transform.position, transform.parent.position);
