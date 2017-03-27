@@ -50,6 +50,7 @@ public class SmoothCam : MonoBehaviour {
         */
 
         Main.orthographicSize = Initial;
+        Main.aspect = ;
         Initial = size;
 
         //Main.orthographicSize = (Screen.height / 100f ) / 4f;
