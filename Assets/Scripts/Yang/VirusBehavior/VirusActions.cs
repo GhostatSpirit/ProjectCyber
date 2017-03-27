@@ -71,7 +71,7 @@ public class VirusActions : MonoBehaviour {
 
 
 	IEnumerator BindVirusActionIE(){
-		yield return WaitUntil (() => {
+		yield return new WaitUntil (() => {
 			return (cs != null);
 		});
 		BindVirusActions();
