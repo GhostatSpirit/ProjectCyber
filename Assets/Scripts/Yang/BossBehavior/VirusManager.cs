@@ -107,9 +107,11 @@ public class VirusManager : MonoBehaviour {
 	IEnumerator EnableStateChange(Transform virusTrans){
 
 		yield return new WaitUntil (() => {return ReachingSpreadRadius(virusTrans);});
-		VirusStateControl vsc = virusTrans.GetComponent<VirusStateControl>();
-		if(vsc){
-			vsc.enabled = true;
+		if (virusTrans) {
+			VirusStateControl vsc = virusTrans.GetComponent<VirusStateControl> ();
+			if (vsc) {
+				vsc.enabled = true;
+			}
 		}
 	}
 

@@ -94,13 +94,14 @@ public class LineCut : MonoBehaviour {
 		if(cs == null || oi == null){
 			return;
 		}
+
 		bool controlledByBoss = 
 			(cs.controller == Controller.Boss);
-		bool isVirus =
-			(oi.objType == ObjectType.Virus);
+		bool isControllable =
+			oi.isControllable ();
 
 
-		if (isVirus && controlledByBoss && couldCut ) // && other.gameObject.GetComponent<LineRenderer>().startColor != Color.clear && other.gameObject.GetComponent<LineRenderer>().endColor != Color.clear)
+		if (isControllable && controlledByBoss && couldCut ) // && other.gameObject.GetComponent<LineRenderer>().startColor != Color.clear && other.gameObject.GetComponent<LineRenderer>().endColor != Color.clear)
 		{
 			// reaching an enemyline, cut it
 			if(OnLineCut != null){

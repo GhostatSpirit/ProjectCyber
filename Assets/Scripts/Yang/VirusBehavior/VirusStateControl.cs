@@ -99,7 +99,7 @@ public class VirusStateControl : MonoBehaviour {
 		OnIdleStart = null;
 		OnIdleStart += StopChase;
 		OnIdleStart += StartPosReceiver;
-		OnIdleEnd += SetReleasePos;
+
 
 		OnIdleEnd = null;
 		OnIdleEnd += StopPosReceiver;
@@ -107,6 +107,7 @@ public class VirusStateControl : MonoBehaviour {
 		OnChaseStart = null;
 		OnChaseStart += StartChase;
 		OnChaseStart += SetTargetToNull;
+		OnChaseStart += SetReleasePos;
 		OnChaseEnd = null;
 
 		OnReturnStart = null;
@@ -154,13 +155,14 @@ public class VirusStateControl : MonoBehaviour {
 	VirusPosManager vpm;
 	// logic for switching states
 	void Update () {
-		ObjectIdentity oi = transform.parent.GetComponent<ObjectIdentity> ();
+		ControlStatus cs = transform.GetComponent<ControlStatus> ();
+		//ObjectIdentity oi = transform.parent.GetComponent<ObjectIdentity> ();
 		vpm = transform.parent.GetComponent<VirusPosManager> ();
 
-		if (oi == null)
-			return;
-		switch(oi.objType){
-		case ObjectType.Boss:
+		//if (oi == null)
+			//return;
+		switch(cs.controller){
+		case Controller.Boss:
 			// state switch logic for Boss
 			switch (virusState) {
 			case VirusState.Idle:
@@ -226,7 +228,7 @@ public class VirusStateControl : MonoBehaviour {
 
 
 
-		case ObjectType.Hacker:
+		case Controller.Hacker:
 			// state switch logic for hacker
 			switch (virusState) {
 			case VirusState.Return:

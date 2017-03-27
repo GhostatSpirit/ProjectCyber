@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum ObjectType
 {
-	AI, Hacker, Virus, Boss, Wall, HackerBullet, Line, None
+	AI, Hacker, Virus, Boss, Wall, HackerBullet, Line, Door, None
 };
 
 
@@ -14,7 +14,7 @@ public class ObjectIdentity : MonoBehaviour {
 
 	// define all controllable objects here
 	public static List<ObjectType> controllables = new List<ObjectType>{
-		ObjectType.Virus
+		ObjectType.Virus, ObjectType.Door
 	};
 
 	// define all obstacles that could block vision here

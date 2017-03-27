@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class VirusActions : MonoBehaviour {
 
-	public GameObject Boss;
-	public GameObject Hacker;
+	//public GameObject Boss;
+	//public GameObject Hacker;
 
 	public LayerMask enemyLayer;
 	public LayerMask friendLayer;
@@ -24,9 +25,9 @@ public class VirusActions : MonoBehaviour {
 			}
 			switch(cs.controller){
 			case(Controller.Hacker):
-				return Hacker.transform;
+				return cs.Hacker;
 			case(Controller.Boss):
-				return Boss.transform;
+				return cs.Boss;
 			default:
 				return null;
 			}
@@ -59,10 +60,12 @@ public class VirusActions : MonoBehaviour {
 
 		oldDrag = (myRigidbody2D != null) ? myRigidbody2D.drag : 0f;
 		oldAngularDrag = (myRigidbody2D != null) ? myRigidbody2D.angularDrag : 0f;
-		BindVirusActions ();
 
 		hd = GetComponent<HurtAndDamage> ();
 		cs = GetComponent<ControlStatus> ();
+
+		StartCoroutine (BindVirusActionIE ());
+
 	}
 
 	void Update(){
@@ -234,11 +237,11 @@ public class VirusActions : MonoBehaviour {
 	}
 
 	void SetParentToHacker(Transform objTrans){
-		this.transform.SetParent(Hacker.transform);
+		this.transform.SetParent(cs.Hacker);
 	}
 
 	void SetParentToBoss(Transform objTrans){
-		this.transform.SetParent(Boss.transform);
+		this.transform.SetParent(cs.Boss);
 	}
 
 

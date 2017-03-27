@@ -27,14 +27,14 @@ public class LineUpdate : MonoBehaviour {
 	// a read-only Boss property that reads Boss from ControlStatus
 	GameObject Boss{
 		get{
-			return GetComponent<ControlStatus> ().Boss;
+			return GetComponent<ControlStatus> ().Boss.gameObject;
 		}
 	}
 
 	// a read-only Boss property that reads Hacker from ControlStatus
 	GameObject Hacker{
 		get{
-			return GetComponent<ControlStatus> ().Hacker;
+			return GetComponent<ControlStatus> ().Hacker.gameObject;
 		}
 	}
 
@@ -137,11 +137,15 @@ public class LineUpdate : MonoBehaviour {
 
 		// Update edge collider
 		LineEC.isTrigger = true;
-		Vector2[] temparray = new Vector2[2];
-		Vector3 Boss2Self = Boss.transform.position - transform.position;
-		temparray[0] = new Vector2(0, 0);
-		temparray[1] = ControlLine.transform.InverseTransformVector (Boss2Self);
-		LineEC.points = temparray;
+		if (Boss) {
+			Vector2[] temparray = new Vector2[2];
+			Vector3 Boss2Self = Boss.transform.position - transform.position;
+			temparray [0] = new Vector2 (0, 0);
+			temparray [1] = ControlLine.transform.InverseTransformVector (Boss2Self);
+			LineEC.points = temparray;
+		} else {
+			LineEC.enabled = false;
+		}
 
 	}
 
