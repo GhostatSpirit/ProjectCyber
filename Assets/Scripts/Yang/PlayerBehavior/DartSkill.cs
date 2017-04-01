@@ -118,7 +118,7 @@ public class DartSkill : MonoBehaviour {
 		if(timer > dartDuration && darting){
         /*/
 
-        // dart if
+        // stop dart
         if( darting && (((x.Status != ChargingDart.chargingStatus.Charging && x.Status != ChargingDart.chargingStatus.StartCharge) || timer > MaxDuration) || ( x.Status == ChargingDart.chargingStatus.Release && x.ChargingSum < MinDuration && timer > MinDuration)))
         { 
         
