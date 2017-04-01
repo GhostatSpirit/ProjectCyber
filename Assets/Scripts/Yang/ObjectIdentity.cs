@@ -1,10 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using System.Linq;
 
 public enum ObjectType
 {
-	AI, Hacker, Virus, Boss, Wall, HackerBullet, Line, Door, None
+	AI, Hacker, Virus, Boss,
+	Wall, Door,
+	HackerBullet,
+	Line, 
+	None,
+	Interface		// interface means an object that allows hacker to control other objects
 };
 
 
@@ -14,7 +21,7 @@ public class ObjectIdentity : MonoBehaviour {
 
 	// define all controllable objects here
 	public static List<ObjectType> controllables = new List<ObjectType>{
-		ObjectType.Virus, ObjectType.Door
+		ObjectType.Virus, ObjectType.Interface
 	};
 
 	// define all obstacles that could block vision here

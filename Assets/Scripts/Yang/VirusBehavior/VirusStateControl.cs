@@ -171,7 +171,7 @@ public class VirusStateControl : MonoBehaviour {
 					if (newTarget != null) {
 						// we found a new target here, set the target to the new target
 						// and change the state
-						Debug.Log ("leaving idle, entering chase");
+	//					Debug.Log ("leaving idle, entering chase");
 						tp.SetNewTarget (newTarget);
 						// entering the chase state
 						virusState = VirusState.Chase;
@@ -203,7 +203,7 @@ public class VirusStateControl : MonoBehaviour {
 				{
 					Transform newTarget = tp.PickTarget ();
 					if (newTarget != null) {
-						Debug.Log ("leaving return, entering chase");
+//						Debug.Log ("leaving return, entering chase");
 						// found new target
 						tp.SetNewTarget (newTarget);
 						// entering the chase state

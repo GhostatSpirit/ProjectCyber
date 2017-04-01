@@ -10,7 +10,7 @@ public class VirusTargetPicker : MonoBehaviour {
 
 	ObjectType[] playerTargets = { ObjectType.Virus, ObjectType.AI, ObjectType.Hacker };
 	//ObjectType[] playerTargets = { ObjectType.Virus, ObjectType.AI, ObjectType.Hacker };
-	ObjectType[] bossTargets = { ObjectType.Boss};
+	ObjectType[] bossTargets = { ObjectType.Boss };
 
 
 //	public List<Transform> playerTargets;
@@ -25,6 +25,8 @@ public class VirusTargetPicker : MonoBehaviour {
 		//vs = GetComponent<VirusStateControl> ();
 		fov = GetComponent<FieldOfView> ();
 		ct = GetComponent<ChaseTarget> ();
+
+
 	}
 
 	public Transform PickTarget(){

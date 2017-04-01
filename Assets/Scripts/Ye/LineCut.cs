@@ -65,6 +65,8 @@ public class LineCut : MonoBehaviour {
 	public event Action<Transform> OnLineCut;
 
 	void LineCutBehavior(Collider2D other){
+//		Debug.Log ("Collision");
+//		Debug.Log (other.transform);
 		ControlStatus cs = other.GetComponentInParent<ControlStatus> ();
 		ObjectIdentity oi = other.GetComponent<ObjectIdentity> ();
 		if(cs == null || oi == null){
@@ -88,20 +90,22 @@ public class LineCut : MonoBehaviour {
 	}
 
 	void LineCutBehavior(RaycastHit2D hit){
-		Transform hitTrans = hit.transform;
-		ControlStatus cs = hitTrans.GetComponent<ControlStatus> ();
-		ObjectIdentity oi =  hitTrans.GetComponent<ObjectIdentity> ();
+//		Debug.Log ("Raycast");
+//		Debug.Log (hit.transform);
+		Transform hitTrans = hit.collider.transform;
+		ControlStatus cs = hitTrans.GetComponentInParent<ControlStatus> ();
+		ObjectIdentity oi = hitTrans.GetComponent<ObjectIdentity> ();
 		if(cs == null || oi == null){
 			return;
 		}
 
 		bool controlledByBoss = 
 			(cs.controller == Controller.Boss);
-		bool isControllable =
-			oi.isControllable ();
+		bool isLine =
+			(oi.objType == ObjectType.Line);
 
 
-		if (isControllable && controlledByBoss && couldCut ) // && other.gameObject.GetComponent<LineRenderer>().startColor != Color.clear && other.gameObject.GetComponent<LineRenderer>().endColor != Color.clear)
+		if (isLine && controlledByBoss && couldCut ) // && other.gameObject.GetComponent<LineRenderer>().startColor != Color.clear && other.gameObject.GetComponent<LineRenderer>().endColor != Color.clear)
 		{
 			// reaching an enemyline, cut it
 			if(OnLineCut != null){

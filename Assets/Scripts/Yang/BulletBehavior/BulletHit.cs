@@ -23,7 +23,7 @@ public class BulletHit : MonoBehaviour {
 		if(oi == null){
 			return;
 		}
-		Debug.Log ("Bullet hits: " + oi.objType.ToString ());
+		//Debug.Log ("Bullet hits: " + oi.objType.ToString ());
 
 		switch(oi.objType){
 		case ObjectType.Virus:{
@@ -34,8 +34,8 @@ public class BulletHit : MonoBehaviour {
 				HitVirusBehaviour (coll);
 				break;
 			}
-		case ObjectType.Door:{
-				HitDoorBehaviour (coll);
+		case ObjectType.Interface:{
+				HitInterfaceBehaviour (coll);
 				break;
 			}
 		}
@@ -76,8 +76,8 @@ public class BulletHit : MonoBehaviour {
 		}
 	}
 
-	void HitDoorBehaviour(Collision2D coll){
-		Debug.Log (coll.transform);
+	void HitInterfaceBehaviour(Collision2D coll){
+		//Debug.Log (coll.transform);
 		if (NotControlled (coll.transform)){
 			// it the door is not controlled by the boss...
 			coll.transform.GetComponentInParent<ControlStatus> ().controller = Controller.Hacker;
