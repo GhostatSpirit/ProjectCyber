@@ -28,7 +28,7 @@ public class HealthSystem : MonoBehaviour {
 	public Text displayText;
 
 	// this object's current health
-	float objHealth;
+	public float objHealth;
 	// whether this object is currently immune or not
 	bool isImmune = false;
 
