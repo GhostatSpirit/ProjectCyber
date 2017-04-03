@@ -25,7 +25,7 @@ public class ControlStatus : MonoBehaviour {
 			return m_controller;
 		}
 		set{
-			Controller oldController = controller;
+			Controller oldController = m_controller;
 			Controller newController = value;
 			// trigger an event accordingly 
 			// if the old & new controllers matches certain combination
@@ -34,7 +34,7 @@ public class ControlStatus : MonoBehaviour {
 					OnCutByPlayer (this.transform);
 				}
 			}
-			else if(oldController == Controller.Hacker && newController == Controller.Boss){
+			else if(oldController == Controller.Hacker && newController == Controller.None){
 				if (OnCutByEnemy != null) {
 					OnCutByEnemy (this.transform);
 				}
@@ -47,6 +47,22 @@ public class ControlStatus : MonoBehaviour {
 			else if(oldController == Controller.None && newController == Controller.Boss){
 				if (OnLinkedByEnemy != null) {
 					OnLinkedByEnemy (this.transform);
+				}
+			}
+			else if(oldController == Controller.Hacker && newController == Controller.Boss){
+				if (OnCutByEnemy != null) {
+					OnCutByEnemy (this.transform);
+				}
+				if (OnLinkedByEnemy != null) {
+					OnLinkedByEnemy (this.transform);
+				}
+			}
+			else if(oldController == Controller.Boss && newController == Controller.Hacker){
+				if (OnCutByPlayer != null) {
+					OnCutByPlayer (this.transform);
+				}
+				if (OnLinkedByPlayer != null) {
+					OnLinkedByPlayer (this.transform);
 				}
 			}
 			// reset the actions and change the controller value

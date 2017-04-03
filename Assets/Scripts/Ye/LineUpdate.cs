@@ -116,19 +116,21 @@ public class LineUpdate : MonoBehaviour {
 		if(controller == Controller.Boss)
 		{
 			Draw(gameObject, Boss, EnemyLineMaterial);
+			UpdateCollider (Boss);
 			//LineEC.enabled = true;
 			ControlLine.tag = "EnemyLine";
 		}
 		if (controller == Controller.None)
 		{
 			// lr.enabled = false;
-			//LineEC.enabled = false;
+			LineEC.enabled = false;
 			ControlLine.tag = "Untagged";
 
 		}
 		if (controller == Controller.Hacker)
 		{
 			Draw(gameObject, Hacker, PlayerLineMateial);
+			UpdateCollider (Hacker);
 			//LineEC.enabled = true;
 			ControlLine.tag = "PlayerLine";
 		}
@@ -136,18 +138,27 @@ public class LineUpdate : MonoBehaviour {
 
 
 		// Update edge collider
-		LineEC.isTrigger = true;
-		if (Boss) {
-			Vector2[] temparray = new Vector2[2];
-			Vector3 Boss2Self = Boss.transform.position - transform.position;
-			temparray [0] = new Vector2 (0, 0);
-			temparray [1] = ControlLine.transform.InverseTransformVector (Boss2Self);
-			LineEC.points = temparray;
-		} else {
-			LineEC.enabled = false;
-		}
+//		LineEC.isTrigger = true;
+//		if (Boss) {
+//			Vector2[] temparray = new Vector2[2];
+//			Vector3 Boss2Self = Boss.transform.position - transform.position;
+//			temparray [0] = new Vector2 (0, 0);
+//			temparray [1] = ControlLine.transform.InverseTransformVector (Boss2Self);
+//			LineEC.points = temparray;
+//		} else {
+//			LineEC.enabled = false;
+//		}
 
 	}
+
+	void UpdateCollider(GameObject target){
+		Vector2[] temparray = new Vector2[2];
+		Vector3 target2Self = target.transform.position - transform.position;
+		temparray [0] = new Vector2 (0, 0);
+		temparray [1] = ControlLine.transform.InverseTransformVector (target2Self);
+		LineEC.points = temparray;
+	}
+
 
 	public void EnableLine(Transform virusTrans){
 		if(LineEC){
