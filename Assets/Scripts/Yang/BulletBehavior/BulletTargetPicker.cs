@@ -7,7 +7,9 @@ public class BulletTargetPicker : MonoBehaviour {
 
 	// add the objects you would like bullet to chase here
 	// that are not controllables
-	List<ObjectType> targets = new List<ObjectType>{};
+	public List<ObjectType> targets = new List<ObjectType>{};
+
+	public bool addControllables = true;
 
 	[Range(0f, 1f)]
 	public float factorInterval = 0.25f;
@@ -17,7 +19,9 @@ public class BulletTargetPicker : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		targets.AddRange (ObjectIdentity.controllables);
+		if (addControllables) {
+			targets.AddRange (ObjectIdentity.controllables);
+		}
 
 		ct = GetComponent<ChaseTarget> ();
 		fov = GetComponent<FieldOfView> ();

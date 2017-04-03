@@ -35,6 +35,10 @@ sysinfo.txt
 # InControl folder
 /Assets/InControl
 
+# PolyNav folder
+/Assets/PolyNav2D
+/Assets/PolyNav2D.meta
+
 # Richard Luo's plugins
 /Assets/FastLineRenderer
 /Assets/Navigation2D

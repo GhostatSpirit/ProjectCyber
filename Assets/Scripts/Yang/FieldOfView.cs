@@ -8,7 +8,7 @@ using System.Linq;
 public class FieldOfView : MonoBehaviour
 {
 	// radius of the float area
-	public float radius = 5f;
+	public float radius = 1.5f;
 
 	[Range(0f,180f)]
 	public float angle = 180f;
@@ -197,7 +197,6 @@ public class FieldOfView : MonoBehaviour
 	}
 
 
-
 	bool CheckPartialAngel(Transform target, float factor){
 		if (factor <= 0f) {
 			Debug.LogError ("angle factor is below zero.");
@@ -265,7 +264,6 @@ public class FieldOfView : MonoBehaviour
 		Vector3 dirToTarget = target.position - this.transform.position;
 		dirToTarget.Normalize ();
 		Quaternion rot = Quaternion.FromToRotation (facing, dirToTarget);
-
 
 		float angleZ = rot.eulerAngles.z;
 		if(angleZ > 180f){

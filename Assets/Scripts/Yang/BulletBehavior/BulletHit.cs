@@ -38,6 +38,10 @@ public class BulletHit : MonoBehaviour {
 				HitInterfaceBehaviour (coll);
 				break;
 			}
+		case ObjectType.Robot:{
+				HitRobotBehaviour (coll);
+				break;
+			}
 		}
 
 	}
@@ -81,6 +85,15 @@ public class BulletHit : MonoBehaviour {
 		if (NotControlled (coll.transform)){
 			// it the door is not controlled by the boss...
 			coll.transform.GetComponentInParent<ControlStatus> ().controller = Controller.Hacker;
+		}
+	}
+
+	void HitRobotBehaviour(Collision2D coll){
+		if(NotControlled(coll.transform)){
+			coll.transform.GetComponent<ControlStatus> ().controller = Controller.Hacker;
+		}
+		else{
+			coll.transform.GetComponent<Animator> ().SetTrigger ("paralyzed");
 		}
 	}
 

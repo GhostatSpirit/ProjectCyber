@@ -1,23 +1,18 @@
-﻿// Script by Yang Liu
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using System.Collections;
-using InControl;
 
-public enum Direction {UP, DOWN, LEFT, RIGHT, UPLEFT, UPRIGHT, DOWNLEFT, DOWNRIGHT};
+[RequireComponent (typeof(SpriteRenderer))]
+public class FacingSpriteSwitcher : MonoBehaviour {
 
-[RequireComponent (typeof(DeviceReceiver))]
-public class PlayerMovement: MonoBehaviour {
+	[ReadOnly]public Vector3 facing;
 
-    public float moveSpeed = 50f;
+	Direction faceDirection{
+		get{
+			return Vector2Direction (facing);
+		}
+	}
 
-	// commented out Unity Input scripts
-	// public string horizontalAxisName = "Horizontal";
-	// public string verticalAxisName = "Vertical";
-
-	public Direction initialFacing = Direction.DOWN;
-	//public Transform playerFeet;
-
-	// different character sprites for 8 directions
 	public Sprite downSprite;
 	public Sprite downLeftSprite;
 	public Sprite downRightSprite;
@@ -27,38 +22,11 @@ public class PlayerMovement: MonoBehaviour {
 	public Sprite upLeftSprite;
 	public Sprite upRightSprite;
 
-	public float frameDuration = 0.16f;
 
-	public bool moveEnabled;
-	public bool turnEnabled;
-
-	public AudioClip moveSound;
-	// default: delay 1 second and play again
-	public float playSoundGap = 1f;
-	public float volumeScale = 0.8f;
-	bool playingSound = false;
-
-	[HideInInspector] public Vector2 faceDirection;
-
-    Vector2 moveVector;
-    Rigidbody2D myRigidbody;
 	SpriteRenderer mySpriteRenderer;
-	InputDevice myInputDevice;
-
-
-	AudioSource myAudioSource;
-
 	// Use this for initialization
 	void Start () {
-        myRigidbody = GetComponent<Rigidbody2D>();
 		mySpriteRenderer = GetComponent<SpriteRenderer> ();
-		myAudioSource = GetComponent<AudioSource> ();
-
-		moveEnabled = true;
-		turnEnabled = true;
-
-		// check if sprites with different facings is null
-		// if is null, replace it with the default sprite
 		Sprite defaultSprite = mySpriteRenderer.sprite;
 
 		downSprite = downSprite ?? defaultSprite;
@@ -69,70 +37,12 @@ public class PlayerMovement: MonoBehaviour {
 		upSprite = upSprite ?? defaultSprite;
 		upLeftSprite = upLeftSprite ?? defaultSprite;
 		upRightSprite = upRightSprite ?? defaultSprite;
-
-
-		switch(initialFacing){
-		case Direction.DOWN:
-			mySpriteRenderer.sprite = downSprite;
-			break;
-		case Direction.DOWNLEFT:
-			mySpriteRenderer.sprite = downLeftSprite;
-			break;
-		case Direction.DOWNRIGHT:
-			mySpriteRenderer.sprite = downRightSprite;
-			break;
-		case Direction.LEFT:
-			mySpriteRenderer.sprite = leftSprite;
-			break;
-		case Direction.RIGHT:
-			mySpriteRenderer.sprite = rightSprite;
-			break;
-		case Direction.UP:
-			mySpriteRenderer.sprite = upSprite;
-			break;
-		case Direction.UPLEFT:
-			mySpriteRenderer.sprite = upLeftSprite;
-			break;
-		case Direction.UPRIGHT:
-			mySpriteRenderer.sprite = upRightSprite;
-			break;
-		default:
-			mySpriteRenderer.sprite = downSprite;
-			break;
-		}
-
-		faceDirection = Direction2Vector (initialFacing);
-		
 	}
-
+	
 	// Update is called once per frame
 	void Update () {
-		// get the axis values, construct a vector and normalize it
-		// commented out Unity Input scripts
-//		float horizontal = Input.GetAxis (horizontalAxisName);
-//		float vertical = Input.GetAxis(verticalAxisName);
-		myInputDevice = GetComponent<DeviceReceiver>().GetDevice();
-
-		if(myInputDevice == null){
-			return;
-		}
-		float horizontal = myInputDevice.LeftStickX;
-		float vertical = myInputDevice.LeftStickY;
-
-        moveVector = new Vector2(horizontal, vertical);
-
-		if(moveVector.magnitude > 1f){
-			moveVector.Normalize ();
-		}
-
-
-		if (moveVector.magnitude != 0f) {
-			// update facedirection
-			faceDirection = moveVector.normalized;
-			// change sprite according to moveVector
-			Direction currentDir = Vector2Direction (moveVector);
-
-			switch(currentDir){
+		if(facing.magnitude > 0f){
+			switch(faceDirection){
 			case Direction.DOWN:
 				mySpriteRenderer.sprite = downSprite;
 				break;
@@ -161,38 +71,7 @@ public class PlayerMovement: MonoBehaviour {
 				mySpriteRenderer.sprite = downSprite;
 				break;
 			}
-
-			// deal with sounds here
-			if(!playingSound && moveVector.magnitude > 0.5f){
-				playingSound = true;
-				myAudioSource.PlayOneShot (moveSound, volumeScale);
-				Invoke ("ResetSound", playSoundGap);
-			}
-
 		}
-
-
-	}
-
-    void FixedUpdate() {
-		if(myInputDevice == null){
-			return;
-		}
-		if (moveEnabled) {
-			if (myRigidbody.bodyType != RigidbodyType2D.Static) {
-				myRigidbody.velocity = moveVector * moveSpeed * Time.deltaTime * 10f;
-			}
-//			if(moveVector.magnitude != 0){
-//				transform.up = new Vector2 (-moveVector.x, -moveVector.y);
-//			}
-		}
-
-		
-
-    }
-
-	void ResetSound(){
-		playingSound = false;
 	}
 
 	// translate a Direction enum to a normalized Vector3
@@ -278,4 +157,3 @@ public class PlayerMovement: MonoBehaviour {
 		return dirvec.normalized;
 	}
 }
-

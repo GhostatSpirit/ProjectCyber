@@ -28,9 +28,10 @@ public class HealthSystem : MonoBehaviour {
 	public Text displayText;
 
 	// this object's current health
-	public float objHealth;
+	[ReadOnly]public float objHealth;
 	// whether this object is currently immune or not
 	bool isImmune = false;
+	bool isHarmless = false;
 
 	// this action is executed as soon as this object is dead
 	public event Action<Transform> OnObjectDead;
@@ -77,10 +78,9 @@ public class HealthSystem : MonoBehaviour {
 		objHealth = 0f;
 		DeathHandler ();
 	}
-
-	/* start the immune period, this object would not be hurt*/
-	public void StartImmune(){
-		// during immune, this obj cannot hurt others any more
+		
+	public void StartHarmless(){
+		// during harmless, this obj cannot hurt others any more
 		HurtAndDamage hd = GetComponent<HurtAndDamage> ();
 		if(hd){
 			hd.canHurtOther = false;
@@ -88,11 +88,11 @@ public class HealthSystem : MonoBehaviour {
 		if (GetComponent<SpriteRenderer> ().color == Color.white) {
 			GetComponent<SpriteRenderer> ().color = Color.green;
 		}
-		isImmune = true;
+		isHarmless = true;
 	}
 
-	/* end the immune period, this object would be hurt again*/
-	public void EndImmune(){
+	/* end the harmless period, this object would be hurt again*/
+	public void EndHarmless(){
 		HurtAndDamage hd = GetComponent<HurtAndDamage> ();
 		if(hd){
 			hd.canHurtOther = true;
@@ -100,7 +100,38 @@ public class HealthSystem : MonoBehaviour {
 		if (GetComponent<SpriteRenderer> ().color == Color.green) {
 			GetComponent<SpriteRenderer> ().color = Color.white;
 		}
+		isHarmless = false;
+	}
+
+	public void StartImmune(){
+		HurtAndDamage hd = GetComponent<HurtAndDamage> ();
+		if(hd){
+			hd.canHurtSelf = false;
+		}
+		if (GetComponent<SpriteRenderer> ().color == Color.white) {
+			GetComponent<SpriteRenderer> ().color = Color.green;
+		}
+		isImmune = true;
+	}
+
+	public void EndImmune(){
+		HurtAndDamage hd = GetComponent<HurtAndDamage> ();
+		if(hd){
+			hd.canHurtSelf = false;
+		}
+		if (GetComponent<SpriteRenderer> ().color == Color.green) {
+			GetComponent<SpriteRenderer> ().color = Color.white;
+		}
 		isImmune = false;
+	}
+
+
+	bool IsHarmless(){
+		return this.isHarmless;
+	}
+
+	bool IsImmune(){
+		return this.isImmune;
 	}
 
 	public float GetHealth(){

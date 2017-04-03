@@ -19,5 +19,8 @@ public class ControlStatusEditor : Editor {
 		EditorGUILayout.LabelField ("Controller", cs.controller.ToString ());
 
 		DrawDefaultInspector ();
+
+		this.Repaint ();
 	}
+
 }
