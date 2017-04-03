@@ -69,7 +69,7 @@ public class ChaseState : StateMachineBehaviour {
 
 			} else if (!shooting && ap.playerTarget != null) {
 				// found player target, start shooting
-				Debug.Log (deltaAngle (ap.playerTarget, animator.transform));
+//				Debug.Log (deltaAngle (ap.playerTarget, animator.transform));
 				if (deltaAngle (ap.playerTarget, animator.transform) < startShootAngle) {
 					shoot.StartShoot ();
 					SetNewAgent ();
