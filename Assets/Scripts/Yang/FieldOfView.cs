@@ -10,8 +10,10 @@ public class FieldOfView : MonoBehaviour
 	// radius of the float area
 	public float radius = 1.5f;
 
-	[Range(0f,180f)]
+	[Range(0f,360f)]
 	public float angle = 180f;
+
+	public bool ignoreVisionBlock = false;
 
 	//[Range(0f,360f)]
 	//public float rotationOffset = 0f;
@@ -282,6 +284,10 @@ public class FieldOfView : MonoBehaviour
 
 	// check if there is a vison blocker between the target and this object
 	bool HasVisionBlock(Transform target){
+		if(ignoreVisionBlock){
+			return false;
+		}
+
 		float dist = Vector3.Distance (transform.position, target.position);
 		Vector3 dir = target.transform.position - transform.position;
 		dir.Normalize ();

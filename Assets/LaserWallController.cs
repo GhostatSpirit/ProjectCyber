@@ -45,7 +45,7 @@ public class LaserWallController : MonoBehaviour {
 	}
 
 	void BindLaserWallActions(){
-		Debug.Log ("binding actions");
+//		Debug.Log ("binding actions");
 
 		cs.OnCutByEnemy += wallLaser.DrawJitterLine;
 		cs.OnCutByPlayer += wallLaser.DrawJitterLine;

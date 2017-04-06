@@ -191,9 +191,9 @@ public class AgentPatrol : MonoBehaviour {
 
 	}
 
-	public Transform playerTarget;
+	[ReadOnly]public Transform playerTarget;
 	ObjectType[] playerTargets = { ObjectType.AI, ObjectType.Hacker };
-	public Vector3 playerLastPos;
+	[ReadOnly]public Vector3 playerLastPos;
 
 	void FixedUpdate(){
 		playerTarget = fov.ScanTargetInSight (playerTargets);
