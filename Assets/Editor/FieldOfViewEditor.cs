@@ -38,7 +38,7 @@ public class FieldOfViewEditor : Editor
 		Handles.color = Color.white;
 		t.radius = Handles.ScaleValueHandle( t.radius,
 			t.transform.position + start * t.radius,
-			Quaternion.FromToRotation(t.transform.forward, start), 1, Handles.ConeCap, 1 );
+			Quaternion.FromToRotation(t.transform.forward, start), 1, Handles.ConeHandleCap, 1 );
 			//t.transform.rotation, 1, Handles.ConeCap, 1 );
 	}
 }
