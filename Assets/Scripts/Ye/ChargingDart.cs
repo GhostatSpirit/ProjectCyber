@@ -9,8 +9,8 @@ public class ChargingDart : MonoBehaviour {
     InputDevice myInputDevice;
     public enum chargingStatus { NotCharge, StartCharge,Charging, Release };
     public chargingStatus Status = chargingStatus.NotCharge;
-    public float ChargingTime = 0 ;
-    public float ChargingSum = 0;
+    [ReadOnly]public float ChargingTime = 0 ;
+	[ReadOnly]public float ChargingSum = 0;
     public float MaxChargingTime = 2;
     // Use this for initialization
     void Start () {
@@ -64,7 +64,7 @@ public class ChargingDart : MonoBehaviour {
                 //  ChargingSum = ChargingTime;
                 //  ChargingSum = ( ChargingTime > MaxChargingTime ) ?  MaxChargingTime : ChargingTime;
                 
-                Debug.Log(Status);
+//                Debug.Log(Status);
                 Status = chargingStatus.Release;
                 ChargingSum = ChargingTime;
                 ChargingTime = 0;

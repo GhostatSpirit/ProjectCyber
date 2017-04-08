@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class WallRecall: MonoBehaviour {
-    bool exist = true;
+   // bool exist = true;
     public float recallTime = 10;
     // Use this for initialization
 

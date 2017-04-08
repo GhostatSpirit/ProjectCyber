@@ -72,6 +72,22 @@ public class FindTarget : MonoBehaviour {
 			return false;
 		}
 		if(oi.objType == targetType){
+			// if target is a controllable, check its control status
+			if(oi.isControllable()){
+				// search for objects controlled by BOSS only
+				ControlStatus cs = trans.GetComponent<ControlStatus> ();
+				if(cs == null){
+					// target does not have cs would also be chased
+					return true;
+				}
+				if(cs.controller == Controller.Boss){
+					return true;
+				}
+				else{
+					return false;
+				}
+			}
+
 			return true;
 		}
 		else {

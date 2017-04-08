@@ -49,8 +49,16 @@ public class PlayerAim : MonoBehaviour {
 
 		if (moveVector.magnitude > radialDeadZone) {
 			var currentRot = Quaternion.LookRotation (Vector3.forward, moveVector);
-			transform.rotation = Quaternion.Lerp (transform.rotation, currentRot,
+			var newRot = Quaternion.Lerp (transform.rotation, currentRot,
 				Time.deltaTime * angularVelocity);
+
+			transform.rotation = newRot;
+
+		}
+
+		VirusPosManager pm = GetComponentInParent<VirusPosManager> ();
+		if(pm){
+			pm.facing = transform.up;
 		}
 //		if(moveVector.magnitude != 0f){
 //			transform.up = moveVector;

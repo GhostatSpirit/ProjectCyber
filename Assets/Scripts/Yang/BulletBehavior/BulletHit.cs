@@ -8,49 +8,95 @@ public class BulletHit : MonoBehaviour {
 
 	public GameObject bulletPrefab;
 
-	public ObjectType targetType = ObjectType.None;
+	//public ObjectType targetType = ObjectType.None;
 
 	public float paralyzeTime = 2f;
 
 	public int bulletCount = 2;
-	public float deltaAngle = 10f;
+	public float deltaAngle = 8f;
 
 	bool reproduced = false;
 
 
 	void OnCollisionEnter2D(Collision2D coll){
-		if(TypeMatches(coll.transform) && coll.gameObject.layer != this.gameObject.layer){
-			if (HasControlStatus (coll.transform)) {
-				// the colliding object must have control status
-				ControlStatus targetCS = coll.transform.GetComponent<ControlStatus> ();
+		ObjectIdentity oi = coll.transform.GetComponent<ObjectIdentity> ();
+		if(oi == null){
+			return;
+		}
+		//Debug.Log ("Bullet hits: " + oi.objType.ToString ());
 
-				// verify that the enemy is not controlled by anything else
-				if (NotControlled (coll.transform) == false) {
-					// if the enemy is controlled by something else,
-					// paralyze the target
-					targetCS.Paralyze (paralyzeTime);
-					// bullet will destroy by itself
+		switch(oi.objType){
+		case ObjectType.Virus:{
+				// when the bullet hits a virus...
+				if (coll.gameObject.layer == this.gameObject.layer) {
 					return;
 				}
+				HitVirusBehaviour (coll);
+				break;
+			}
+		case ObjectType.Interface:{
+				HitInterfaceBehaviour (coll);
+				break;
+			}
+		case ObjectType.Robot:{
+				HitRobotBehaviour (coll);
+				break;
+			}
+		}
 
-				// if the enemy is not connected to anything right now...
-				if (!reproduced) {
-					// the target is now acquired by the HACKER!
-					targetCS.controller = Controller.Hacker;
+	}
 
-					// modify layer so it wont collide
-					coll.gameObject.layer = this.gameObject.layer;
-					// stop the enemy from chasing the player
-					// reproduce the bullets
-					reproduced = true;
+	void HitVirusBehaviour(Collision2D coll){
+		if (HasControlStatus (coll.transform)) {
+			// the colliding object must have control status
+			ControlStatus targetCS = coll.transform.GetComponent<ControlStatus> ();
 
-					ReproduceBullets ();
-
-					Destroy (gameObject);
+			// verify that the enemy is not controlled by anything else
+			if (NotControlled (coll.transform) == false) {
+				// if the enemy is controlled by something else,
+				// paralyze the target
+				VirusActions va = coll.transform.GetComponent<VirusActions> ();
+				if(va){
+					va.Paralyze (paralyzeTime);
 				}
+				// bullet will destroy by itself
+				return;
+			}
+
+			// if the enemy is not connected to anything right now...
+			if (!reproduced) {
+				// the target is now acquired by the HACKER!
+				targetCS.controller = Controller.Hacker;
+
+				// modify layer so it wont collide
+				coll.gameObject.layer = this.gameObject.layer;
+				// stop the enemy from chasing the player
+				// reproduce the bullets
+				reproduced = true;
+
+				ReproduceBullets ();
+				Destroy (gameObject);
 			}
 		}
 	}
+
+	void HitInterfaceBehaviour(Collision2D coll){
+		//Debug.Log (coll.transform);
+		if (NotControlled (coll.transform)){
+			// it the door is not controlled by the boss...
+			coll.transform.GetComponentInParent<ControlStatus> ().controller = Controller.Hacker;
+		}
+	}
+
+	void HitRobotBehaviour(Collision2D coll){
+		if(NotControlled(coll.transform)){
+			coll.transform.GetComponent<ControlStatus> ().controller = Controller.Hacker;
+		}
+		else{
+			coll.transform.GetComponent<Animator> ().SetTrigger ("paralyzed");
+		}
+	}
+
 
 	void ReproduceBullets(){
 		// instantiate the bullet prefabs
@@ -86,23 +132,23 @@ public class BulletHit : MonoBehaviour {
 	// verify if a transform's object is controlled
 	// return false if it connot find ControlStatus on the transform
 	bool NotControlled(Transform controllable){
-		ControlStatus cs = controllable.GetComponent<ControlStatus> ();
+		ControlStatus cs = controllable.GetComponentInParent<ControlStatus> ();
 		if(cs == null){
 			return false;
 		}
 		return (cs.controller == Controller.None);
 	}
 
-	bool TypeMatches(Transform trans){
-		ObjectIdentity oi = trans.GetComponent<ObjectIdentity> ();
-		if(oi == null){
-			return false;
-		}
-		if(oi.objType == targetType){
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
+//	bool TypeMatches(Transform trans){
+//		ObjectIdentity oi = trans.GetComponent<ObjectIdentity> ();
+//		if(oi == null){
+//			return false;
+//		}
+//		if(oi.objType == targetType){
+//			return true;
+//		}
+//		else {
+//			return false;
+//		}
+//	}
 }

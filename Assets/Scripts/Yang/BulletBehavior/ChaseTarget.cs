@@ -57,8 +57,14 @@ public class ChaseTarget : MonoBehaviour {
 		Quaternion desiredRot = Quaternion.Euler (0f, 0f, zAngle);
 
 		float finalRotSpeed = rotationSpeed * rotSpeedFactor * Time.fixedDeltaTime;
+
 		transform.rotation =
 			Quaternion.RotateTowards (transform.rotation, desiredRot, finalRotSpeed);
+
+//		Quaternion finalRot = 
+//			Quaternion.RotateTowards (transform.rotation, desiredRot, finalRotSpeed);
+//		myRigidbody.MoveRotation (finalRot.eulerAngles.z);
+//
 
 		//myRigidbody.angularVelocity = rotationSpeed * rotSpeedFactor;
 	}
