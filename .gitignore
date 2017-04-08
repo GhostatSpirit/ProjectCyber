@@ -35,6 +35,9 @@ sysinfo.txt
 # InControl folder
 /Assets/InControl
 
+# ProCamera2D
+/Assets/ProCamera2D
+
 # Richard Luo's plugins
 /Assets/FastLineRenderer
 /Assets/Navigation2D
