@@ -12,7 +12,8 @@ public enum ObjectType
 	Line, 
 	None,
 	Interface,		// interface means an object that allows hacker to control other objects
-	Robot, RobotBullet
+	Robot, RobotBullet,
+	LaserCannon
 };
 
 

@@ -2,19 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class LCEnemyReady : StateMachineBehaviour {
+public class LCPlayerReady : StateMachineBehaviour {
 
 	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 		LaserCannonSP lcsp = animator.GetComponent<LaserCannonSP> ();
+
 		if (lcsp) {
-			lcsp.SetEnemySprite ();
-			lcsp.SetEnemyColor ();
+			lcsp.SetPlayerSprite ();
+			lcsp.SetPlayerColor ();
 		}
 
+		Transform hacker = animator.GetComponentInChildren<ControlStatus> ().Hacker;
 		LaserCannonState state = animator.GetComponent<LaserCannonState> ();
+
 		state.aimLaserLine.gameObject.SetActive (false);
+		state.playerAimPos = hacker.position;
+
+		if (hacker) {
+			PlayerControl pc = hacker.GetComponent<PlayerControl> ();
+			if (pc)  pc.canControl = false;
+		}
 	}
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

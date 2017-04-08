@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HackerControl : MonoBehaviour
+public class HackerKeyboardMove : MonoBehaviour
 {
 
     public int moveSpeed = 3;

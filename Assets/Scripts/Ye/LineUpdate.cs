@@ -22,6 +22,7 @@ public class LineUpdate : MonoBehaviour {
 
 	public float lineWidth = 0.15f;
 
+	public bool drawOnEnable = true;
 
 	// private field for LineRenderer and EdgeCollider
 	LineRenderer lr;
@@ -98,6 +99,10 @@ public class LineUpdate : MonoBehaviour {
 			cs.OnCutByPlayer += DisableLine;
 			cs.OnLinkedByEnemy += EnableLine;
 			cs.OnLinkedByPlayer += EnableLine;
+		}
+
+		if(!drawOnEnable){
+			DisableLine ();
 		}
 
 	}

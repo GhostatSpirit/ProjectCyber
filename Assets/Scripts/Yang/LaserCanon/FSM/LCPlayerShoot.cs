@@ -1,15 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DigitalRuby.FastLineRenderer;
 
-public class LCEnemyShoot : StateMachineBehaviour {
+public class LCPlayerShoot : StateMachineBehaviour {
 	Vector3 shootPos;
 	LaserCannonState state;
 	Vector3 shootDir;
 
 	Vector3 laserStart;
 	Vector3 laserEnd;
+
+	CannonHackerControl control;
 
 	public float maxDistance = 50f;
 
@@ -19,51 +20,31 @@ public class LCEnemyShoot : StateMachineBehaviour {
 	public float fadeSeconds = 0.5f;
 	public float lifeTime = 3f;
 
-	bool damaging{
-		get{
-			if (state)
-				return state.damaging;
-			else
-				return false;
-		}
-	}
-
+	public float rotateLaserSpeed = 0.5f;
 	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 		state = animator.GetComponent<LaserCannonState> ();
+		control = animator.GetComponent<CannonHackerControl> ();
 		// get the start pos of the laser
 		laserStart = state.shootLaser.position;
 		// decide where to shoot the laser at
 		shootPos = state.aimLaser.position;
-		// guess where the player might be at after fade seconds
-		if(state.playerTarget){
-			Rigidbody2D rb = state.playerTarget.GetComponent<Rigidbody2D> ();
-			if(rb){
-				shootPos = shootPos + (Vector3)(rb.velocity * fadeSeconds);
-			}
-		}
+
 		shootDir = (shootPos - laserStart).normalized;
 		// the cannon at least can shoot $radius units 
 		maxDistance = Mathf.Max (maxDistance, state.fov.radius);
 
-		state.ShootLaser (shootDir, maxDistance, fadeSeconds, lifeTime);
-
+		state.ShootLaser (shootDir, maxDistance, fadeSeconds, lifeTime, false);
 	}
-
-
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		if(state.playerTarget){
-			state.shootLaserLine.targetGo = state.playerTarget.gameObject;
-		}
-		else{
-			state.shootLaserLine.targetGo = null;
-		}
+		Vector3 targetDir = control.direction;
 
-		if(damaging){
-			// shoot a raycast between startPos and endPos
-			// do damage to every target object
+		if(targetDir.magnitude != 0f){
+			float step = rotateLaserSpeed * Time.deltaTime;	
+			state.shootLaser.right = 
+				Vector3.RotateTowards(state.shootLaser.right, targetDir, step, Mathf.Infinity);
 		}
 	}
 
