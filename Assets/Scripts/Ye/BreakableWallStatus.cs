@@ -21,7 +21,7 @@ public class BreakableWallStatus : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        Debug.Log(Status);
+        //Debug.Log(Status);
 
         if (GetComponent<HealthSystem>().GetHealth() == GetComponent<HealthSystem>().maxHealth)
         {
