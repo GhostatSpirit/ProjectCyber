@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DigitalRuby.FastLineRenderer;
+using TwoDLaserPack;
+
 
 [System.Serializable]
 public struct LineProperty{
@@ -30,59 +32,59 @@ public class LaserCannonState : MonoBehaviour {
 		}
 	}
 
-	public FastLineRenderer shootLaserLine{
+	public LineBasedLaser shootLaserLine{
 		get{
 			if (!shootLaser)
 				return null;
 			else
-				return shootLaser.GetComponent<FastLineRenderer> ();
+				return shootLaser.GetComponent<LineBasedLaser> ();
 		}
 	} 
 
 
 	// variables for the shooting laser
-	public LineProperty shootProperty;
 	[HideInInspector] public bool damaging = false;
 	Coroutine shootLaserCoroutine = null;
+	public float damage = 10f;
 
 	// functions for the shooting laser
-	public void ShootLaser(Vector3 laserStart, Vector3 laserEnd, float fadeSeconds, float lifeTime){
+	public void ShootLaser(Vector3 direction, float maxDistance, float fadeSeconds, float lifeTime){
 		if (shootLaserCoroutine == null) {
 			shootLaserCoroutine = 
-				StartCoroutine (ShootLaserIE (laserStart, laserEnd, fadeSeconds, lifeTime));
+				StartCoroutine (ShootLaserIE (direction, maxDistance, fadeSeconds, lifeTime));
 		}
 	}
 
-	IEnumerator ShootLaserIE(Vector3 laserStart, Vector3 laserEnd, float fadeSeconds, float lifeTime){
-		FastLineRenderer lr = shootLaserLine;
-		yield return new WaitForEndOfFrame ();
+	IEnumerator ShootLaserIE(Vector3 direction, float maxDistance, float fadeSeconds, float lifeTime){
+		shootLaser.right = direction;
+		shootLaserLine.maxLaserRaycastDistance = maxDistance;
+		shootLaserLine.laserRotationEnabled = true;
+		shootLaserLine.SetLaserState (true);
+		shootLaserLine.OnLaserHitTriggered += HurtTarget;
 
-		// reset the fast line renderer
-		lr.Reset ();
-		lr.JitterMultiplier = shootProperty.jitterMultiplier;
-
-		FastLineRendererProperties props = new FastLineRendererProperties ();
-		props.Start = laserStart;
-		props.End = laserEnd;
-
-		props.Radius = shootProperty.lineRadius;
-		props.GlowIntensityMultiplier = shootProperty.glowIntensity;
-		props.GlowWidthMultiplier = shootProperty.glowWidthMultiplier;
-
-		props.SetLifeTime (lifeTime, fadeSeconds);
-
-		lr.AddLine (props, true, true);
-		lr.Apply ();
-
-		yield return new WaitForSeconds (fadeSeconds);
 		damaging = true;
+//		yield return new WaitForSeconds (fadeSeconds);
+//		damaging = true;
+//
+//		yield return new WaitForSeconds (lifeTime - 2 * fadeSeconds);
+//		damaging = false;
 
-		yield return new WaitForSeconds (lifeTime - 2 * fadeSeconds);
+		yield return new WaitForSeconds (lifeTime);
+
 		damaging = false;
+		shootLaserLine.laserRotationEnabled = false;
+		shootLaserLine.SetLaserState (false);
+		shootLaserLine.OnLaserHitTriggered -= HurtTarget;
 
-		yield return new WaitForSeconds (fadeSeconds);
 		animator.SetTrigger ("finishShoot");
 		shootLaserCoroutine = null;
+	}
+
+	void HurtTarget(RaycastHit2D hit){
+		HealthSystem hs = hit.transform.GetComponentInParent<HealthSystem> ();
+		if(hs){
+			hs.Damage (damage);
+		}
 	}
 
 
@@ -96,31 +98,23 @@ public class LaserCannonState : MonoBehaviour {
 	//Coroutine resetCoroutine;
 
 	public void SetEnemyColor(){
-		shootLaserLine.GlowColor = sp.shootTintCP.enemyColor;
-		shootLaserLine.TintColor = sp.shootTintCP.enemyColor;
-//		if(resetCoroutine == null){
-//			resetCoroutine = StartCoroutine ("ResetLineIE");
-//		}
+		shootLaserLine.laserLineRenderer.material = sp.shootMaterials.enemyMaterial;
+		shootLaserLine.hitSparkParticleSystem = sp.shootParticles.enemyParticle;
+		shootLaserLine.SetLaserState (false);
 
 		aimLaserLine.startColor = sp.aimCP.enemyColor;
 		aimLaserLine.endColor = sp.aimCP.enemyColor;
 	}
 
 	public void SetPlayerColor(){
-		shootLaserLine.GlowColor = sp.shootTintCP.playerColor;
-		shootLaserLine.TintColor = sp.shootTintCP.playerColor;
-//		if(resetCoroutine == null){
-//			resetCoroutine = StartCoroutine ("ResetLineIE");
-//		}
+		shootLaserLine.laserLineRenderer.material = sp.shootMaterials.enemyMaterial;
+		shootLaserLine.hitSparkParticleSystem = sp.shootParticles.enemyParticle;
+		shootLaserLine.SetLaserState (false);
 
 		aimLaserLine.startColor = sp.aimCP.playerColor;
 		aimLaserLine.endColor = sp.aimCP.playerColor;
 	}
 
-	IEnumerator ResetLineIE(){
-		yield return new WaitForEndOfFrame ();
-		shootLaserLine.Reset ();
-	}
 
 	public LayerMask aimLaserMask;
 	public LayerMask shootLaserMask;
@@ -177,6 +171,7 @@ public class LaserCannonState : MonoBehaviour {
 			alu.targetPos = targetPos;
 		}
 	}
+		
 
 	[ReadOnly]public Transform playerTarget;
 	ObjectType[] playerTargets = { ObjectType.AI, ObjectType.Hacker };

@@ -35,6 +35,9 @@ sysinfo.txt
 # InControl folder
 /Assets/InControl
 
+# 2DLaserPack
+/Assets/2DLaserPack
+
 # PolyNav folder
 /Assets/PolyNav2D
 /Assets/PolyNav2D.meta

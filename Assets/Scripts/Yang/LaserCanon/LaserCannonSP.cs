@@ -33,6 +33,19 @@ public struct ColorPair{
 	public Color playerColor;
 }
 
+[System.Serializable]
+public struct MaterialPair{
+	public Material enemyMaterial;
+	public Material playerMaterial;
+}
+
+[System.Serializable]
+public struct ParticlePair{
+	public ParticleSystem enemyParticle;
+	public ParticleSystem playerParticle;
+}
+
+
 public class LaserCannonSP : MonoBehaviour {
 	public SpritePair baseColorSP;
 	public SpritePair baseGreySP;
@@ -45,6 +58,10 @@ public class LaserCannonSP : MonoBehaviour {
 	public ColorPair shootTintCP;
 	public ColorPair shootGlowCP;
 	public ColorPair aimCP;
+
+
+	public MaterialPair shootMaterials;
+	public ParticlePair shootParticles;
 
 	public void SetEnemySprite(){
 		baseColorSP.SetEnemy ();

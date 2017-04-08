@@ -17,7 +17,10 @@ public class LineUpdate : MonoBehaviour {
 	public Material EnemyLineMaterial;
 	public Material PlayerLineMateial;
 
-	public float lineWidth;
+	public string sortingLayerName = "ControlLine";
+	public int orderInLayer = 0;
+
+	public float lineWidth = 0.15f;
 
 
 	// private field for LineRenderer and EdgeCollider
@@ -51,8 +54,10 @@ public class LineUpdate : MonoBehaviour {
 		ControlLine.transform.position = gameObject.transform.position;
 
 		// create and initialize LineRenderer
-		ControlLine.AddComponent<LineRenderer>();
-		lr = ControlLine.GetComponent<LineRenderer>();
+		lr = ControlLine.AddComponent<LineRenderer>();
+		lr.sortingOrder = orderInLayer;
+		lr.sortingLayerID = SortingLayer.NameToID (sortingLayerName);
+
 		lr.material = EnemyLineMaterial;
 		Color color = Color.white;
 		lr.startWidth = lineWidth;
@@ -159,6 +164,24 @@ public class LineUpdate : MonoBehaviour {
 		LineEC.points = temparray;
 	}
 
+
+	public void EnableLine(){
+		if(LineEC){
+			LineEC.enabled = true;
+		}
+		if(lr){
+			lr.enabled = true;
+		}
+	}
+
+	public void DisableLine(){
+		if(LineEC){
+			LineEC.enabled = false;
+		}
+		if(lr){
+			lr.enabled = false;
+		}
+	}
 
 	public void EnableLine(Transform virusTrans){
 		if(LineEC){

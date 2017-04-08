@@ -6,11 +6,12 @@ using DigitalRuby.FastLineRenderer;
 public class LCEnemyShoot : StateMachineBehaviour {
 	Vector3 shootPos;
 	LaserCannonState state;
+	Vector3 shootDir;
 
 	Vector3 laserStart;
 	Vector3 laserEnd;
 
-	public float maxDistance = 10f;
+	public float maxDistance = 50f;
 
 	[Range(0f, Mathf.Infinity)]
 	public float extraDistance = 0f;
@@ -41,17 +42,11 @@ public class LCEnemyShoot : StateMachineBehaviour {
 				shootPos = shootPos + (Vector3)(rb.velocity * fadeSeconds);
 			}
 		}
-
-
+		shootDir = (shootPos - laserStart).normalized;
 		// the cannon at least can shoot $radius units 
 		maxDistance = Mathf.Max (maxDistance, state.fov.radius);
 
-		// decide the end of the laser beam
-		Vector3 shootDir = (shootPos - laserStart).normalized;
-		laserEnd = state.GetLaserContact (laserStart, shootDir, maxDistance, state.shootLaserMask);
-		laserEnd += shootDir * extraDistance;
-
-		state.ShootLaser (laserStart, laserEnd, fadeSeconds, lifeTime);
+		state.ShootLaser (shootDir, maxDistance, fadeSeconds, lifeTime);
 
 	}
 
@@ -59,6 +54,13 @@ public class LCEnemyShoot : StateMachineBehaviour {
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+		if(state.playerTarget){
+			state.shootLaserLine.targetGo = state.playerTarget.gameObject;
+		}
+		else{
+			state.shootLaserLine.targetGo = null;
+		}
+
 		if(damaging){
 			// shoot a raycast between startPos and endPos
 			// do damage to every target object
