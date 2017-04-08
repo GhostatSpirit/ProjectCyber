@@ -13,23 +13,40 @@ public class TestPortal : MonoBehaviour {
 
     public float transTime = 0f;
 
-	// Use this for initialization
-	void Start () {
+    Transform[] DesList;
+
+    // Use this for initialization
+    void Start () {
         ProCamera2DTransitionsFX transFX = cam.GetComponent<ProCamera2DTransitionsFX>();
         Collider2D portalcol = gameObject.GetComponent<CircleCollider2D>();
         Collider2D AIcol = AI.GetComponent<CircleCollider2D>();
-        Collider2D Hackercol = Hacker.GetComponent<CircleCollider2D>();  
-	}
+        Collider2D Hackercol = Hacker.GetComponent<CircleCollider2D>();
+        DesList = destination.GetComponentsInChildren<Transform>();
+
+    }
 
     // Update is called once per frame
 
     IEnumerator DelayedTransition(ProCamera2DTransitionsFX transFX)
     {
+        // camera exit
         transFX.TransitionExit();
+        // wait for transition
         yield return new WaitForSeconds(0.5f);
-        AI.transform.position = destination.transform.position;
-        Hacker.transform.position = destination.transform.position;
+
+        // AI.transform.position = destination.transform.position;
+        // Hacker.transform.position = destination.transform.position;
+
+        // transition
+        
+        AI.transform.position = DesList[1].position;
+        Hacker.transform.position = DesList[2].position;
+
+
+        // wait for transition
         yield return new WaitForSeconds(1f);
+        
+        // camera enter
         transFX.TransitionEnter();
     }
     
