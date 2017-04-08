@@ -44,6 +44,7 @@ public class ChaseState : StateMachineBehaviour {
 
 
 		if(shoot){
+			UpdateTargetPos ();
 			shoot.StopShoot ();
 		}
 		shooting = false;
@@ -58,6 +59,7 @@ public class ChaseState : StateMachineBehaviour {
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 
 		agent.SetDestination (ap.playerLastPos);
+		UpdateTargetPos ();
 
 		if (shoot) {
 			//Debug.Log ("Shooting: " + shooting.ToString ());
@@ -129,6 +131,10 @@ public class ChaseState : StateMachineBehaviour {
 		agent.slowingDistance = oldSlowingDist;
 		agent.accelerationRate = oldAccelRate;
 		agent.decelerationRate = oldDecelRate;
+	}
+
+	void UpdateTargetPos(){
+		shoot.targetPos = ap.playerLastPos;
 	}
 	// OnStateMove is called right after Animator.OnAnimatorMove(). Code that processes and affects root motion should be implemented here
 	//override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
