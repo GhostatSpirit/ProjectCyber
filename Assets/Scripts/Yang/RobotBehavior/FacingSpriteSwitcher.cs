@@ -7,11 +7,21 @@ public class FacingSpriteSwitcher : MonoBehaviour {
 
 	[ReadOnly]public Vector3 facing;
 
+	public Vector3 facingPosition{
+		set{
+			if(value != transform.position){
+				facing = (value - transform.position).normalized;
+			}
+		}
+	}
+
 	Direction faceDirection{
 		get{
 			return Vector2Direction (facing);
 		}
 	}
+
+	public Direction initialFacing = Direction.DOWN;
 
 	public Sprite downSprite;
 	public Sprite downLeftSprite;
@@ -37,40 +47,56 @@ public class FacingSpriteSwitcher : MonoBehaviour {
 		upSprite = upSprite ?? defaultSprite;
 		upLeftSprite = upLeftSprite ?? defaultSprite;
 		upRightSprite = upRightSprite ?? defaultSprite;
+
+		UpdateSprite (initialFacing);
+		facing = Direction2Vector (initialFacing);
 	}
-	
+		
 	// Update is called once per frame
 	void Update () {
 		if(facing.magnitude > 0f){
-			switch(faceDirection){
-			case Direction.DOWN:
+			UpdateSprite (faceDirection);
+		}
+	}
+
+	void UpdateSprite(Direction faceDirection){
+		switch (faceDirection) {
+		case Direction.DOWN:
+			if (mySpriteRenderer.sprite != downSprite)
 				mySpriteRenderer.sprite = downSprite;
-				break;
-			case Direction.DOWNLEFT:
+			break;
+		case Direction.DOWNLEFT:
+			if (mySpriteRenderer.sprite != downLeftSprite)
 				mySpriteRenderer.sprite = downLeftSprite;
-				break;
-			case Direction.DOWNRIGHT:
+			break;
+		case Direction.DOWNRIGHT:
+			if (mySpriteRenderer.sprite != downRightSprite)
 				mySpriteRenderer.sprite = downRightSprite;
-				break;
-			case Direction.LEFT:
+			break;
+		case Direction.LEFT:
+			if (mySpriteRenderer.sprite != leftSprite)
 				mySpriteRenderer.sprite = leftSprite;
-				break;
-			case Direction.RIGHT:
+			break;
+		case Direction.RIGHT:
+			if (mySpriteRenderer.sprite != rightSprite)
 				mySpriteRenderer.sprite = rightSprite;
-				break;
-			case Direction.UP:
+			break;
+		case Direction.UP:
+			if (mySpriteRenderer.sprite != upSprite)
 				mySpriteRenderer.sprite = upSprite;
-				break;
-			case Direction.UPLEFT:
+			break;
+		case Direction.UPLEFT:
+			if (mySpriteRenderer.sprite != upLeftSprite)
 				mySpriteRenderer.sprite = upLeftSprite;
-				break;
-			case Direction.UPRIGHT:
+			break;
+		case Direction.UPRIGHT:
+			if (mySpriteRenderer.sprite != upRightSprite)
 				mySpriteRenderer.sprite = upRightSprite;
-				break;
-			default:
+			break;
+		default:
+			if (mySpriteRenderer.sprite != downSprite)
 				mySpriteRenderer.sprite = downSprite;
-				break;
-			}
+			break;
 		}
 	}
 

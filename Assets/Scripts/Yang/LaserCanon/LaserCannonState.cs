@@ -19,6 +19,19 @@ public class LaserCannonState : MonoBehaviour {
 	Animator animator;
 	[HideInInspector]public FieldOfView fov;
 	LaserCannonSP sp;
+//	ServerPicker picker;
+
+	Vector3 _facing = Vector3.up;
+	[HideInInspector] public Vector3 facing{
+		get{
+			return _facing;
+		}
+		set{
+			_facing = value.normalized;
+		}
+	}
+
+	public Vector3 playerAimPos;
 
 	public Transform aimLaser;
 	public Transform shootLaser;
@@ -47,52 +60,15 @@ public class LaserCannonState : MonoBehaviour {
 	Coroutine shootLaserCoroutine = null;
 	public float damage = 10f;
 
-	// functions for the shooting laser
-	public void ShootLaser(Vector3 direction, float maxDistance, float fadeSeconds, float lifeTime){
-		if (shootLaserCoroutine == null) {
-			shootLaserCoroutine = 
-				StartCoroutine (ShootLaserIE (direction, maxDistance, fadeSeconds, lifeTime));
-		}
-	}
-
-	IEnumerator ShootLaserIE(Vector3 direction, float maxDistance, float fadeSeconds, float lifeTime){
-		shootLaser.right = direction;
-		shootLaserLine.maxLaserRaycastDistance = maxDistance;
-		shootLaserLine.laserRotationEnabled = true;
-		shootLaserLine.SetLaserState (true);
-		shootLaserLine.OnLaserHitTriggered += HurtTarget;
-
-		damaging = true;
-//		yield return new WaitForSeconds (fadeSeconds);
-//		damaging = true;
-//
-//		yield return new WaitForSeconds (lifeTime - 2 * fadeSeconds);
-//		damaging = false;
-
-		yield return new WaitForSeconds (lifeTime);
-
-		damaging = false;
-		shootLaserLine.laserRotationEnabled = false;
-		shootLaserLine.SetLaserState (false);
-		shootLaserLine.OnLaserHitTriggered -= HurtTarget;
-
-		animator.SetTrigger ("finishShoot");
-		shootLaserCoroutine = null;
-	}
-
-	void HurtTarget(RaycastHit2D hit){
-		HealthSystem hs = hit.transform.GetComponentInParent<HealthSystem> ();
-		if(hs){
-			hs.Damage (damage);
-		}
-	}
-
 
 	// Use this for initialization
 	void Start () {
 		animator = GetComponent<Animator> ();
 		fov = GetComponentInChildren<FieldOfView> ();
 		sp = GetComponent<LaserCannonSP> ();
+		//picker = GetComponentInChildren<ServerPicker> ();
+
+		playerAimPos = shootLaser.position;
 	}
 
 	//Coroutine resetCoroutine;
@@ -107,8 +83,8 @@ public class LaserCannonState : MonoBehaviour {
 	}
 
 	public void SetPlayerColor(){
-		shootLaserLine.laserLineRenderer.material = sp.shootMaterials.enemyMaterial;
-		shootLaserLine.hitSparkParticleSystem = sp.shootParticles.enemyParticle;
+		shootLaserLine.laserLineRenderer.material = sp.shootMaterials.playerMaterial;
+		shootLaserLine.hitSparkParticleSystem = sp.shootParticles.playerParticle;
 		shootLaserLine.SetLaserState (false);
 
 		aimLaserLine.startColor = sp.aimCP.playerColor;
@@ -164,18 +140,77 @@ public class LaserCannonState : MonoBehaviour {
 	}
 
 
-	public void UpdateAimLaser(){
+	public void EnemyUpdateAimLaser(){
 		Vector3 targetPos = GetLaserContact (shootLaser.position, playerLastPos, aimLaserMask);
 		AimLaserUpdate alu = aimLaser.GetComponent<AimLaserUpdate> ();
 		if(alu){
 			alu.targetPos = targetPos;
 		}
 	}
+
+	public void PlayerUpdateAimLaser(){
+		Vector3 targetPos = GetLaserContact (shootLaser.position, playerAimPos, aimLaserMask);
+		AimLaserUpdate alu = aimLaser.GetComponent<AimLaserUpdate> ();
+		if(alu){
+			alu.targetPos = targetPos;
+		}
+	}
+
+	public void DisableShootLaser(){
+		shootLaserLine.SetLaserState (false);
+	}
+
+	// functions for the shooting laser
+	public void ShootLaser
+	(Vector3 direction, float maxDistance, float fadeSeconds, float lifeTime, bool rotating = true){
+		if (shootLaserCoroutine == null) {
+			shootLaserCoroutine = 
+				StartCoroutine (ShootLaserIE (direction, maxDistance, fadeSeconds, lifeTime, rotating));
+		}
+	}
+
+	IEnumerator ShootLaserIE
+	(Vector3 direction, float maxDistance, float fadeSeconds, float lifeTime, bool rotating){
+		shootLaser.right = direction;
+		shootLaserLine.maxLaserRaycastDistance = maxDistance;
+		shootLaserLine.laserRotationEnabled = rotating;
+		shootLaserLine.OnLaserHitTriggered += HurtTarget;
+
+		yield return new WaitForEndOfFrame ();
+		shootLaserLine.SetLaserState (true);
+
+		damaging = true;
+		//		yield return new WaitForSeconds (fadeSeconds);
+		//		damaging = true;
+		//
+		//		yield return new WaitForSeconds (lifeTime - 2 * fadeSeconds);
+		//		damaging = false;
+
+		yield return new WaitForSeconds (lifeTime);
+
+		damaging = false;
+		shootLaserLine.laserRotationEnabled = false;
+		shootLaserLine.SetLaserState (false);
+		shootLaserLine.OnLaserHitTriggered -= HurtTarget;
+
+		animator.SetTrigger ("finishShoot");
+		shootLaserCoroutine = null;
+	}
+
+	void HurtTarget(RaycastHit2D hit){
+		HealthSystem hs = hit.transform.GetComponentInParent<HealthSystem> ();
+		if(hs){
+			hs.Damage (damage);
+		}
+	}
 		
 
 	[ReadOnly]public Transform playerTarget;
 	ObjectType[] playerTargets = { ObjectType.AI, ObjectType.Hacker };
+
+
 	[ReadOnly]public Vector3 playerLastPos;
+
 
 	void FixedUpdate(){
 		playerTarget = fov.ScanTargetInSight (playerTargets);
