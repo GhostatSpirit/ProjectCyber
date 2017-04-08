@@ -15,8 +15,8 @@ public class WallTransparency : MonoBehaviour {
 
 	public string[] playerTags = { "AI", "Hacker" };
 
-	public string playerBackLayerName = "Midground";
-	public string playerFrontLayerName = "Foreground";
+	public string playerBackLayerName = "BackChara";
+	public string playerFrontLayerName = "ForeChara";
 
 	public LayerMask moveableMask;
 
