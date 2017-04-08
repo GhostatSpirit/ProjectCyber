@@ -42,6 +42,10 @@ public class BulletHit : MonoBehaviour {
 				HitRobotBehaviour (coll);
 				break;
 			}
+		case ObjectType.LaserCannon:{
+				HitInterfaceBehaviour (coll);
+				break;
+			}
 		}
 
 	}
@@ -96,6 +100,7 @@ public class BulletHit : MonoBehaviour {
 			coll.transform.GetComponent<Animator> ().SetTrigger ("paralyzed");
 		}
 	}
+		
 
 
 	void ReproduceBullets(){

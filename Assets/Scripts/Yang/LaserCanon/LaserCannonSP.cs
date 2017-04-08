@@ -7,6 +7,7 @@ public struct SpritePair{
 	public Transform trans;
 	public Sprite enemySprite;
 	public Sprite playerSprite;
+	public Sprite noneSprite;
 
 	public SpriteRenderer renderer{
 		get{
@@ -23,6 +24,12 @@ public struct SpritePair{
 	public void SetPlayer(){
 		if(renderer && playerSprite){
 			renderer.sprite = playerSprite;
+		}
+	}
+
+	public void SetNone(){
+		if(renderer && noneSprite){
+			renderer.sprite = noneSprite;
 		}
 	}
 }
@@ -75,6 +82,12 @@ public class LaserCannonSP : MonoBehaviour {
 		crystalSP.SetPlayer ();
 		aimPointSP.SetPlayer ();
 		reflectionSP.SetPlayer ();
+	}
+
+	public void SetNoneSprite(){
+		baseColorSP.SetNone ();
+		crystalSP.SetNone ();
+		reflectionSP.SetNone ();
 	}
 
 	public void SetEnemyColor(){
