@@ -3,6 +3,8 @@ using UnityEngine;
 using System.Collections;
 using InControl;
 
+public enum Direction {UP, DOWN, LEFT, RIGHT, UPLEFT, UPRIGHT, DOWNLEFT, DOWNRIGHT};
+
 [RequireComponent (typeof(DeviceReceiver))]
 public class PlayerMovement: MonoBehaviour {
 
@@ -11,8 +13,6 @@ public class PlayerMovement: MonoBehaviour {
 	// commented out Unity Input scripts
 	// public string horizontalAxisName = "Horizontal";
 	// public string verticalAxisName = "Vertical";
-
-	public enum Direction {UP, DOWN, LEFT, RIGHT, UPLEFT, UPRIGHT, DOWNLEFT, DOWNRIGHT};
 
 	public Direction initialFacing = Direction.DOWN;
 	//public Transform playerFeet;
@@ -37,6 +37,8 @@ public class PlayerMovement: MonoBehaviour {
 	public float playSoundGap = 1f;
 	public float volumeScale = 0.8f;
 	bool playingSound = false;
+
+	[HideInInspector] public Vector2 faceDirection;
 
     Vector2 moveVector;
     Rigidbody2D myRigidbody;
@@ -98,6 +100,8 @@ public class PlayerMovement: MonoBehaviour {
 			mySpriteRenderer.sprite = downSprite;
 			break;
 		}
+
+		faceDirection = Direction2Vector (initialFacing);
 		
 	}
 
@@ -123,6 +127,8 @@ public class PlayerMovement: MonoBehaviour {
 
 
 		if (moveVector.magnitude != 0f) {
+			// update facedirection
+			faceDirection = moveVector.normalized;
 			// change sprite according to moveVector
 			Direction currentDir = Vector2Direction (moveVector);
 
@@ -234,9 +240,42 @@ public class PlayerMovement: MonoBehaviour {
 			return Direction.RIGHT;
 		}
 
+	}
 
+	Vector2 Direction2Vector(Direction dir){
+		Vector2 dirvec = Vector2.zero;
 
-		//Debug.Log (angle);
+		switch(dir){
+		case Direction.DOWN:
+			dirvec = Vector2.down;
+			break;
+		case Direction.DOWNLEFT:
+			dirvec = Vector2.down + Vector2.left;
+			break;
+		case Direction.DOWNRIGHT:
+			dirvec = Vector2.down + Vector2.right;
+			break;
+		case Direction.LEFT:
+			dirvec = Vector2.left;
+			break;
+		case Direction.RIGHT:
+			dirvec = Vector2.right;
+			break;
+		case Direction.UP:
+			dirvec = Vector2.up;
+			break;
+		case Direction.UPLEFT:
+			dirvec = Vector2.up + Vector2.left;
+			break;
+		case Direction.UPRIGHT:
+			dirvec = Vector2.up + Vector2.right;
+			break;
+		default:
+			dirvec = Vector2.down;
+			break;
+		}
+
+		return dirvec.normalized;
 	}
 }
 

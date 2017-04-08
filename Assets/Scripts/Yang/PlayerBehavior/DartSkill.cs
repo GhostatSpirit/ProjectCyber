@@ -8,8 +8,8 @@ public class DartSkill : MonoBehaviour {
 	[HideInInspector]public bool darting = false;
 	public float dartSpeed = 20f;
 	public float dartDuration = 0.1f;
-    public float MinDuration = 1f;
-    public float MaxDuration = 3f;
+    public float MinDuration = 0.1f;
+    public float MaxDuration = 0.2f;
 
     
 
@@ -109,6 +109,7 @@ public class DartSkill : MonoBehaviour {
 			// start the immune buff
 			if(healthSys){
 				healthSys.StartImmune();
+				healthSys.StartHarmless ();
 			}
 		}
 
@@ -152,6 +153,7 @@ public class DartSkill : MonoBehaviour {
 	void EndImmune(){
 		if(healthSys){
 			healthSys.EndImmune();
+			healthSys.EndHarmless ();
 		}
 	}
 
