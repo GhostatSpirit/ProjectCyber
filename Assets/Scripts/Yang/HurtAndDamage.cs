@@ -72,6 +72,12 @@ public class HurtAndDamage : MonoBehaviour {
 	}
 
 	void OnCollisionEnter2D(Collision2D coll){
+		HurtDamageLogic (coll);
+	}
+
+
+
+	void HurtDamageLogic(Collision2D coll){
 		if(instantKillOther && VerifyHurtOther(coll.transform)){
 			HealthSystem hs = coll.transform.GetComponent<HealthSystem> ();
 			if(hs){
@@ -108,13 +114,14 @@ public class HurtAndDamage : MonoBehaviour {
 			VerifyHurtSelf(coll.transform) ) 
 		{
 			// do damage to this object itself
-//			Debug.Log ("Damage");
+			//			Debug.Log ("Damage");
 			if(selfHealthSystem){
 				selfHealthSystem.Damage (damage);
 			}
 		}
 
 	}
+
 
 
 }
