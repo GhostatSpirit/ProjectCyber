@@ -19,15 +19,24 @@ public class TestPortal : MonoBehaviour {
     
     Transform[] DesList;
 
+    ProCamera2DTransitionsFX transFX ;
+    Collider2D portalcol ;
+    Collider2D AIcol ;
+    Collider2D Hackercol ;
+    AudioSource TransAudio ;
+
     // Use this for initialization
     void Start () {
+
+        TransAudio = GetComponent<AudioSource>();
+        /*
         ProCamera2DTransitionsFX transFX = cam.GetComponent<ProCamera2DTransitionsFX>();
         Collider2D portalcol = gameObject.GetComponent<CircleCollider2D>();
         Collider2D AIcol = AI.GetComponent<CircleCollider2D>();
         Collider2D Hackercol = Hacker.GetComponent<CircleCollider2D>();
         DesList = destination.GetComponentsInChildren<Transform>();
         AudioSource audio = GetComponent<AudioSource>();
-
+        */
     }
 
     // Update is called once per frame
@@ -81,12 +90,13 @@ public class TestPortal : MonoBehaviour {
     
 
 	void Update () {
-        AudioSource audio = GetComponent<AudioSource>();
-        ProCamera2DTransitionsFX transFX = cam.GetComponent<ProCamera2DTransitionsFX>();
-        Collider2D portalcol = gameObject.GetComponent<Collider2D>();
-        Collider2D AIcol = AI.GetComponent<Collider2D>();
-        Collider2D Hackercol = Hacker.GetComponent<Collider2D>();
-        
+        TransAudio = GetComponent<AudioSource>();
+        transFX = cam.GetComponent<ProCamera2DTransitionsFX>();
+        portalcol = gameObject.GetComponent<Collider2D>();
+        AIcol = AI.GetComponent<Collider2D>();
+        Hackercol = Hacker.GetComponent<Collider2D>();
+        DesList = destination.GetComponentsInChildren<Transform>();
+
         //  Examine whether ai and hacker are in the portal 
         if (portalcol.IsTouching(AIcol) && portalcol.IsTouching(Hackercol))
         {
@@ -100,7 +110,7 @@ public class TestPortal : MonoBehaviour {
             transTime = 0f;
         }
 
-        //  If transTime >= MaxtransTime, transport
+        //  If transTime >= MaxtransTime ,stop transtime and transport
         if (transTime >= MaxtransTime && end == false)
         {
             
