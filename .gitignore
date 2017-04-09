@@ -42,6 +42,9 @@ sysinfo.txt
 /Assets/PolyNav2D
 /Assets/PolyNav2D.meta
 
+# AdvancedPolygonCollider
+/Assets/AdvancedPolygonCollider
+
 # ProCamera2D
 /Assets/ProCamera2D
 
