@@ -40,7 +40,7 @@ public class DoorMover : MonoBehaviour {
 	void Start () {
 		// assume that the current pos is the closed pos
 		closePos = transform.position;
-		sr = GetComponent<SpriteRenderer> ();
+		sr = GetComponentInChildren<SpriteRenderer> ();
 		if(sr){
 			// calculate the width of this single side door
 			doorWidth = sr.bounds.size.x / 2.0f;
