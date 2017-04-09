@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class BreakableStatus : MonoBehaviour {
 
+    HealthSystem HS;
 
 	// Use this for initialization
 	void Start () {
-        HealthSystem HS = gameObject.GetComponent<HealthSystem>();
+        
         
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        HealthSystem HS = gameObject.GetComponent<HealthSystem>();
+        HS = gameObject.GetComponent<HealthSystem>();
         Animator BWAnim = gameObject.GetComponent<Animator>();
         BWAnim.SetFloat("LeftHealth", HS.objHealth / HS.maxHealth * 100);
 

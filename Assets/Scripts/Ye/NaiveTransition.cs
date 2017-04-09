@@ -8,17 +8,18 @@ public class NaiveTransition : MonoBehaviour {
     public Camera cam;
     public GameObject target;
     public GameObject initial;
+    ProCamera2DTransitionsFX s;
 
     // Use this for initialization
     void Start () {
-        ProCamera2DTransitionsFX s = cam.GetComponent<ProCamera2DTransitionsFX>();
+        s = cam.GetComponent<ProCamera2DTransitionsFX>();
         //StartCoroutine(DelayedOperations());
         //print("start coroutine");
     }
 
     IEnumerator DelayedOperations()
     {
-        ProCamera2DTransitionsFX s = cam.GetComponent<ProCamera2DTransitionsFX>();
+        s = cam.GetComponent<ProCamera2DTransitionsFX>();
         if (Input.GetKey(KeyCode.Space))
         {
             //s.TransitionExit();
