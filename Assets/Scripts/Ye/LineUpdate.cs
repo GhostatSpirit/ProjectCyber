@@ -29,16 +29,49 @@ public class LineUpdate : MonoBehaviour {
 	EdgeCollider2D LineEC;
 
 	// a read-only Boss property that reads Boss from ControlStatus
+	GameObject _boss;
 	GameObject Boss{
 		get{
-			return GetComponent<ControlStatus> ().Boss.gameObject;
+			if(_boss == null){
+				_boss = GetComponent<ControlStatus> ().Boss.gameObject;
+				if(_boss){
+					// try to find control line node
+					ControlLineNode node = _boss.GetComponentInChildren<ControlLineNode> ();
+					if (node)
+						_boss = node.gameObject;
+				}
+			}
+			return _boss;
 		}
 	}
 
 	// a read-only Boss property that reads Hacker from ControlStatus
+	GameObject _hacker;
 	GameObject Hacker{
 		get{
-			return GetComponent<ControlStatus> ().Hacker.gameObject;
+			if(_hacker == null){
+				_hacker = GetComponent<ControlStatus> ().Hacker.gameObject;
+				if(_hacker){
+					// try to find control line node
+					ControlLineNode node = _hacker.GetComponentInChildren<ControlLineNode> ();
+					if (node)
+						_hacker = node.gameObject;
+				}
+			}
+			return _hacker;
+		}
+	}
+
+	Transform _self;
+	Transform self{
+		get{
+			if(_self == null){
+				_self = transform;
+				ControlLineNode node = GetComponentInChildren<ControlLineNode> ();
+				if (node)
+					_self = node.transform;
+			}
+			return _self;
 		}
 	}
 
@@ -52,7 +85,7 @@ public class LineUpdate : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		ControlLine = new GameObject();
-		ControlLine.transform.position = gameObject.transform.position;
+		ControlLine.transform.position = self.position;
 
 		// create and initialize LineRenderer
 		lr = ControlLine.AddComponent<LineRenderer>();
@@ -65,7 +98,7 @@ public class LineUpdate : MonoBehaviour {
 		lr.endWidth = lineWidth;
 		lr.startColor = color;
 		lr.endColor = color;
-		lr.SetPosition(0, gameObject.transform.position);
+		lr.SetPosition(0, self.position);
 		lr.SetPosition(1, Boss.transform.position);
 
 		// create and initialize EdgeCollider2D
@@ -74,7 +107,7 @@ public class LineUpdate : MonoBehaviour {
 		LineEC.isTrigger = true;
 		Vector2[] temparray = new Vector2[2];
 		temparray[0] = new Vector2(0, 0);
-		temparray[1] = new Vector2(Boss.transform.position.x- gameObject.transform.position.x, Boss.transform.position.y - gameObject.transform.position.y);
+		temparray[1] = new Vector2(Boss.transform.position.x- self.position.x, Boss.transform.position.y - self.position.y);
 		LineEC.points = temparray;
 
 		// set the objectIdentity to line
@@ -89,7 +122,7 @@ public class LineUpdate : MonoBehaviour {
 		// rename this new game object
 		ControlLine.name = "ControlLine";
 
-		ControlLine.transform.SetParent(gameObject.transform);
+		ControlLine.transform.SetParent(this.transform);
 		// Debug.Log(gameObject.name + ControlLine.transform.position);
 
 		// modify the actions
@@ -125,7 +158,7 @@ public class LineUpdate : MonoBehaviour {
 		// Update LineRenderer
 		if(controller == Controller.Boss)
 		{
-			Draw(gameObject, Boss, EnemyLineMaterial);
+			Draw(self.gameObject, Boss, EnemyLineMaterial);
 			UpdateCollider (Boss);
 			//LineEC.enabled = true;
 			ControlLine.tag = "EnemyLine";
@@ -139,7 +172,7 @@ public class LineUpdate : MonoBehaviour {
 		}
 		if (controller == Controller.Hacker)
 		{
-			Draw(gameObject, Hacker, PlayerLineMateial);
+			Draw(self.gameObject, Hacker, PlayerLineMateial);
 			UpdateCollider (Hacker);
 			//LineEC.enabled = true;
 			ControlLine.tag = "PlayerLine";
@@ -163,7 +196,7 @@ public class LineUpdate : MonoBehaviour {
 
 	void UpdateCollider(GameObject target){
 		Vector2[] temparray = new Vector2[2];
-		Vector3 target2Self = target.transform.position - transform.position;
+		Vector3 target2Self = target.transform.position - ControlLine.transform.position;
 		temparray [0] = new Vector2 (0, 0);
 		temparray [1] = ControlLine.transform.InverseTransformVector (target2Self);
 		LineEC.points = temparray;

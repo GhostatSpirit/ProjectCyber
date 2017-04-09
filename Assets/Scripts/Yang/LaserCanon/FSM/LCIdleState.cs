@@ -21,8 +21,6 @@ public class LCIdleState : StateMachineBehaviour {
 			lcsp.SetNoneSprite ();
 		}
 
-		LaserCannonState state = animator.GetComponent<LaserCannonState> ();
-		state.playerAimPos = hacker.position;
 
 		animator.ResetTrigger ("playerLink");
 

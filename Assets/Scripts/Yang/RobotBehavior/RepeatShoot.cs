@@ -13,13 +13,14 @@ public class RepeatShoot : MonoBehaviour {
 	bool shootTowardsPlayer = true;
 
 	[ReadOnly]public Vector3 facing;
+	[ReadOnly]public Vector3 targetPos;
 
 	private Coroutine shootCoroutine = null;
 
-	AgentPatrol ap;
+	//AgentPatrol ap;
 	// Use this for initialization
 	void Start () {
-		ap = GetComponent<AgentPatrol> ();
+		//ap = GetComponent<AgentPatrol> ();
 		if(facing == Vector3.zero){
 			facing = transform.up;
 		}
@@ -57,8 +58,8 @@ public class RepeatShoot : MonoBehaviour {
 		GameObject bullet = Instantiate (bulletPrefab, transform.position, transform.rotation);
 
 
-		if (shootTowardsPlayer && ap && ap.playerTarget) {
-			Vector3 dir2Target = ap.playerTarget.position - transform.position;
+		if (shootTowardsPlayer) {
+			Vector3 dir2Target = targetPos - transform.position;
 			dir2Target.Normalize ();
 			bullet.transform.up = dir2Target;
 		} else {
