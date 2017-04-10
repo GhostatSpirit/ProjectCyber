@@ -43,10 +43,16 @@ public class MovableDepthSwitcher : MonoBehaviour {
 				continue;
 			}
 //			Debug.Log (targetColl.transform);
-			if(targetColl.GetComponent<WallTransparency>()){
+			if (targetColl.GetComponent<WallTransparency> ()) {
 				// hit a wall
 				hitWallTrigger = true;
+			} else {
+				ObjectIdentity oi = targetColl.GetComponent<ObjectIdentity> ();
+				if(oi && oi.objType == ObjectType.DepthField){
+					hitWallTrigger = true;
+				}
 			}
+
 		}
 		if(hitWallTrigger){
 			SetBackWall ();

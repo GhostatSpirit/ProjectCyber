@@ -10,7 +10,7 @@ public class RepeatShoot : MonoBehaviour {
 
 	public float interval = 1f;
 
-	bool shootTowardsPlayer = true;
+	public bool shootTowardsPlayer = true;
 
 	[ReadOnly]public Vector3 facing;
 	[ReadOnly]public Vector3 targetPos;

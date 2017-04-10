@@ -14,7 +14,8 @@ public enum ObjectType
 	Interface,		// interface means an object that allows hacker to control other objects
 	Robot, RobotBullet,
 	LaserCannon,
-    BreakableWall
+    BreakableWall,
+	DepthField,		// object enters this field will change its sorting layer accordingly
 };
 
 

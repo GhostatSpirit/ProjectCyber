@@ -32,15 +32,14 @@ public class LineUpdate : MonoBehaviour {
 	GameObject _boss;
 	GameObject Boss{
 		get{
-			if(_boss == null){
-				_boss = GetComponent<ControlStatus> ().Boss.gameObject;
-				if(_boss){
-					// try to find control line node
-					ControlLineNode node = _boss.GetComponentInChildren<ControlLineNode> ();
-					if (node)
-						_boss = node.gameObject;
-				}
+			_boss = GetComponent<ControlStatus> ().Boss.gameObject;
+			if(_boss){
+				// try to find control line node
+				ControlLineNode node = _boss.GetComponentInChildren<ControlLineNode> ();
+				if (node)
+					_boss = node.gameObject;
 			}
+
 			return _boss;
 		}
 	}
@@ -49,15 +48,14 @@ public class LineUpdate : MonoBehaviour {
 	GameObject _hacker;
 	GameObject Hacker{
 		get{
-			if(_hacker == null){
-				_hacker = GetComponent<ControlStatus> ().Hacker.gameObject;
-				if(_hacker){
-					// try to find control line node
-					ControlLineNode node = _hacker.GetComponentInChildren<ControlLineNode> ();
-					if (node)
-						_hacker = node.gameObject;
-				}
+			_hacker = GetComponent<ControlStatus> ().Hacker.gameObject;
+			if(_hacker){
+				// try to find control line node
+				ControlLineNode node = _hacker.GetComponentInChildren<ControlLineNode> ();
+				if (node)
+					_hacker = node.gameObject;
 			}
+
 			return _hacker;
 		}
 	}
@@ -84,6 +82,7 @@ public class LineUpdate : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
 		ControlLine = new GameObject();
 		ControlLine.transform.position = self.position;
 
