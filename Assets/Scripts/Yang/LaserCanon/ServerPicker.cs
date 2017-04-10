@@ -99,8 +99,8 @@ public class ServerPicker : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(alwayPickNearest){
-			Debug.Log (GetNearestFromSelf ());
-			Debug.Log (cs);
+//			Debug.Log (GetNearestFromSelf ());
+//			Debug.Log (cs);
 			SetNearestFromSelf ();
 		}
 	}
