@@ -27,6 +27,7 @@ public class BreakableWallAnim: MonoBehaviour
             Break();
 
             // Let the wall recover after RecoverTime
+            Debug.Log(RecoverTime);
             Invoke("Recover", RecoverTime);
         }
     }
@@ -34,12 +35,13 @@ public class BreakableWallAnim: MonoBehaviour
     // Break Status
     void Break()
     {
-        // Handheld.Vibrate();
+        
         GetComponent<PolygonCollider2D>().enabled = false;
         anim.SetBool("Recover", false);
         anim.SetBool("Break", true);
         GetComponent<BreakableWallStatus>().Status = BreakableWallStatus.WallStatus.Broken;
-        
+        Debug.Log("broken!");
+        GetComponentsInChildren<SpriteRenderer>()[1].enabled = false;
     }
 
     // Recover Status
@@ -51,5 +53,7 @@ public class BreakableWallAnim: MonoBehaviour
         anim.SetBool("Recover", true);
         GetComponent<BreakableWallStatus>().Status = BreakableWallStatus.WallStatus.Full;
         GetComponent<HealthSystem>().Heal(GetComponent<HealthSystem>().maxHealth);
+        GetComponentsInChildren<SpriteRenderer>()[1].enabled = true;
+
     }
 }
