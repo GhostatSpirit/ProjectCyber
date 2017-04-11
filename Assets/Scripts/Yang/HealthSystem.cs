@@ -13,9 +13,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Collections.ObjectModel;
+// added tweening effect when hurt
+using DG.Tweening;
 
 public class HealthSystem : MonoBehaviour {
 	public float maxHealth = 100f;
+
+	public float hurtImmunePeriod = 1.5f;
+	public Color hurtColor = new Color (255f, 107f, 107f, 255f);
+	public int flashCount = 3;
 
 	public bool destoryOnDead = false;
 	public float destoryDelay = 1f;
@@ -30,14 +36,19 @@ public class HealthSystem : MonoBehaviour {
 	// this object's current health
 	[ReadOnly]public float objHealth;
 	// whether this object is currently immune or not
-	bool isImmune = false;
+	[ReadOnly]public bool isImmune = false;
 	bool isHarmless = false;
 
 	// this action is executed as soon as this object is dead
 	public event Action<Transform> OnObjectDead;
+	public event Action<Transform> OnObjectHurt;
 
+
+	SpriteRenderer sr;
 	// Use this for initialization
 	void Start () {
+		sr = GetComponent<SpriteRenderer> ();
+
 		objHealth = maxHealth;
 		InitDeathHandler ();
 	}
@@ -46,6 +57,28 @@ public class HealthSystem : MonoBehaviour {
 	void Update () {
 		if(displayText != null){
 			displayText.text = Mathf.Round(objHealth).ToString();
+		}
+	}
+
+	public Coroutine HurtCoroutine;
+
+	IEnumerator	HurtImmuneIE(){
+		// start the immune period
+		StartImmune (false);
+		if(sr){
+			// multiply flash count by 2 to ensure the color gets back to the original
+			sr.DOColor(hurtColor, hurtImmunePeriod).SetEase(Ease.OutFlash, 2 * flashCount, 0);
+		}
+		yield return new WaitForSeconds (hurtImmunePeriod);
+		EndImmune (false);
+		HurtCoroutine = null;
+	}
+
+
+
+	void StartHurtBehaviour(){
+		if(HurtCoroutine == null && hurtImmunePeriod > 0f){
+			HurtCoroutine = StartCoroutine (HurtImmuneIE ());
 		}
 	}
 
@@ -63,6 +96,7 @@ public class HealthSystem : MonoBehaviour {
 			// the object is dead, call DeathHandler()
 			DeathHandler ();
 		} else{
+			StartHurtBehaviour ();
 			objHealth = tempHealth;
 		}
 	}
@@ -80,48 +114,56 @@ public class HealthSystem : MonoBehaviour {
 		DeathHandler ();
 	}
 		
-	public void StartHarmless(){
+	public void StartHarmless(bool setColor = true){
 		// during harmless, this obj cannot hurt others any more
 		HurtAndDamage hd = GetComponent<HurtAndDamage> ();
 		if(hd){
 			hd.canHurtOther = false;
 		}
-		if (GetComponent<SpriteRenderer> ().color == Color.white) {
-			GetComponent<SpriteRenderer> ().color = Color.green;
+		if (setColor) {
+			if (GetComponent<SpriteRenderer> ().color == Color.white) {
+				GetComponent<SpriteRenderer> ().color = Color.green;
+			}
 		}
 		isHarmless = true;
 	}
 
 	/* end the harmless period, this object would be hurt again*/
-	public void EndHarmless(){
+	public void EndHarmless(bool setColor = true){
 		HurtAndDamage hd = GetComponent<HurtAndDamage> ();
 		if(hd){
 			hd.canHurtOther = true;
 		}
-		if (GetComponent<SpriteRenderer> ().color == Color.green) {
-			GetComponent<SpriteRenderer> ().color = Color.white;
+		if (setColor) {
+			if (GetComponent<SpriteRenderer> ().color == Color.green) {
+				GetComponent<SpriteRenderer> ().color = Color.white;
+			}
 		}
 		isHarmless = false;
 	}
 
-	public void StartImmune(){
+	public void StartImmune(bool setColor = true){
 		HurtAndDamage hd = GetComponent<HurtAndDamage> ();
 		if(hd){
 			hd.canHurtSelf = false;
 		}
-		if (GetComponent<SpriteRenderer> ().color == Color.white) {
-			GetComponent<SpriteRenderer> ().color = Color.green;
+		if (setColor) {
+			if (GetComponent<SpriteRenderer> ().color == Color.white) {
+				GetComponent<SpriteRenderer> ().color = Color.green;
+			}
 		}
 		isImmune = true;
 	}
 
-	public void EndImmune(){
+	public void EndImmune(bool setColor = true){
 		HurtAndDamage hd = GetComponent<HurtAndDamage> ();
 		if(hd){
-			hd.canHurtSelf = false;
+			hd.canHurtSelf = true;
 		}
-		if (GetComponent<SpriteRenderer> ().color == Color.green) {
-			GetComponent<SpriteRenderer> ().color = Color.white;
+		if (setColor) {
+			if (GetComponent<SpriteRenderer> ().color == Color.green) {
+				GetComponent<SpriteRenderer> ().color = Color.white;
+			}
 		}
 		isImmune = false;
 	}
@@ -171,7 +213,6 @@ public class HealthSystem : MonoBehaviour {
 	 * change the color of the SpriteRenderer to a given color
 	 */
 	void ChangeColor(Transform trans){
-		SpriteRenderer sr = GetComponent<SpriteRenderer> ();
 		if(sr != null){
 			sr.color = newColor;
 		}

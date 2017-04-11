@@ -64,7 +64,7 @@ public class TurretEnemyShootState : StateMachineBehaviour {
 				// lost player target, stop shooting
 				shoot.StopShoot ();
 				shooting = false;
-				Debug.Log("stopshoot");
+//				Debug.Log("stopshoot");
 
 			} else if (!shooting && state.target != null) {
 				// found player target, start shooting
