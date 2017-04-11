@@ -54,7 +54,8 @@ public class TurretState : MonoBehaviour {
 		} else {
 			targetInSight = false;
 		}
-			
+
+		//animator.SetBool ("targetInSight", targetInSight);
 	}
 
 	public void SetTargetDist(float dist){
