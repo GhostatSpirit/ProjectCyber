@@ -34,6 +34,7 @@ public class RobotLineCutState : StateMachineBehaviour {
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+		shoot.targetPos = ap.playerLastPos;
 		if (ap.playerTarget != null) {
 			// found player, rotate towards it
 			Vector3 dir2Target = ap.playerLastPos - animator.transform.position;

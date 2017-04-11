@@ -19,7 +19,7 @@ public class BulletHit : MonoBehaviour {
 
 
 	void OnCollisionEnter2D(Collision2D coll){
-		ObjectIdentity oi = coll.transform.GetComponent<ObjectIdentity> ();
+		ObjectIdentity oi = coll.transform.GetComponentInParent<ObjectIdentity> ();
 		if(oi == null){
 			return;
 		}

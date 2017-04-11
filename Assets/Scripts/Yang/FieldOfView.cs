@@ -304,7 +304,13 @@ public class FieldOfView : MonoBehaviour
 			Transform hitTrans = hit.transform;
 
 			ObjectIdentity oi = hitTrans.GetComponent<ObjectIdentity> ();
+
 			if (oi && oi.isVisionBlocker()) {
+				return true;
+			}
+
+			PolyNavObstacle obstacle = hitTrans.GetComponent<PolyNavObstacle> ();
+			if(obstacle){
 				return true;
 			}
 				

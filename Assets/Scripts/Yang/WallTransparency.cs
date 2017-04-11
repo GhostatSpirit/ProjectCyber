@@ -15,8 +15,8 @@ public class WallTransparency : MonoBehaviour {
 
 	public string[] playerTags = { "AI", "Hacker" };
 
-	public string playerBackLayerName = "BackChara";
-	public string playerFrontLayerName = "ForeChara";
+//	public string wallBackLayerName = "BackWall";
+//	public string wallFrontLayerName = "ForeWall";
 
 	public LayerMask moveableMask;
 
@@ -100,7 +100,7 @@ public class WallTransparency : MonoBehaviour {
 			wallSprite.color = newColor;
 		}
 		//				// change the sorting layer from midground to foreground
-		wallSprite.sortingLayerName = playerFrontLayerName;
+		// wallSprite.sortingLayerName = playerFrontLayerName;
 	}
 
 	void SetAsSolid(){
@@ -111,7 +111,7 @@ public class WallTransparency : MonoBehaviour {
 			wallSprite.color = newColor;
 		}
 		//				// change the sorting layer from midground to foreground
-		wallSprite.sortingLayerName = playerBackLayerName;
+		// wallSprite.sortingLayerName = playerBackLayerName;
 	}
 
 }

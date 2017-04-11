@@ -6,18 +6,30 @@ public class ServerPicker : MonoBehaviour {
 	public Transform serverParent;
 	public List<Transform> servers;
 
-	ControlStatus cs;
+	ControlStatus _cs;
+	ControlStatus cs{
+		get{
+			if (!_cs) {
+				_cs = GetComponentInChildren<ControlStatus> ();
+			}
+			return _cs;
+		}
+	}
+
+	public bool alwayPickNearest = false;
 
 	// Use this for initialization
 	void Start () {
 		// add the servers from serverParent to the servers list
-		if(serverParent != null){
-			foreach(Transform child in serverParent){
+		if (serverParent != null) {
+			foreach (Transform child in serverParent) {
 				servers.Add (child);
 			}
 		}
 
-		cs = GetComponentInChildren<ControlStatus> ();
+		if(alwayPickNearest){
+			SetNearestFromSelf ();
+		}
 	}
 
 	public Transform GetNearestFromSelf(){
@@ -86,6 +98,10 @@ public class ServerPicker : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		
+		if(alwayPickNearest){
+//			Debug.Log (GetNearestFromSelf ());
+//			Debug.Log (cs);
+			SetNearestFromSelf ();
+		}
 	}
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 public class LaserWallController : MonoBehaviour {
 	public Transform laserWall;
 
+	bool enableWhenDisconnect = false;
 	WallLaser wallLaser;
 //	WallLaser wallLaser{
 //		get{
@@ -46,12 +47,14 @@ public class LaserWallController : MonoBehaviour {
 
 	void BindLaserWallActions(){
 //		Debug.Log ("binding actions");
+		if (enableWhenDisconnect) {
+			cs.OnCutByEnemy += wallLaser.DrawJitterLine;
+			cs.OnCutByEnemy += wallLaser.EnableCollider;
+		}
 
-		cs.OnCutByEnemy += wallLaser.DrawJitterLine;
 		cs.OnCutByPlayer += wallLaser.DrawJitterLine;
 
 		cs.OnLinkedByEnemy += wallLaser.DrawDefaultLine;
-		cs.OnLinkedByEnemy += wallLaser.EnableCollider;
 
 		cs.OnLinkedByPlayer += wallLaser.ClearLine;
 		cs.OnLinkedByPlayer += wallLaser.DisableCollider;

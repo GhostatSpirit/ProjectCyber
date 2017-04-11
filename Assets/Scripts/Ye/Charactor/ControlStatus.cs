@@ -91,5 +91,8 @@ public class ControlStatus : MonoBehaviour {
 		OnLinkedByEnemy = null;
 	}
 
+	void OnDrawGizmo(){
+		
+	}
 
 }
