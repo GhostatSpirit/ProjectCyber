@@ -39,6 +39,7 @@ public class HealthSystem : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		objHealth = maxHealth;
+		InitDeathHandler ();
 	}
 	
 	// Update is called once per frame
@@ -140,9 +141,7 @@ public class HealthSystem : MonoBehaviour {
 
 
 	/**********************************************/
-
-
-	void DeathHandler(){
+	void InitDeathHandler(){
 		if(changeColor){
 			OnObjectDead += ChangeColor;
 		}
@@ -155,6 +154,9 @@ public class HealthSystem : MonoBehaviour {
 				StartCoroutine (DestroyObjectIE (trans, destoryDelay));
 			};
 		}
+	}
+
+	void DeathHandler(){
 		// execute the action
 		if(OnObjectDead != null){
 			OnObjectDead (this.transform);
