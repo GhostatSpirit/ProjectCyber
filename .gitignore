@@ -48,6 +48,9 @@ sysinfo.txt
 # ProCamera2D
 /Assets/ProCamera2D
 
+# DOTween
+/Assets/DOTween
+
 # Richard Luo's plugins
 /Assets/FastLineRenderer
 /Assets/Navigation2D
