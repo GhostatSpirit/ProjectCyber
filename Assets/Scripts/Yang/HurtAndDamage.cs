@@ -76,6 +76,10 @@ public class HurtAndDamage : MonoBehaviour {
 		HurtDamageLogic (coll);
 	}
 
+	void OnCollisionStay2D(Collision2D coll){
+		HurtDamageLogic (coll);
+	}
+
 
 
 	void HurtDamageLogic(Collision2D coll){

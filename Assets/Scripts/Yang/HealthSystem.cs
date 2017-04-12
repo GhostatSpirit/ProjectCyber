@@ -218,6 +218,24 @@ public class HealthSystem : MonoBehaviour {
 	}
 
 
+
+	public Coroutine ImmuneCoroutine;
+
+	public void Immune(float period){
+		if(ImmuneCoroutine == null && period > 0f){
+			ImmuneCoroutine = StartCoroutine (ImmuneIE(period));
+		}
+	}
+
+	IEnumerator ImmuneIE(float period){
+		// start the immune period
+		StartImmune (false);
+		yield return new WaitForSeconds (period);
+		EndImmune (false);
+		ImmuneCoroutine = null;
+	}
+
+
 	bool IsHarmless(){
 		return this.isHarmless;
 	}

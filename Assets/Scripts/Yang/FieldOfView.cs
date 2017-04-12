@@ -327,6 +327,9 @@ public class FieldOfView : MonoBehaviour
 		bool isEnemy = true;
 		ControlStatus targetCS = target.GetComponent<ControlStatus> ();
 		if(cs && targetCS){
+			if(targetCS.controller == Controller.None){
+				return false;
+			}
 			if(cs.controller == targetCS.controller && cs.controller != Controller.None){
 				isEnemy = false;
 			}
