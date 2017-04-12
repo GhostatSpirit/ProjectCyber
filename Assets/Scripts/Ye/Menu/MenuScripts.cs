@@ -9,7 +9,7 @@ public class MenuScripts : MonoBehaviour {
 
     public void ChangeScene(string sceneName)
     {
-        SceneManager.LoadScene("Prototype");
+        SceneManager.LoadScene(sceneName);
     }
 
 	// Use this for initialization
