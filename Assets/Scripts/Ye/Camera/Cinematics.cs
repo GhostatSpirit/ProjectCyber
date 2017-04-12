@@ -9,6 +9,7 @@ public class Cinematics : MonoBehaviour {
     public Camera cam;
     public Transform hacker;
     public Transform ai;
+    public GameObject target;
 
     // Use this for initialization
     void Start () {
@@ -29,10 +30,12 @@ public class Cinematics : MonoBehaviour {
         ai.GetComponent<HealthSystem>().StartImmune();
 
         ProCamera2DCinematics proCam = cam.GetComponent<ProCamera2DCinematics>();
+        proCam.AddCinematicTarget( target.transform); 
+
         proCam.Play();
         proCam.OnCinematicFinished.AddListener(StartMovement);
         proCam.OnCinematicFinished.AddListener(EndImmune);
-
+        proCam.RemoveCinematicTarget(target.transform);
         CS.OnLinkedByPlayer -= CameraBehaviour;
     }
 
