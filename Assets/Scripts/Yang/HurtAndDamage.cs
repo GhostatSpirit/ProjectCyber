@@ -121,7 +121,8 @@ public class HurtAndDamage : MonoBehaviour {
 			VerifyHurtSelf(coll.transform) ) 
 		{
 			// do damage to this object itself
-			//			Debug.Log ("Damage");
+//			Debug.Log (otherType);
+//			Debug.Log ("Damage");
 			if(selfHealthSystem){
 				selfHealthSystem.Damage (damage);
 			}

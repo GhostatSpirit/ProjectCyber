@@ -28,7 +28,7 @@ public class BreakableWallStatus : MonoBehaviour {
             Status = WallStatus.Full;
         }
 
-        if (GetComponent<HealthSystem>().GetHealth() == deadHealth)
+		if (GetComponent<HealthSystem>().IsDead())
         {
             Status = WallStatus.Break;
         }

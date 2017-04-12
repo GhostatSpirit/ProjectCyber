@@ -28,7 +28,7 @@ public class HealthSystem : MonoBehaviour {
 	public float destoryDelay = 1f;
 
 	public bool changeColor = true;
-	public Color newColor = Color.red;
+	public Color deadColor = Color.red;
 
 	public bool stopMovement = true;
 
@@ -36,12 +36,35 @@ public class HealthSystem : MonoBehaviour {
 
 	// this object's current health
 	[ReadOnly]public float objHealth;
+
 	// whether this object is currently immune or not
-	[ReadOnly]public bool isImmune = false;
+	bool isImmune = false;
 	bool isHarmless = false;
+
+	bool _isDead = false;
+	bool isDead{
+		get{
+			return _isDead;
+		}
+		set{
+			bool oldIsDead = _isDead;
+			if(oldIsDead != value){
+				if(value == true){
+					// object become dead
+					DeathHandler ();
+				} else{
+					// object is revived
+					ReviveHandler ();
+				}
+				_isDead = value;
+			}
+		}
+	}
 
 	// this action is executed as soon as this object is dead
 	public event Action<Transform> OnObjectDead;
+	public event Action<Transform> OnObjectRevive;
+
 	public event Action<Transform> OnObjectHurt;
 
 
@@ -86,17 +109,19 @@ public class HealthSystem : MonoBehaviour {
 	/* public exposed methods for managing health */
 	/**********************************************/
 	public void Damage(float deltaHealth){
-		if(isImmune) {
-			return;
-		}
-
+		if(isImmune)	return;
+		if (isDead)		return;
+	
 		float tempHealth = objHealth;
 		tempHealth -= deltaHealth;
 		if(tempHealth <= 0f){
 			objHealth = 0f;
 			// the object is dead, call DeathHandler()
-			DeathHandler ();
+			isDead = true;
 		} else{
+			if(OnObjectHurt != null){
+				OnObjectHurt (this.transform);
+			}
 			if (hurtImmunePeriod > 0f) {
 				StartHurtBehaviour ();
 			}
@@ -105,16 +130,31 @@ public class HealthSystem : MonoBehaviour {
 	}
 
 	public void Heal(float deltaHealth){
+		// we cannot heal a dead object, use revive instead
+		if (isDead)		return;
+
 		objHealth += deltaHealth;
 		if(objHealth > maxHealth){
 			objHealth = maxHealth;
 		}
 	}
 
+	public void Revive(float healthPercentage = 0.5f){
+		if (healthPercentage <= 0f || !isDead)
+			return;
+		if(healthPercentage > 1f){
+			healthPercentage = 1f;
+		}
+		// revive the object now, first add the health
+		objHealth += maxHealth * healthPercentage;
+		isDead = false;
+	}
+
+
 	/* instantly kill this object, making its health to 0 */
 	public void InstantDead(){
 		objHealth = 0f;
-		DeathHandler ();
+		isDead = true;
 	}
 		
 	public void StartHarmless(bool setColor = true){
@@ -184,6 +224,10 @@ public class HealthSystem : MonoBehaviour {
 		return this.objHealth;
 	}
 
+	public bool IsDead(){
+		return this.isDead;
+	}
+
 
 	/**********************************************/
 	void InitDeathHandler(){
@@ -206,7 +250,12 @@ public class HealthSystem : MonoBehaviour {
 		if(OnObjectDead != null){
 			OnObjectDead (this.transform);
 		}
+	}
 
+	void ReviveHandler(){
+		if(OnObjectRevive != null){
+			OnObjectRevive (this.transform);
+		}
 	}
 		
 	/* private methods for OnObjectDead()
@@ -217,7 +266,7 @@ public class HealthSystem : MonoBehaviour {
 	 */
 	void ChangeColor(Transform trans){
 		if(sr != null){
-			sr.color = newColor;
+			sr.DOColor (deadColor, destoryDelay / 2f).SetEase (Ease.OutCubic);
 		}
 	}
 
