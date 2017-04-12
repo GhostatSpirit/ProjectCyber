@@ -130,6 +130,11 @@ public class RoombaBehaviour : MonoBehaviour {
 
 
 	public void ResetVelocity(){
+		StartCoroutine (ResetVelocityIE());
+	}
+
+	IEnumerator ResetVelocityIE(){
+		yield return new WaitUntil (() => body != null);
 		body.velocity = Vector3.zero;
 	}
 

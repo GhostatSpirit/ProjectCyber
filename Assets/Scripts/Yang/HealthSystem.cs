@@ -21,7 +21,7 @@ public class HealthSystem : MonoBehaviour {
 
 	[Range(0f, Mathf.Infinity)]
 	public float hurtImmunePeriod = 1.5f;
-	public Color hurtColor = new Color (255f, 107f, 107f, 255f);
+	public Color hurtColor = new Color32 (255, 107, 107, 255);
 	public int flashCount = 3;
 
 	public bool destoryOnDead = false;
@@ -72,6 +72,12 @@ public class HealthSystem : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		sr = GetComponent<SpriteRenderer> ();
+
+		if(hurtColor == Color.white){
+			hurtColor = new Color32 (255, 107, 107, 255);
+		}
+
+//		Debug.Log (hurtColor);
 
 		objHealth = maxHealth;
 		InitDeathHandler ();
