@@ -5,9 +5,12 @@ using Image = UnityEngine.UI.Image;
 
 public class UI_Pointer : MonoBehaviour {
 
-    public float x = 0;
-    public float y = 0;
+    public float velocity = 8f; 
+    
+    float x = 0;
+    float y = -1;
     float z = 0;
+
 
     Vector3 moveVector;
     // Use this for initialization
@@ -20,18 +23,13 @@ public class UI_Pointer : MonoBehaviour {
 
     void Update () {
 
-        //transform.Rotate(new Vector3(0,0,30));
-        // Debug.Log(GetComponentInParent<Image>().fillAmount);
-        Debug.Log(Mathf.Cos(Mathf.PI));
-        Debug.Log(Mathf.Sin(Mathf.PI));
-        x = Mathf.Cos( Mathf.PI/2f);
-        y = Mathf.Sin( GetComponentInParent<Image>().fillAmount * Mathf.PI);
+        x = Mathf.Cos( (-90 - GetComponentsInParent<Image>()[1].fillAmount * 360) * Mathf.Deg2Rad);
+        y = Mathf.Sin( (-90 - GetComponentsInParent<Image>()[1].fillAmount * 360) * Mathf.Deg2Rad);
+
 
         moveVector = new Vector3(x, y, z);
-        // Mathf.Sin(GetComponentInParent<Image>().fillAmount * 360),Mathf.Cos(GetComponentInParent<Image>().fillAmount * 360) ,0);
         var currentRot = Quaternion.LookRotation(new Vector3(0,0,1), moveVector);
-        var newRot = Quaternion.Lerp(transform.rotation, currentRot,
-            Time.deltaTime);
+        var newRot = Quaternion.Lerp(transform.rotation, currentRot,Time.deltaTime * velocity);
 
         transform.rotation = newRot;
     }
