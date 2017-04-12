@@ -19,6 +19,7 @@ using DG.Tweening;
 public class HealthSystem : MonoBehaviour {
 	public float maxHealth = 100f;
 
+	[Range(0f, Mathf.Infinity)]
 	public float hurtImmunePeriod = 1.5f;
 	public Color hurtColor = new Color (255f, 107f, 107f, 255f);
 	public int flashCount = 3;
@@ -96,7 +97,9 @@ public class HealthSystem : MonoBehaviour {
 			// the object is dead, call DeathHandler()
 			DeathHandler ();
 		} else{
-			StartHurtBehaviour ();
+			if (hurtImmunePeriod > 0f) {
+				StartHurtBehaviour ();
+			}
 			objHealth = tempHealth;
 		}
 	}

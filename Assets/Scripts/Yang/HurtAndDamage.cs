@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class HurtAndDamage : MonoBehaviour {
 
-
-
 	public TypeDamagePair[] DamageOtherList;
 	public TypeDamagePair[] HurtSelfList;
 
@@ -23,6 +21,9 @@ public class HurtAndDamage : MonoBehaviour {
 	// if set false, this object would not be able to hurt itself anymore,
 	// even with instantKillSelf enabled.
 	[ReadOnly]public bool canHurtSelf = true;
+
+	// bullet will kill itself on collision no matter what happens
+	public bool isBullet = false;
 
 	HealthSystem selfHealthSystem;
 	// Use this for initialization
@@ -85,6 +86,8 @@ public class HurtAndDamage : MonoBehaviour {
 			}
 		}
 
+		// if instant kill self,  will override other's can hurt other
+		// if(instantKillSelf && selfHealthSystem && !this.canHurtSelf){
 		if(instantKillSelf && selfHealthSystem && VerifyHurtSelf(coll.transform)){
 			selfHealthSystem.InstantDead ();
 		}
@@ -104,7 +107,7 @@ public class HurtAndDamage : MonoBehaviour {
 			DamageOtherDict.TryGetValue(otherType, out damage) &&
 			VerifyHurtOther(coll.transform) )
 		{
-			Debug.Log (damage);
+//			Debug.Log (damage);
 			// do damage to the other type
 			HealthSystem hs = coll.transform.GetComponent<HealthSystem> ();
 			if(hs){
@@ -122,6 +125,10 @@ public class HurtAndDamage : MonoBehaviour {
 			if(selfHealthSystem){
 				selfHealthSystem.Damage (damage);
 			}
+		}
+
+		if(isBullet && selfHealthSystem){
+			selfHealthSystem.InstantDead ();
 		}
 
 	}

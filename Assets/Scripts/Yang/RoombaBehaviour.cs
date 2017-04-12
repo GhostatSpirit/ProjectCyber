@@ -7,10 +7,14 @@ public class RoombaBehaviour : MonoBehaviour {
 
 	public float aimDelay = 2f;
 
+	public SpritePair aimPointSP;
+	public ColorPair aimColorCP;
+
 	[HideInInspector] public Rigidbody2D body;
 	FieldOfView fov;
 	ControlStatus cs;
 	Animator animator;
+	HurtAndDamage hd;
 
 	public Controller controller{
 		get{
@@ -27,6 +31,7 @@ public class RoombaBehaviour : MonoBehaviour {
 		fov = GetComponent<FieldOfView> ();
 		cs = GetComponent<ControlStatus> ();
 		animator = GetComponent<Animator> ();
+		hd = GetComponent<HurtAndDamage> ();
 
 		// set default targets 
 		targets = playerTargets;
@@ -39,11 +44,64 @@ public class RoombaBehaviour : MonoBehaviour {
 
 		cs.OnCutByPlayer += SetPlayerCut;
 
+		hd.canHurtOther = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
+	}
+
+	public void SetEnemyAim(){
+		Transform aimTrans = aimPointSP.trans;
+		// set aim laser color
+		LineRenderer lr = aimTrans.GetComponent<LineRenderer> ();
+		if(lr){
+			lr.startColor = aimColorCP.enemyColor;
+			lr.endColor = aimColorCP.enemyColor;
+		}
+		// set aim point sprite
+		aimPointSP.SetEnemy ();
+	}
+
+	public void SetPlayerAim(){
+		Transform aimTrans = aimPointSP.trans;
+		// set aim laser color
+		LineRenderer lr = aimTrans.GetComponent<LineRenderer> ();
+		if(lr){
+			lr.startColor = aimColorCP.playerColor;
+			lr.endColor = aimColorCP.playerColor;
+		}
+		// set aim point sprite
+		aimPointSP.SetPlayer ();
+	}
+
+	public void TurnOnAim(){
+		switch(cs.controller){
+		case Controller.Boss:
+			SetEnemyAim ();
+			aimPointSP.trans.GetComponent<AimLaserUpdate> ().targetPos = targetLastPos;
+			aimPointSP.trans.GetComponent<AimLaserUpdate> ().SnapPosition ();
+			aimPointSP.trans.position = targetLastPos;
+			aimPointSP.trans.gameObject.SetActive (true);
+			break;
+		case Controller.Hacker:
+			SetPlayerAim ();
+			aimPointSP.trans.GetComponent<AimLaserUpdate> ().targetPos = targetLastPos;
+			aimPointSP.trans.GetComponent<AimLaserUpdate> ().SnapPosition ();
+			aimPointSP.trans.position = targetLastPos;
+			aimPointSP.trans.gameObject.SetActive (true);
+			break;
+		}
+	}
+
+	public void TurnOffAim(){
+		aimPointSP.trans.gameObject.SetActive (false);
+	}
+
+	public void UpdateAim(){
+		aimPointSP.trans.GetComponent<AimLaserUpdate> ().targetPos = targetLastPos;
+		aimPointSP.trans.position = targetLastPos;
 	}
 
 

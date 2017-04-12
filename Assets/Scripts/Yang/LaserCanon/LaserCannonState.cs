@@ -76,6 +76,7 @@ public class LaserCannonState : MonoBehaviour {
 	public void SetEnemyColor(){
 		shootLaserLine.laserLineRenderer.material = sp.shootMaterials.enemyMaterial;
 		shootLaserLine.hitSparkParticleSystem = sp.shootParticles.enemyParticle;
+
 		shootLaserLine.SetLaserState (false);
 
 		aimLaserLine.startColor = sp.aimCP.enemyColor;
