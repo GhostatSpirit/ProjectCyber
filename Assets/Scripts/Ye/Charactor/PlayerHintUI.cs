@@ -2,12 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Text = UnityEngine.UI.Text;
+using Image = UnityEngine.UI.Image;
 
 public class PlayerHintUI : MonoBehaviour {
 
     public GameObject target;
 
-    public enum HintStatus { A, B, C, None};
+    public Sprite None;
+
+    public Sprite pressAsprite;
+
+    public Sprite pressBsprite;
+
+    public float moveX;
+
+    public enum HintStatus { PressA, PressB, None };
 
     public HintStatus hint = HintStatus.None;
 
@@ -20,21 +29,20 @@ public class PlayerHintUI : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         transform.position = cam.WorldToScreenPoint(target.transform.position);
+        transform.position += new Vector3(moveX,0,0);
+
         if (hint == HintStatus.None)
         {
-            GetComponent<Text>().text = "";
+            GetComponent<Image>().sprite = None;
         }
-        else if (hint == HintStatus.A)
+        else if (hint == HintStatus.PressA)
         {
-            GetComponent<Text>().text = " A ";
+            GetComponent<Image>().sprite = pressAsprite;
         }
-        else if (hint == HintStatus.B)
+        else if (hint == HintStatus.PressB)
         {
-            GetComponent<Text>().text = " B ";
+            GetComponent<Image>().sprite = pressBsprite;
         }
-        else if (hint == HintStatus.C)
-        {
-            GetComponent<Text>().text = " C ";
-        }
+        
     }
 }

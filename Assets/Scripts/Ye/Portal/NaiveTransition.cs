@@ -2,61 +2,57 @@
 using System.Collections.Generic;
 using Com.LuisPedroFonseca.ProCamera2D;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class NaiveTransition : MonoBehaviour {
 
     public Camera cam;
-    public GameObject target;
-    public GameObject initial;
+    // public GameObject target;
+    public bool trans; 
+
+    // save back place 
+    // public GameObject initial;
+
     ProCamera2DTransitionsFX s;
 
     // Use this for initialization
     void Start () {
         s = cam.GetComponent<ProCamera2DTransitionsFX>();
-        //StartCoroutine(DelayedOperations());
-        //print("start coroutine");
     }
 
     IEnumerator DelayedOperations()
     {
         s = cam.GetComponent<ProCamera2DTransitionsFX>();
-        if (Input.GetKey(KeyCode.Space))
+
+        if (trans == true)
         {
-            //s.TransitionExit();
+            
+            // start transition
+
             s.TransitionExit();
-            yield return new WaitForSeconds(1.5f);
+            
+            yield return new WaitForSeconds(0.5f);
+
+            SceneManager.LoadScene(2);
+            /*
             gameObject.transform.position = target.transform.position;
             yield return new WaitForSeconds(1f);
             s.TransitionEnter();
+            */
         }
+        
+        // go back
+        /*
         if (Input.GetKey(KeyCode.Z))
         {
             gameObject.transform.position = initial.transform.position;
         }
+        */
         
     }
     void Update()
     {
         StartCoroutine(DelayedOperations());
     }
-    // Update is called once per frame
-    /*
-	void Update () {
-         ProCamera2DTransitionsFX s = cam.GetComponent<ProCamera2DTransitionsFX>();
-        if (Input.GetKey(KeyCode.Space))
-        {
-            //s.TransitionExit();
-            s.TransitionExit();
-            
-            gameObject.transform.position = target.transform.position;
-        }
-        if (Input.GetKey(KeyCode.Z))
-        {
-            gameObject.transform.position = initial.transform.position;
-        }
-
-    }
-    */
-
 
 }
