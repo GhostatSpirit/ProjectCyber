@@ -31,12 +31,25 @@ public class RoombaRespawner : MonoBehaviour {
 			RespawnRoomba ();
 		}
 
+		// initialize all the roomba childs
+		foreach(Transform child in transform){
+			ObjectIdentity oi = child.GetComponent<ObjectIdentity> ();
+			if(oi && oi.objType == ObjectType.Roomba){
+				ControlStatus cs = child.GetComponent<ControlStatus> ();
+				if(cs){
+					cs.Boss = transform;
+					if (hacker)
+						cs.Hacker = hacker;
+				}
+			}
+		}
+
 	}
 
 	Coroutine respawnCoroutine;
 	// Update is called once per frame
 	void Update () {
-		Debug.Log (roombaCount);
+//		Debug.Log (roombaCount);
 		if(roombaCount == 0 && respawnCoroutine == null){
 			// start the respawnCoroutine
 			respawnCoroutine = StartCoroutine (RespawnRoombaIE (respawnInterval));

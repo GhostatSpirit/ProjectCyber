@@ -15,6 +15,8 @@ public class FieldOfView : MonoBehaviour
 
 	public bool ignoreVisionBlock = false;
 
+	// if has control status, we would only find enemy targets
+	ControlStatus cs;
 	//[Range(0f,360f)]
 	//public float rotationOffset = 0f;
 
@@ -40,6 +42,7 @@ public class FieldOfView : MonoBehaviour
 	public Direction initialDirection = Direction.UP;
 
 	void Start(){
+		cs = GetComponent<ControlStatus> ();
 		if(useInitialFacing)
 			facing = Direction2Vector (initialDirection);
 	}
@@ -68,9 +71,9 @@ public class FieldOfView : MonoBehaviour
 			foreach (Transform trans in targets) {
 				if(CheckTarget(trans)){
 					// check if vision blocker
-					if(HasVisionBlock(trans)){
-						continue;
-					}
+					if(HasVisionBlock(trans))  continue;
+					if (IsDead (trans))  continue;
+					if (!IsEnemy (trans))  continue;
 						
 					float newDist = Vector3.Distance (this.transform.position, trans.position);
 					if (newDist < dist) {
@@ -122,9 +125,9 @@ public class FieldOfView : MonoBehaviour
 					continue;
 				}
 				// check if vision blocker
-				if(HasVisionBlock(target)){
-					continue;
-				}
+				if(HasVisionBlock(target))  continue;
+				if (IsDead (target))  continue;
+				if (!IsEnemy (target))  continue;
 
 				// now it is a valid target, if its distance is smaller, use it instead
 				float newDist = 
@@ -178,9 +181,9 @@ public class FieldOfView : MonoBehaviour
 					continue;
 				}
 				// check if vision blocker
-				if(HasVisionBlock(target)){
-					continue;
-				}
+				if(HasVisionBlock(target))  continue;
+				if (IsDead (target))  continue;
+				if (!IsEnemy (target))  continue;
 
 				// now it is a valid target, if its distance is smaller, use it instead
 				float newDist = 
@@ -317,6 +320,27 @@ public class FieldOfView : MonoBehaviour
 		}
 
 		return false;
+	}
+
+
+	bool IsEnemy(Transform target){
+		bool isEnemy = true;
+		ControlStatus targetCS = target.GetComponent<ControlStatus> ();
+		if(cs && targetCS){
+			if(cs.controller == targetCS.controller && cs.controller != Controller.None){
+				isEnemy = false;
+			}
+		}
+		return isEnemy;
+	}
+
+	bool IsDead(Transform target){
+		bool isDead = false;
+		HealthSystem targetHS = target.GetComponent<HealthSystem> ();
+		if(targetHS && targetHS.IsDead()){
+			isDead = true;
+		}
+		return isDead;
 	}
 
 	// translate a Direction enum to a normalized Vector3

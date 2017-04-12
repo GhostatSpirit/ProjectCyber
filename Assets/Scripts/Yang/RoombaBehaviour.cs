@@ -138,8 +138,8 @@ public class RoombaBehaviour : MonoBehaviour {
 		body.velocity = Vector3.zero;
 	}
 
-	ObjectType[] playerTargets = { ObjectType.AI, ObjectType.Hacker };
-	ObjectType[] enemyTargets = { ObjectType.Virus, ObjectType.Robot, ObjectType.Boss };
+	ObjectType[] playerTargets = { ObjectType.AI, ObjectType.Hacker, ObjectType.Roomba };
+	ObjectType[] enemyTargets = { ObjectType.Virus, ObjectType.Robot, ObjectType.Boss, ObjectType.Roomba };
 
 	ObjectType[] targets;
 
