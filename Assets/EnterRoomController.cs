@@ -19,6 +19,9 @@ public class EnterRoomController : MonoBehaviour {
 
 	public BossHealth bossHealth;
 
+	public Transform oldRevivePoint;
+	public Transform newRevivePoint;
+
 
 	public event Action OnPlayersEnterRoom;
 
@@ -69,6 +72,9 @@ public class EnterRoomController : MonoBehaviour {
 			bossHealth.bossAppear = true;
 		}
 
+		SwitchRevivePoint ();
+
+
 		if (hackerControl)
 			hackerControl.canControl = true;
 		if (AIControl)
@@ -96,6 +102,11 @@ public class EnterRoomController : MonoBehaviour {
 		if(manager){
 			manager.enabled = true;
 		}
+	}
+
+	void SwitchRevivePoint(){
+		oldRevivePoint.gameObject.SetActive (false);
+		newRevivePoint.gameObject.SetActive (true);
 	}
 
 
