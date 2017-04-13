@@ -9,7 +9,7 @@ public class FinalPort : MonoBehaviour {
     public Camera cam;
     public GameObject AI;
     public GameObject Hacker;
-    public float MaxtransTime = 5f;
+    public float MaxtransTime = 2f;
     //public GameObject destination;
 
     public GameObject PortalBack;
