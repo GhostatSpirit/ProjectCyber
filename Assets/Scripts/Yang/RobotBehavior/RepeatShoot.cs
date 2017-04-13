@@ -46,8 +46,8 @@ public class RepeatShoot : MonoBehaviour {
 
 	IEnumerator ShootInterval(){
 		while(true){
-			fire ();
 			yield return new WaitForSeconds (interval);
+			fire ();
 		}
 	}
 

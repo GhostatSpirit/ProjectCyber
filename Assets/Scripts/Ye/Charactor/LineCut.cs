@@ -131,10 +131,10 @@ public class LineCut : MonoBehaviour {
 		LineCutBehavior (other);
 	}
 
-	void OnTriggerExit2D(Collider2D other)
-	{
-		LineCutBehavior (other);
-	}
+//	void OnTriggerExit2D(Collider2D other)
+//	{
+//		LineCutBehavior (other);
+//	}
 
 	void SetLastPos(Transform AItrans){
 		lastPos = transform.position;

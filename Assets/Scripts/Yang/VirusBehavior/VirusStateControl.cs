@@ -157,13 +157,14 @@ public class VirusStateControl : MonoBehaviour {
 	void Update () {
 		ControlStatus cs = transform.GetComponent<ControlStatus> ();
 		//ObjectIdentity oi = transform.parent.GetComponent<ObjectIdentity> ();
-		vpm = transform.parent.GetComponent<VirusPosManager> ();
+
 
 		//if (oi == null)
 			//return;
 		switch(cs.controller){
 		case Controller.Boss:
 			// state switch logic for Boss
+			vpm = transform.parent.GetComponent<VirusPosManager> ();
 			switch (virusState) {
 			case VirusState.Idle:
 				{
@@ -267,6 +268,11 @@ public class VirusStateControl : MonoBehaviour {
 				}
 			}
 			break;
+
+		case Controller.None:{
+				StopChase (this.transform);
+				break;
+			}
 		
 		default:
 			Debug.LogError ("parent obj type must be hacker of boss");
@@ -375,6 +381,9 @@ public class VirusStateControl : MonoBehaviour {
 
 
 	bool withinAngle(Transform target, float angle){
+		if(target == null){
+			return false;
+		}
 		Vector3 dirToTarget = target.position - this.transform.position;
 		Quaternion rot = Quaternion.FromToRotation (transform.up, dirToTarget);
 

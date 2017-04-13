@@ -44,6 +44,7 @@ public class HiddenLineBehaviour : MonoBehaviour {
 		if (lr) {
 			lr.enabled = true;
 			lr.useWorldSpace = true;
+			lr.sortingLayerName = sortingLayerName;
 		}
 		// try to find all hidden line node in child and add them to node positions
 		nodeTransforms = new List<Transform> ();

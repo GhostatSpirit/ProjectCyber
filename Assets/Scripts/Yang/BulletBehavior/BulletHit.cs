@@ -34,16 +34,20 @@ public class BulletHit : MonoBehaviour {
 				HitVirusBehaviour (coll);
 				break;
 			}
-		case ObjectType.Interface:{
-				HitInterfaceBehaviour (coll);
-				break;
-			}
 		case ObjectType.Robot:{
 				HitRobotBehaviour (coll);
 				break;
 			}
+		case ObjectType.Interface:{
+				DefaultBehaviour (coll);
+				break;
+			}
 		case ObjectType.LaserCannon:{
-				HitInterfaceBehaviour (coll);
+				DefaultBehaviour (coll);
+				break;
+			}
+		default:{
+				DefaultBehaviour (coll);
 				break;
 			}
 		}
@@ -84,8 +88,12 @@ public class BulletHit : MonoBehaviour {
 		}
 	}
 
-	void HitInterfaceBehaviour(Collision2D coll){
+	void DefaultBehaviour(Collision2D coll){
 		//Debug.Log (coll.transform);
+		ControlStatus cs = coll.transform.GetComponentInParent<ControlStatus> ();
+		if(!cs){
+			return;
+		}
 		if (NotControlled (coll.transform)){
 			// it the door is not controlled by the boss...
 			coll.transform.GetComponentInParent<ControlStatus> ().controller = Controller.Hacker;

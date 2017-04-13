@@ -21,7 +21,7 @@ public class CannonHackerControl : MonoBehaviour {
 			if (myInputDevice == null)
 				return false;
 			else
-				return myInputDevice.RightTrigger.IsPressed;
+				return myInputDevice.Action1.IsPressed;
 		}
 	}
 

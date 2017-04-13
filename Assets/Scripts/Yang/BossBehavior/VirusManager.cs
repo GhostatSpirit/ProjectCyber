@@ -9,6 +9,8 @@ public class VirusManager : MonoBehaviour {
 	public int respawnCount = 4;
 
 	public float respawnRadius = 3f;
+
+	public float respawnDelay = 5f;
 	// the amount of virus that is alive for now
 	public int currentCount{
 		get{
@@ -34,6 +36,11 @@ public class VirusManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		fov = GetComponent<FieldOfView> ();
+
+		if(currentCount == 0){
+			Respawn ();
+		}
+
 	}
 	
 	// Update is called once per frame
@@ -56,9 +63,19 @@ public class VirusManager : MonoBehaviour {
 			fov.facing = dir;
 		}
 
-		if(currentCount == 0){
-			Respawn ();
+		if(currentCount == 0 && respawnCoroutine == null){
+			respawnCoroutine = StartCoroutine (DelayRespawnIE (respawnDelay));
 		}
+	}
+
+
+	Coroutine respawnCoroutine;
+
+	IEnumerator DelayRespawnIE(float delay){
+		yield return new WaitForSeconds (delay);
+		Respawn ();
+		respawnCoroutine = null;
+		yield break;
 	}
 
 

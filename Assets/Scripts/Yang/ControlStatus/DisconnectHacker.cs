@@ -7,6 +7,8 @@ public class DisconnectHacker : MonoBehaviour {
 	public float waitSeconds = 1f;
 	public float disconnectDistance = 1f;
 
+	public bool onlyCheckDistance = false;
+
 	ControlStatus _cs;
 	ControlStatus cs{
 		get{
@@ -82,7 +84,11 @@ public class DisconnectHacker : MonoBehaviour {
 			if(fov){
 				hackerInSight = fov.CheckTarget (cs.Hacker);
 			}
-			float dist = Vector3.Distance (transform.position, self.position);
+			if(onlyCheckDistance){
+				hackerInSight = true;
+			}
+			float dist = Vector3.Distance (cs.Hacker.position, self.position);
+			Debug.Log (dist);
 			if(!hackerInSight || dist > disconnectDistance){
 				cs.controller = Controller.None;
 				canDisconnect = false;

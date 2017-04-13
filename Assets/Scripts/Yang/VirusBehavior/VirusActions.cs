@@ -52,7 +52,7 @@ public class VirusActions : MonoBehaviour {
 		}
 	}
 
-
+	HealthSystem hs;
 
 	void Start()
 	{
@@ -63,6 +63,8 @@ public class VirusActions : MonoBehaviour {
 
 		hd = GetComponent<HurtAndDamage> ();
 		cs = GetComponent<ControlStatus> ();
+		hs = GetComponent<HealthSystem> ();
+
 
 		StartCoroutine (BindVirusActionIE ());
 
@@ -86,6 +88,7 @@ public class VirusActions : MonoBehaviour {
 		cs.OnCutByPlayer += ChaseNone;
 		cs.OnCutByPlayer += ChaseNone;
 		cs.OnCutByPlayer += StopMovement;
+		//cs.OnCutByPlayer += ChangeLayerToFriend;
 		cs.OnCutByPlayer += StartImmune;
 
 		//OnCutByEnemy = null;
@@ -99,6 +102,7 @@ public class VirusActions : MonoBehaviour {
 		cs.OnLinkedByPlayer += ChangeLayerToFriend;
 		cs.OnLinkedByPlayer += SetParentToHacker;
 		cs.OnLinkedByPlayer += EndImmune;
+		cs.OnLinkedByPlayer += ShortImmnue;
 
 		//OnLinkedByEnemy = null;
 		cs.OnLinkedByEnemy += ChasePlayer;
@@ -109,6 +113,13 @@ public class VirusActions : MonoBehaviour {
 	}
 
 	// methods for the events above
+
+
+	void ShortImmnue(Transform objTrans){
+		if(hs){
+			hs.Immune (0.5f);
+		}
+	}
 
 	/* StopMovement:
 	 * 1. stop the enemy from chasing the target
@@ -233,7 +244,7 @@ public class VirusActions : MonoBehaviour {
 			layer = layer >> 1;
 			layerNumber++;
 		}
-		return layerNumber;
+		return layerNumber - 1;
 	}
 
 	void SetParentToHacker(Transform objTrans){
