@@ -57,7 +57,7 @@ public class PlayerInteract : MonoBehaviour {
 			return (selfHealth != null && otherHealth != null);
 		});
 
-		Debug.Log ("init complete");
+//		Debug.Log ("init complete");
 	}
 	
 	// Update is called once per frame
