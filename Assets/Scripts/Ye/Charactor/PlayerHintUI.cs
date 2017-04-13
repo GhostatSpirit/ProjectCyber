@@ -16,10 +16,12 @@ public class PlayerHintUI : MonoBehaviour {
 
     public Sprite pressYsprite;
 
+	public Sprite pressB2sprite;
+
     public float moveX;
 
 
-    public enum HintStatus { PressA, PressB, PressY ,None };
+    public enum HintStatus { PressA, PressB, PressY ,None , PressB2};
 
     public HintStatus hint = HintStatus.None;
 
@@ -53,5 +55,10 @@ public class PlayerHintUI : MonoBehaviour {
         {
             image.sprite = pressYsprite;
         }
+		else if (hint == HintStatus.PressB2){
+			if(pressB2sprite){
+				image.sprite = pressB2sprite;
+			}
+		}
     }
 }

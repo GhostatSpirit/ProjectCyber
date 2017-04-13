@@ -12,7 +12,7 @@ public class VirusManager : MonoBehaviour {
 
 	public float respawnDelay = 5f;
 	// the amount of virus that is alive for now
-	public int currentCount{
+	public int controlCount{
 		get{
 			int count = 0;
 			foreach(Transform child in transform){
@@ -30,6 +30,21 @@ public class VirusManager : MonoBehaviour {
 		}
 	}
 
+	public int totalCount{
+		get{
+			int count = 0;
+			foreach(Transform child in transform){
+				// does if have a objectIdentity and the identity is virus?
+				ObjectIdentity oi = child.GetComponent<ObjectIdentity> ();
+				if(oi && oi.objType == ObjectType.Virus){
+					// append it to the virus list
+					count++;
+				}
+			}
+			return count;
+		}
+	}
+
 	public Transform[] targets;
 
 	FieldOfView fov;
@@ -37,7 +52,7 @@ public class VirusManager : MonoBehaviour {
 	void Start () {
 		fov = GetComponent<FieldOfView> ();
 
-		if(currentCount == 0){
+		if(totalCount == 0){
 			Respawn ();
 		}
 
@@ -63,8 +78,10 @@ public class VirusManager : MonoBehaviour {
 			fov.facing = dir;
 		}
 
-		if(currentCount == 0 && respawnCoroutine == null){
-			respawnCoroutine = StartCoroutine (DelayRespawnIE (respawnDelay));
+		if(respawnCoroutine == null){
+			if (controlCount == 0 && totalCount <= 3) {
+				respawnCoroutine = StartCoroutine (DelayRespawnIE (respawnDelay));
+			}
 		}
 	}
 

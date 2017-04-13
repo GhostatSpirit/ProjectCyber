@@ -100,7 +100,8 @@ public class PlayerMovement: MonoBehaviour {
 		}
 		if (moveEnabled) {
 			if (myRigidbody.bodyType != RigidbodyType2D.Static) {
-				myRigidbody.velocity = moveVector * moveSpeed * Time.deltaTime * 10f;
+				// myRigidbody.velocity = moveVector * moveSpeed * Time.deltaTime * 10f;
+				myRigidbody.AddForce (moveVector * moveSpeed * Time.deltaTime * 100f);
 			}
 //			if(moveVector.magnitude != 0){
 //				transform.up = new Vector2 (-moveVector.x, -moveVector.y);

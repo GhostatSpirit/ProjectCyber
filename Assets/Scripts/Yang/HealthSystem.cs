@@ -257,6 +257,7 @@ public class HealthSystem : MonoBehaviour {
 	void InitDeathHandler(){
 		if(changeColor){
 			OnObjectDead += ChangeColor;
+			OnObjectRevive += ResetColor;
 		}
 		if(stopMovement){
 			OnObjectDead += StopMovement;
@@ -291,6 +292,12 @@ public class HealthSystem : MonoBehaviour {
 	void ChangeColor(Transform trans){
 		if(sr != null){
 			sr.DOColor (deadColor, destoryDelay / 2f).SetEase (Ease.OutCubic);
+		}
+	}
+
+	void ResetColor(Transform trans){
+		if(sr != null){
+			sr.color = Color.white;
 		}
 	}
 

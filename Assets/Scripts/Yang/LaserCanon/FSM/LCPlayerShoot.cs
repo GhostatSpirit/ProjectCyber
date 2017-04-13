@@ -21,6 +21,9 @@ public class LCPlayerShoot : StateMachineBehaviour {
 	public float lifeTime = 3f;
 
 	public float rotateLaserSpeed = 0.5f;
+
+
+
 	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 		state = animator.GetComponent<LaserCannonState> ();
@@ -35,6 +38,8 @@ public class LCPlayerShoot : StateMachineBehaviour {
 		maxDistance = Mathf.Max (maxDistance, state.fov.radius);
 
 		state.ShootLaser (shootDir, maxDistance, fadeSeconds, lifeTime, false);
+
+
 	}
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -49,9 +54,9 @@ public class LCPlayerShoot : StateMachineBehaviour {
 	}
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-	//override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-	//
-	//}
+	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+
+	}
 
 	// OnStateMove is called right after Animator.OnAnimatorMove(). Code that processes and affects root motion should be implemented here
 	//override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {

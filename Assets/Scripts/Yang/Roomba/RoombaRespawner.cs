@@ -27,9 +27,9 @@ public class RoombaRespawner : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		areaTrigger = GetComponent<Collider2D> ();
-		if(roombaCount == 0 && roomba){
-			RespawnRoomba ();
-		}
+//		if(roombaCount == 0 && roomba){
+//			RespawnRoomba ();
+//		}
 
 		// initialize all the roomba childs
 		foreach(Transform child in transform){
@@ -43,7 +43,12 @@ public class RoombaRespawner : MonoBehaviour {
 				}
 			}
 		}
+	}
 
+	void OnEnable(){
+		if(roombaCount == 0 && roomba && !ObjectNearby()){
+			RespawnRoomba ();
+		}
 	}
 
 	Coroutine respawnCoroutine;
@@ -57,6 +62,9 @@ public class RoombaRespawner : MonoBehaviour {
 	}
 
 	bool ObjectNearby(){
+		if(!areaTrigger){
+			areaTrigger = GetComponent<Collider2D> ();
+		}
 		if (!areaTrigger){
 			return false;
 		}
@@ -75,6 +83,7 @@ public class RoombaRespawner : MonoBehaviour {
 		RespawnRoomba ();
 		respawnCoroutine = null;
 	}
+
 
 
 	void RespawnRoomba(){
