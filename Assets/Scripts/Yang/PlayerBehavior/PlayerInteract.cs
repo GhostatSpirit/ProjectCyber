@@ -82,7 +82,9 @@ public class PlayerInteract : MonoBehaviour {
 		if(!selfHealth.IsDead() && otherHealth.IsDead() && dist < reviveDistance){
 
 			if(hintUI){
-				hintUI.hint = PlayerHintUI.HintStatus.PressY;
+				if(hintUI.hint == PlayerHintUI.HintStatus.None ||
+					hintUI.hint == PlayerHintUI.HintStatus.PressB2)
+						hintUI.hint = PlayerHintUI.HintStatus.PressY;
 			}
 			if((device != null) && device.Action4.WasPressed){
 				otherHealth.Revive ();
@@ -90,7 +92,8 @@ public class PlayerInteract : MonoBehaviour {
 
 		} else{
 			if (hintUI) {
-				hintUI.hint = PlayerHintUI.HintStatus.None;
+				if(hintUI.hint == PlayerHintUI.HintStatus.PressY)
+					hintUI.hint = PlayerHintUI.HintStatus.None;
 			}
 		}
 

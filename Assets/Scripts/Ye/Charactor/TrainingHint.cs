@@ -13,28 +13,30 @@ public class TrainingHint : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         CS = GetComponent<ControlStatus>();	
+
+		ChangeBossHint ();
+
+		CS.OnCutByPlayer += ChangeNoneHint;
+		CS.OnLinkedByPlayer += ChangeHackerHint;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	    CS = GetComponent<ControlStatus>();
         // Debug.Log(CS.controller);
-
-        if(CS.controller == Controller.Boss)
-        {
-            AIHint.GetComponent<PlayerHintUI>().hint = PlayerHintUI.HintStatus.PressA ;
-        }
-
-        if (CS.controller == Controller.None)
-        {
-            AIHint.GetComponent<PlayerHintUI>().hint = PlayerHintUI.HintStatus.None;
-            HackerHint.GetComponent<PlayerHintUI>().hint = PlayerHintUI.HintStatus.PressA;
-        }
-
-        if (CS.controller == Controller.Hacker)
-        {
-            HackerHint.GetComponent<PlayerHintUI>().hint = PlayerHintUI.HintStatus.None;
-            GetComponent<TrainingHint>().enabled = false;
-        }
     }
+
+	void ChangeBossHint(){
+		AIHint.GetComponent<PlayerHintUI>().hint = PlayerHintUI.HintStatus.PressA ;
+	}
+
+	void ChangeNoneHint(Transform objTrans){
+		AIHint.GetComponent<PlayerHintUI>().hint = PlayerHintUI.HintStatus.None;
+		HackerHint.GetComponent<PlayerHintUI>().hint = PlayerHintUI.HintStatus.PressA;
+	}
+
+	void ChangeHackerHint(Transform objTrans){
+		HackerHint.GetComponent<PlayerHintUI>().hint = PlayerHintUI.HintStatus.None;
+		GetComponent<TrainingHint>().enabled = false;
+	}
 }

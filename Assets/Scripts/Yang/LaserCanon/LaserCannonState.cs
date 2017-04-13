@@ -60,6 +60,19 @@ public class LaserCannonState : MonoBehaviour {
 	Coroutine shootLaserCoroutine = null;
 	public float damage = 10f;
 
+	public PlayerHintUI playerHint;
+
+	public void TurnOnHint(){
+		if(playerHint){
+			playerHint.hint = PlayerHintUI.HintStatus.PressB;
+		}
+	}
+
+	public void TurnOffHint(){
+		if(playerHint){
+			playerHint.hint = PlayerHintUI.HintStatus.None;
+		}
+	}
 
 	// Use this for initialization
 	void Start () {

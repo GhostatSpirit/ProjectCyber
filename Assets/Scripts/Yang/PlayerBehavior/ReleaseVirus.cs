@@ -10,6 +10,21 @@ public class ReleaseVirus : MonoBehaviour {
 	// a static object
 	public Transform releasedVirusParent;
 
+	public PlayerHintUI hintUI;
+
+	int virusCount{
+		get{
+			int tempCount = 0;
+			foreach(Transform child in transform){
+				// does if have a objectIdentity and the identity is virus?
+				ObjectIdentity oi = child.GetComponent<ObjectIdentity> ();
+				if(oi && oi.objType == ObjectType.Virus){
+					tempCount++;
+				}
+			}
+			return tempCount;
+		}
+	}
 	// Use this for initialization
 	void Start () {
 		
@@ -21,8 +36,19 @@ public class ReleaseVirus : MonoBehaviour {
 		if (myInputDevice == null) {
 			return;
 		}
-		
-		if(myInputDevice.Action2.IsPressed){
+
+		int count = virusCount;
+
+		if (hintUI) {
+			if (count > 0 && hintUI.hint == PlayerHintUI.HintStatus.None) {
+				hintUI.hint = PlayerHintUI.HintStatus.PressB2;
+			}
+			if (count == 0 && hintUI.hint == PlayerHintUI.HintStatus.PressB2){
+				hintUI.hint = PlayerHintUI.HintStatus.None;
+			}
+		}
+
+		if(myInputDevice.Action2.IsPressed && count != 0){
 			ReleaseIdleVirus ();
 		}
 	}
