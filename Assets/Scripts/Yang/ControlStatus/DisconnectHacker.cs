@@ -88,7 +88,7 @@ public class DisconnectHacker : MonoBehaviour {
 				hackerInSight = true;
 			}
 			float dist = Vector3.Distance (cs.Hacker.position, self.position);
-			Debug.Log (dist);
+//			Debug.Log (dist);
 			if(!hackerInSight || dist > disconnectDistance){
 				cs.controller = Controller.None;
 				canDisconnect = false;
