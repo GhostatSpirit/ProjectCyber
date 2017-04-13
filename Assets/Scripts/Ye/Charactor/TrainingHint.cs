@@ -18,7 +18,7 @@ public class TrainingHint : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	    CS = GetComponent<ControlStatus>();
-        Debug.Log(CS.controller);
+        // Debug.Log(CS.controller);
 
         if(CS.controller == Controller.Boss)
         {
