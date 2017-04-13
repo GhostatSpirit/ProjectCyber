@@ -42,9 +42,15 @@ public class RoombaBehaviour : MonoBehaviour {
 		cs.OnLinkedByPlayer += SetEnemyTargets;
 		cs.OnLinkedByPlayer += SetPlayerLink;
 
-		cs.OnCutByPlayer += SetPlayerCut;
+		cs.OnCutByPlayer += SetCut;
+		cs.OnCutByEnemy += SetCut;
+
 
 		hd.canHurtOther = false;
+
+		if(cs.controller == Controller.Boss){
+			animator.SetTrigger ("enemyLink");
+		}
 	}
 	
 	// Update is called once per frame
@@ -59,6 +65,7 @@ public class RoombaBehaviour : MonoBehaviour {
 		if(lr){
 			lr.startColor = aimColorCP.enemyColor;
 			lr.endColor = aimColorCP.enemyColor;
+			lr.sortingLayerName = "ControlLine";
 		}
 		// set aim point sprite
 		aimPointSP.SetEnemy ();
@@ -71,6 +78,7 @@ public class RoombaBehaviour : MonoBehaviour {
 		if(lr){
 			lr.startColor = aimColorCP.playerColor;
 			lr.endColor = aimColorCP.playerColor;
+			lr.sortingLayerName = "ControlLine";
 		}
 		// set aim point sprite
 		aimPointSP.SetPlayer ();
@@ -167,7 +175,7 @@ public class RoombaBehaviour : MonoBehaviour {
 		targets = enemyTargets;
 	}
 
-	public void SetPlayerCut(Transform objTrans){
+	public void SetCut(Transform objTrans){
 		Debug.Log ("unlink");
 		animator.SetTrigger ("unlink");
 	}

@@ -20,6 +20,8 @@ public class FieldOfView : MonoBehaviour
 	//[Range(0f,360f)]
 	//public float rotationOffset = 0f;
 
+	public bool includeUncontrolledTarget = false;
+
 	// a vector3 points to where this object is facing
 	// if facing is Vector3.zero or null, we will use transform.up instead
 	public Vector3 facing{
@@ -328,7 +330,11 @@ public class FieldOfView : MonoBehaviour
 		ControlStatus targetCS = target.GetComponent<ControlStatus> ();
 		if(cs && targetCS){
 			if(targetCS.controller == Controller.None){
-				return false;
+				if (!includeUncontrolledTarget) {
+					return false;
+				} else{
+					return true;
+				}
 			}
 			if(cs.controller == targetCS.controller && cs.controller != Controller.None){
 				isEnemy = false;
