@@ -67,17 +67,20 @@ public class Revive : MonoBehaviour {
         hackerHS.Revive(1);
         able = false;
 
+		reviveCoroutine = null;
     }
 
     
+	Coroutine reviveCoroutine;
     // Update is called once per frame
     
     void Update () {
         
-        if ( hackerHS.IsDead() && AIHS.IsDead() && able == true)
+        if ( hackerHS.IsDead() && AIHS.IsDead() )
         {
-            able = false;
-            StartCoroutine(DelayedTransition(reviveFx));
+			if (reviveCoroutine == null) {
+				reviveCoroutine = StartCoroutine (DelayedTransition (reviveFx));
+			}
         }	
 	}
     
