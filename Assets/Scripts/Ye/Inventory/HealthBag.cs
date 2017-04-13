@@ -7,6 +7,7 @@ public class HealthBag : MonoBehaviour {
     GameObject player;
     // HealthSystem HBHS;
     HealthSystem PlayerHS;
+	ObjectIdentity PlayerOI;
     public float HealRatio = 0.2f; 
 
 	// Use this for initialization
@@ -31,7 +32,16 @@ public class HealthBag : MonoBehaviour {
     {
         // heal
         PlayerHS = collision.gameObject.GetComponent<HealthSystem>();
-        PlayerHS.Heal(HealRatio * PlayerHS.maxHealth);
+		PlayerOI = collision.transform.GetComponent<ObjectIdentity> ();
+
+		if(!PlayerOI){
+			return;
+		}
+
+		if (PlayerOI.objType == ObjectType.AI || PlayerOI.objType == ObjectType.AI) {
+			if(PlayerHS)
+				PlayerHS.Heal (HealRatio * PlayerHS.maxHealth);
+		}
         /*
         PlayerHS.Heal(HealRatio * PlayerHS.maxHealth);
         */

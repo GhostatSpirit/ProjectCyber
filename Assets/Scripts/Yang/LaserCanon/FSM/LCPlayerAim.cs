@@ -29,6 +29,8 @@ public class LCPlayerAim : StateMachineBehaviour {
 			state.PlayerUpdateAimLaser ();
 			state.aimLaser.GetComponent<AimLaserUpdate> ().SnapPosition ();
 			state.aimLaser.gameObject.SetActive (true);
+
+			state.TurnOnHint ();
 		}
 	}
 
@@ -78,6 +80,8 @@ public class LCPlayerAim : StateMachineBehaviour {
 		// turn off the laser
 		if(state){
 			state.aimLaser.gameObject.SetActive (false);
+
+			state.TurnOffHint ();
 		}
 	}
 

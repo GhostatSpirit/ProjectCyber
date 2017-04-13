@@ -30,7 +30,7 @@ public class Cinematics : MonoBehaviour {
         ai.GetComponent<HealthSystem>().StartImmune();
 
         ProCamera2DCinematics proCam = cam.GetComponent<ProCamera2DCinematics>();
-        proCam.AddCinematicTarget( target.transform); 
+        proCam.AddCinematicTarget( target.transform, 0f); 
 
         proCam.Play();
         proCam.OnCinematicFinished.AddListener(StartMovement);

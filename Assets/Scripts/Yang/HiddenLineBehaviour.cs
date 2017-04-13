@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Com.LuisPedroFonseca.ProCamera2D;
 
 public class HiddenLineBehaviour : MonoBehaviour {
 	public Transform statusReceiver;
@@ -36,6 +37,8 @@ public class HiddenLineBehaviour : MonoBehaviour {
 
 	LineRenderer lr;
 
+	ProCamera2DCinematics proCam;
+
 	List<Transform> nodeTransforms;
 	Vector3[] nodePositions;
 	// Use this for initialization
@@ -69,7 +72,16 @@ public class HiddenLineBehaviour : MonoBehaviour {
 
 		yield return new WaitUntil (() => receiverCS != null && assignerCS != null);
 
-		assignerCS.OnLinkedByPlayer += SyncPlayerLink;
+//		Cinematics cinematics = statusAssigner.GetComponent<Cinematics> ();
+//		if (cinematics && cinematics.cam) {
+//			proCam = cinematics.cam.GetComponent<ProCamera2DCinematics> ();
+//		}
+//
+//		if (proCam) {
+//			proCam.OnCinematicTargetReached.AddListener (CamSyncPlayerLink(0));
+//		} else {
+			assignerCS.OnLinkedByPlayer += SyncPlayerLink;
+//		}
 
 	}
 
@@ -78,6 +90,16 @@ public class HiddenLineBehaviour : MonoBehaviour {
 		lr.material = playerLineMaterial;
 		// then update control status
 		receiverCS.controller = Controller.Hacker;
+//		proCam.OnCinematicTargetReached.RemoveListener (CamSyncPlayerLink(0));
+	}
+
+	public void CamSyncPlayerLink(int index){
+		// first update line material if needed
+		lr.material = playerLineMaterial;
+		// then update control status
+		receiverCS.controller = Controller.Hacker;
+
+
 	}
 
 	void UpdateNodePositions(){
