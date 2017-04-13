@@ -81,6 +81,7 @@ public class LaserCannonState : MonoBehaviour {
 
 		aimLaserLine.startColor = sp.aimCP.enemyColor;
 		aimLaserLine.endColor = sp.aimCP.enemyColor;
+		aimLaserLine.sortingLayerName = "ControlLine";
 	}
 
 	public void SetPlayerColor(){
@@ -90,6 +91,7 @@ public class LaserCannonState : MonoBehaviour {
 
 		aimLaserLine.startColor = sp.aimCP.playerColor;
 		aimLaserLine.endColor = sp.aimCP.playerColor;
+		aimLaserLine.sortingLayerName = "ControlLine";
 	}
 
 

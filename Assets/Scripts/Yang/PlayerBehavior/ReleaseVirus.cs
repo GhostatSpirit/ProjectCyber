@@ -22,7 +22,7 @@ public class ReleaseVirus : MonoBehaviour {
 			return;
 		}
 		
-		if(myInputDevice.RightBumper.IsPressed){
+		if(myInputDevice.Action2.IsPressed){
 			ReleaseIdleVirus ();
 		}
 	}
