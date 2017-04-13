@@ -91,7 +91,6 @@ public class PlayerBoom : MonoBehaviour
                 StartCoroutine(disableMove(rb));
                 rb.AddForce(getForceDirection(rb, explosionCenter) * forceMagnitude, ForceMode2D.Impulse);
             }
-
         }
         AIEnergy.SubstractEnergy(AIEnergy.GetEnergy() / 2);
         HackerEnergy.SubstractEnergy(HackerEnergy.GetEnergy() / 2);
