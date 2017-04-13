@@ -29,14 +29,7 @@ public class TestPortal : MonoBehaviour {
     void Start () {
 
         TransAudio = GetComponent<AudioSource>();
-        /*
-        ProCamera2DTransitionsFX transFX = cam.GetComponent<ProCamera2DTransitionsFX>();
-        Collider2D portalcol = gameObject.GetComponent<CircleCollider2D>();
-        Collider2D AIcol = AI.GetComponent<CircleCollider2D>();
-        Collider2D Hackercol = Hacker.GetComponent<CircleCollider2D>();
-        DesList = destination.GetComponentsInChildren<Transform>();
-        AudioSource audio = GetComponent<AudioSource>();
-        */
+        
     }
 
     // Update is called once per frame

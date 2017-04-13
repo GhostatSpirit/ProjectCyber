@@ -14,16 +14,22 @@ public class PlayerHintUI : MonoBehaviour {
 
     public Sprite pressBsprite;
 
+    public Sprite pressYsprite;
+
     public float moveX;
 
-    public enum HintStatus { PressA, PressB, None };
+
+    public enum HintStatus { PressA, PressB, PressY ,None };
 
     public HintStatus hint = HintStatus.None;
 
     public Camera cam ;
+
+    Image image;
+
 	// Use this for initialization
 	void Start () {
-		
+        image = GetComponent<Image>();
 	}
 	
 	// Update is called once per frame
@@ -33,16 +39,19 @@ public class PlayerHintUI : MonoBehaviour {
 
         if (hint == HintStatus.None)
         {
-            GetComponent<Image>().sprite = None;
+            image.sprite = None;
         }
         else if (hint == HintStatus.PressA)
         {
-            GetComponent<Image>().sprite = pressAsprite;
+            image.sprite = pressAsprite;
         }
         else if (hint == HintStatus.PressB)
         {
-            GetComponent<Image>().sprite = pressBsprite;
+            image.sprite = pressBsprite;
         }
-        
+        else if (hint == HintStatus.PressY)
+        {
+            image.sprite = pressYsprite;
+        }
     }
 }
