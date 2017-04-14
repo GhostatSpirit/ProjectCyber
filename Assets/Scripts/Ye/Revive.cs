@@ -18,7 +18,7 @@ public class Revive : MonoBehaviour {
     PlayerControl hackerPC;
     PlayerControl AIPC;
     
-    bool able = true;
+//    bool able = true;
 
 	// Use this for initialization
 	void Start () {
@@ -65,7 +65,7 @@ public class Revive : MonoBehaviour {
         hackerPC.canControl = true;
         AIHS.Revive(1);
         hackerHS.Revive(1);
-        able = false;
+//        able = false;
 
 		reviveCoroutine = null;
     }
