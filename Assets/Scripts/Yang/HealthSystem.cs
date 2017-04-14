@@ -182,6 +182,7 @@ public class HealthSystem : MonoBehaviour {
 	public void InstantDead(){
 		objHealth = 0f;
 		isDead = true;
+
 	}
 		
 	public void StartHarmless(bool setColor = true){
