@@ -9,7 +9,10 @@ public class LCIdleState : StateMachineBehaviour {
 		Transform hacker = animator.GetComponentInChildren<ControlStatus> ().Hacker;
 		if (hacker) {
 			PlayerControl pc = hacker.GetComponent<PlayerControl> ();
-			if (pc)  pc.canControl = true;
+			HealthSystem hs = hacker.GetComponent<HealthSystem> ();
+			if (pc && !hs.IsDead()) {
+				pc.canControl = true;
+			}
 		}
 		ControlStatus cs = animator.GetComponentInChildren<ControlStatus> ();
 		if(cs){

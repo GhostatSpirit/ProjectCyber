@@ -13,6 +13,8 @@ public class PlayerReviveBehaviour : MonoBehaviour {
 		body = GetComponent<Rigidbody2D> ();
 
 		if(control && hs){
+			hs.OnObjectDead += StopControl;
+
 			hs.OnObjectRevive += StartControl;
 			hs.OnObjectRevive += StartSimulate;
 		}

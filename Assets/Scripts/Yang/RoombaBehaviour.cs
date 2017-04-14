@@ -12,7 +12,7 @@ public class RoombaBehaviour : MonoBehaviour {
 
 	[HideInInspector] public Rigidbody2D body;
 	FieldOfView fov;
-	ControlStatus cs;
+	[HideInInspector] public ControlStatus cs;
 	Animator animator;
 	HurtAndDamage hd;
 
