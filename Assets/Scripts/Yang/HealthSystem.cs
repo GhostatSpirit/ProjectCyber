@@ -36,6 +36,9 @@ public class HealthSystem : MonoBehaviour {
 
 	public float hurtFlashPeriod = 1.5f;
 
+	[Range(0f, 1f)]
+	public float initialHealthPercentage = 1f;
+
 	// this object's current health
 	[ReadOnly]public float objHealth;
 
@@ -81,7 +84,7 @@ public class HealthSystem : MonoBehaviour {
 
 //		Debug.Log (hurtColor);
 
-		objHealth = maxHealth;
+		objHealth = maxHealth * initialHealthPercentage;
 		InitDeathHandler ();
 	}
 	
