@@ -2,23 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RoombaConnected : StateMachineBehaviour {
-	RoombaBehaviour roomba;
-
+public class BackLightOff : StateMachineBehaviour {
+	SpriteRenderer sr;
 	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		roomba = animator.GetComponent<RoombaBehaviour> ();
-		roomba.ResetVelocity ();
-
-		switch(roomba.cs.controller){
-		case Controller.Boss:
-			roomba.SetPlayerTargets (animator.transform);
-			break;
-		case Controller.Hacker:
-			roomba.SetEnemyTargets (animator.transform);
-			break;
+		if(sr == null){
+			sr = animator.GetComponent<SpriteRenderer> ();
 		}
-
+		if(sr){
+			sr.enabled = false;
+		}
 	}
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -27,9 +20,11 @@ public class RoombaConnected : StateMachineBehaviour {
 	//}
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-	//override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-	//
-	//}
+	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+		if(sr){
+			sr.enabled = true;
+		}
+	}
 
 	// OnStateMove is called right after Animator.OnAnimatorMove(). Code that processes and affects root motion should be implemented here
 	//override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {

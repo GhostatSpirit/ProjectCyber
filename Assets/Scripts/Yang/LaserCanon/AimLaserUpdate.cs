@@ -6,9 +6,12 @@ public class AimLaserUpdate : MonoBehaviour {
 	LineRenderer lr;
 	[HideInInspector] public Vector3 targetPos;
 	public float easing = 30f;
+
+	public string sortingLayerName = "ControlLine";
 	// Use this for initialization
 	void Start () {
 		lr = GetComponent<LineRenderer> ();
+		lr.sortingLayerName = this.sortingLayerName;
 	}
 	
 	// Update is called once per frame
