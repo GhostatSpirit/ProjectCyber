@@ -10,6 +10,15 @@ public class RoombaConnected : StateMachineBehaviour {
 		roomba = animator.GetComponent<RoombaBehaviour> ();
 		roomba.ResetVelocity ();
 
+		switch(roomba.cs.controller){
+		case Controller.Boss:
+			roomba.SetPlayerTargets (animator.transform);
+			break;
+		case Controller.Hacker:
+			roomba.SetEnemyTargets (animator.transform);
+			break;
+		}
+
 	}
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
