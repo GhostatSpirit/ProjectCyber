@@ -92,15 +92,18 @@ public class PlayerControl : MonoBehaviour {
 	void StartControls(){
 		// Debug.Log(
 		foreach(MonoBehaviour behaviour in behaviours){
-			if(behaviour != null)
+			if (behaviour != null)
+				Debug.Log ("started: " + behaviour.ToString ());
 				behaviour.enabled = true;
 		}
 	}
 
 	void StopControls(){
 		foreach(MonoBehaviour behaviour in behaviours){
-			if(behaviour != null)
+			if (behaviour != null) {
+				Debug.Log ("stopped: " + behaviour.ToString ());
 				behaviour.enabled = false;
+			}
 		}
 	}
 	

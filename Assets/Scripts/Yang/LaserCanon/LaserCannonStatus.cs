@@ -20,6 +20,13 @@ public class LaserCannonStatus : MonoBehaviour {
 
 		cs.OnCutByPlayer += SetPlayerCut;
 		cs.OnLinkedByPlayer += SetPlayerLink;
+
+		HealthSystem hs = cs.Hacker.GetComponent<HealthSystem> ();
+		if(hs){
+			hs.OnObjectDead += SetPlayerUnLink;
+			// hs.OnObjectDead += ForceDisconnect;
+
+		}
 	}
 	
 	// Update is called once per frame
@@ -76,6 +83,30 @@ public class LaserCannonStatus : MonoBehaviour {
 	public void SetPlayerLink(Transform objTrans){
 		if(animator){
 			animator.SetTrigger ("playerLink");
+		}
+	}
+
+	public void SetPlayerUnLink(Transform objTrans){
+		if(animator){
+			animator.SetTrigger ("playerUnlink");
+		}
+	}
+
+	public void ForceDisconnect(Transform deadObject){
+		cs.controller = Controller.None;
+	}
+
+	public void TurnOffHackerControl(Transform trans){
+		CannonHackerControl control = transform.parent.GetComponent<CannonHackerControl> ();
+		if(control){
+			control.enabled = false;
+		}
+	}
+
+	public void TurnOnHackerControl(Transform trans){
+		CannonHackerControl control = transform.parent.GetComponent<CannonHackerControl> ();
+		if(control){
+			control.enabled = true;
 		}
 	}
 }

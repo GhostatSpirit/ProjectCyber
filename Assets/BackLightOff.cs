@@ -2,31 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LCIdleState : StateMachineBehaviour {
-
+public class BackLightOff : StateMachineBehaviour {
+	SpriteRenderer sr;
 	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		Transform hacker = animator.GetComponentInChildren<ControlStatus> ().Hacker;
-		if (hacker) {
-			PlayerControl pc = hacker.GetComponent<PlayerControl> ();
-			HealthSystem hs = hacker.GetComponent<HealthSystem> ();
-			if (pc && !hs.IsDead()) {
-				pc.canControl = true;
-			}
+		if(sr == null){
+			sr = animator.GetComponent<SpriteRenderer> ();
 		}
-		ControlStatus cs = animator.GetComponentInChildren<ControlStatus> ();
-		if(cs){
-			cs.controller = Controller.None;
+		if(sr){
+			sr.enabled = false;
 		}
-
-		LaserCannonSP lcsp = animator.GetComponent<LaserCannonSP> ();
-		if (lcsp) {
-			lcsp.SetNoneSprite ();
-		}
-
-
-		animator.ResetTrigger ("playerLink");
-
 	}
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -36,8 +21,9 @@ public class LCIdleState : StateMachineBehaviour {
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
 	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		animator.ResetTrigger ("playerLink");
-
+		if(sr){
+			sr.enabled = true;
+		}
 	}
 
 	// OnStateMove is called right after Animator.OnAnimatorMove(). Code that processes and affects root motion should be implemented here
