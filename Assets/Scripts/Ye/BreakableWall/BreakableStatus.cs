@@ -6,6 +6,7 @@ public class BreakableStatus : MonoBehaviour {
 
     HealthSystem HS;
 
+
 	float delay = 1f;
 	// Use this for initialization
 	void Start () {
@@ -23,8 +24,13 @@ public class BreakableStatus : MonoBehaviour {
         {
             foreach (Transform child in transform )
             {
-                child.gameObject.SetActive(false);
+				SpriteRenderer sr = child.GetComponent<SpriteRenderer> ();
+				if(sr){
+					sr.enabled = false;
+				}
             }
+
+
             gameObject.GetComponent<Collider2D>().enabled = false;
 			Invoke ("TurnOffGameObject", delay);
         }
