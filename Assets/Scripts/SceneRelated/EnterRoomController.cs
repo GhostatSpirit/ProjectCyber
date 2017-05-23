@@ -74,12 +74,24 @@ public class EnterRoomController : MonoBehaviour {
 
 		SwitchRevivePoint ();
 
+		bossTrans.GetComponent<HealthSystem> ().OnObjectDead += TurnOffBossHealth;
 
 		if (hackerControl)
 			hackerControl.canControl = true;
 		if (AIControl)
 			AIControl.canControl = true;
 
+	}
+
+	void TurnOffBossHealth(Transform trans){
+		StartCoroutine (TurnOffBossHealthIE ());
+	}
+
+	IEnumerator TurnOffBossHealthIE(){
+		yield return new WaitForSeconds (3f);
+		if(bossHealth){
+			bossHealth.bossAppear = false;
+		}
 	}
 
 	void StartRespawnRoomba(){

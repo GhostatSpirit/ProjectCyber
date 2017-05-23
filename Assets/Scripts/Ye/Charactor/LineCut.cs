@@ -6,6 +6,8 @@ using System.Collections.ObjectModel;
 
 public class LineCut : MonoBehaviour {
 
+	public GameObject sparkPrefab;
+
 	public bool couldCut{
 		get{
 			return m_couldCut;
@@ -37,6 +39,8 @@ public class LineCut : MonoBehaviour {
 
 	void Start(){
 		OnStartCut += SetLastPos;
+
+		OnLineCut += CreateSpark;
 	}
 
 	// shoot a raycast from last pos to current pos every frame
@@ -63,6 +67,13 @@ public class LineCut : MonoBehaviour {
 
 	// Transform means the cutter's transform, i.e. this.transform
 	public event Action<Transform> OnLineCut;
+
+	void CreateSpark(Transform trans){
+		if(!sparkPrefab){
+			return;
+		}
+		Instantiate (sparkPrefab, transform.position, transform.rotation,transform.parent);
+	}
 
 	void LineCutBehavior(Collider2D other){
 //		Debug.Log ("Collision");
