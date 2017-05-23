@@ -7,7 +7,11 @@ using InControl;
 public class DartSkill : MonoBehaviour {
 	[HideInInspector]public bool darting = false;
 	public float dartSpeed = 20f;
-	public float dartDuration = 1f;
+	public float dartDuration = 0.1f;
+    public float MinDuration = 0.1f;
+    public float MaxDuration = 0.2f;
+
+    
 
 	public float startMovementDelay = 0.6f;
 	public float coolDownDelay = 0.6f;
@@ -43,6 +47,10 @@ public class DartSkill : MonoBehaviour {
 	HealthSystem healthSys;
 	public float extraImmuneTime = 0.5f;
 
+    // add for charging dart
+    
+
+
 	// Use this for initialization
 	void Start () {
 		myRigidbody = GetComponent<Rigidbody2D>();
@@ -63,11 +71,22 @@ public class DartSkill : MonoBehaviour {
 			return;
 		}
 
+
+
+        /*/
 		if(myInputDevice.Action1.IsPressed && !darting && 
 			coolDown && energySys.UseEnergy(energyConsume)){
+        /*/
 
-			// CAUTION: starting the darting skill
-			darting = true;
+        // Ye change 2017/3/25 try to add charging 
+        
+        ChargingDart x = gameObject.GetComponent<ChargingDart>();
+        if ( (x.Status ==  ChargingDart.chargingStatus.StartCharge || x.Status == ChargingDart.chargingStatus.Charging) && !darting &&
+            coolDown && energySys.UseEnergy(energyConsume))
+        {
+
+            // CAUTION: starting the darting skill
+            darting = true;
 			// AI can cut lines now
 			linecut.couldCut = true;
 
@@ -90,11 +109,21 @@ public class DartSkill : MonoBehaviour {
 			// start the immune buff
 			if(healthSys){
 				healthSys.StartImmune();
+				healthSys.StartHarmless ();
 			}
 		}
 
 		timer += Time.deltaTime;
+
+        /*/
 		if(timer > dartDuration && darting){
+        /*/
+
+        // stop dart
+        if( darting && (((x.Status != ChargingDart.chargingStatus.Charging && x.Status != ChargingDart.chargingStatus.StartCharge) || timer > MaxDuration) || ( x.Status == ChargingDart.chargingStatus.Release && x.ChargingSum < MinDuration && timer > MinDuration)))
+        { 
+        
+
 			// CAUTION: stop darting skill
 			darting = false;
 
@@ -124,6 +153,7 @@ public class DartSkill : MonoBehaviour {
 	void EndImmune(){
 		if(healthSys){
 			healthSys.EndImmune();
+			healthSys.EndHarmless ();
 		}
 	}
 
@@ -145,6 +175,9 @@ public class DartSkill : MonoBehaviour {
 
 	void CoolDown(){
 		coolDown = true;
+
+        // when cooldown reset dartDuration   
+        dartDuration = MinDuration;
 	}
 
 	void OnCollisionEnter2D(Collision2D coll){

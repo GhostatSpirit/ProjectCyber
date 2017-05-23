@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class HurtAndDamage : MonoBehaviour {
 
-
-
 	public TypeDamagePair[] DamageOtherList;
 	public TypeDamagePair[] HurtSelfList;
 
@@ -19,10 +17,13 @@ public class HurtAndDamage : MonoBehaviour {
 
 	// if set true, this object would not be able to hurt others anymore,
 	// even with instantKillOther enabled.
-	[HideInInspector]public bool canHurtOther = true;
+	[ReadOnly]public bool canHurtOther = true;
 	// if set false, this object would not be able to hurt itself anymore,
 	// even with instantKillSelf enabled.
-	[HideInInspector]public bool canHurtSelf = true;
+	[ReadOnly]public bool canHurtSelf = true;
+
+	// bullet will kill itself on collision no matter what happens
+	public bool isBullet = false;
 
 	HealthSystem selfHealthSystem;
 	// Use this for initialization
@@ -72,22 +73,36 @@ public class HurtAndDamage : MonoBehaviour {
 	}
 
 	void OnCollisionEnter2D(Collision2D coll){
+		HurtDamageLogic (coll);
+	}
+
+	void OnCollisionStay2D(Collision2D coll){
+		HurtDamageLogic (coll);
+	}
+
+
+
+	void HurtDamageLogic(Collision2D coll){
 		if(instantKillOther && VerifyHurtOther(coll.transform)){
 			HealthSystem hs = coll.transform.GetComponent<HealthSystem> ();
 			if(hs){
 				hs.InstantDead ();
 			}
 		}
+
+		// if instant kill self,  will override other's can hurt other
+		// if(instantKillSelf && selfHealthSystem && !this.canHurtSelf){
 		if(instantKillSelf && selfHealthSystem && VerifyHurtSelf(coll.transform)){
 			selfHealthSystem.InstantDead ();
 		}
-
 
 		// get the type of the colliding object
 		ObjectIdentity oi = coll.transform.GetComponent<ObjectIdentity> ();
 		if(oi == null){
 			return;
 		}
+
+//		Debug.Log (oi);
 
 		// if the colliding object has an identity and type...
 		ObjectType otherType = oi.objType;
@@ -96,25 +111,33 @@ public class HurtAndDamage : MonoBehaviour {
 			DamageOtherDict.TryGetValue(otherType, out damage) &&
 			VerifyHurtOther(coll.transform) )
 		{
+//			Debug.Log (damage);
 			// do damage to the other type
 			HealthSystem hs = coll.transform.GetComponent<HealthSystem> ();
 			if(hs){
 				hs.Damage (damage);
 			}
 		}
+			
 
 		if(!instantKillSelf &&
 			HurtSelfDict.TryGetValue(otherType, out damage) &&
 			VerifyHurtSelf(coll.transform) ) 
 		{
 			// do damage to this object itself
+//			Debug.Log (otherType);
 //			Debug.Log ("Damage");
 			if(selfHealthSystem){
 				selfHealthSystem.Damage (damage);
 			}
 		}
 
+		if(isBullet && selfHealthSystem){
+			selfHealthSystem.InstantDead ();
+		}
+
 	}
+
 
 
 }

@@ -13,6 +13,8 @@ public class ChaseTarget : MonoBehaviour {
 	Rigidbody2D myRigidbody;
 	float rotSpeedFactor;
 
+	public bool constantRotation = false;
+
 	// Use this for initialization
 	void Start () {
 		myRigidbody = GetComponent<Rigidbody2D> ();
@@ -59,6 +61,7 @@ public class ChaseTarget : MonoBehaviour {
             float zAngle = Mathf.Atan2(point2Target.y, point2Target.x) * Mathf.Rad2Deg - 90f;
             Quaternion desiredRot = Quaternion.Euler(0f, 0f, zAngle);
 
+<<<<<<< HEAD
             float finalRotSpeed = rotationSpeed * rotSpeedFactor * Time.fixedDeltaTime;
             transform.rotation =
                 Quaternion.RotateTowards(transform.rotation, desiredRot, finalRotSpeed);
@@ -67,4 +70,25 @@ public class ChaseTarget : MonoBehaviour {
         }
 
     }
+=======
+		float finalRotSpeed;
+		// float finalRotSpeed = rotationSpeed * rotSpeedFactor * Time.fixedDeltaTime;
+
+		if(constantRotation){
+			finalRotSpeed = rotationSpeed * Time.fixedDeltaTime;
+		} else{
+			finalRotSpeed = rotationSpeed * rotSpeedFactor * Time.fixedDeltaTime;
+		}
+
+		transform.rotation =
+			Quaternion.RotateTowards (transform.rotation, desiredRot, finalRotSpeed);
+
+//		Quaternion finalRot = 
+//			Quaternion.RotateTowards (transform.rotation, desiredRot, finalRotSpeed);
+//		myRigidbody.MoveRotation (finalRot.eulerAngles.z);
+//
+
+		//myRigidbody.angularVelocity = rotationSpeed * rotSpeedFactor;
+	}
+>>>>>>> refs/remotes/origin/master
 }

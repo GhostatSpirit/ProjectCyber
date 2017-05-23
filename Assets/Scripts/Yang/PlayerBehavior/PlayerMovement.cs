@@ -3,31 +3,17 @@ using UnityEngine;
 using System.Collections;
 using InControl;
 
+public enum Direction {UP, DOWN, LEFT, RIGHT, UPLEFT, UPRIGHT, DOWNLEFT, DOWNRIGHT};
+
 [RequireComponent (typeof(DeviceReceiver))]
 public class PlayerMovement: MonoBehaviour {
 
     public float moveSpeed = 50f;
 
-	// commented out Unity Input scripts
-	// public string horizontalAxisName = "Horizontal";
-	// public string verticalAxisName = "Vertical";
-
-	public enum Direction {UP, DOWN, LEFT, RIGHT, UPLEFT, UPRIGHT, DOWNLEFT, DOWNRIGHT};
 
 	public Direction initialFacing = Direction.DOWN;
-	//public Transform playerFeet;
 
-	// different character sprites for 8 directions
-	public Sprite downSprite;
-	public Sprite downLeftSprite;
-	public Sprite downRightSprite;
-	public Sprite leftSprite;
-	public Sprite rightSprite;
-	public Sprite upSprite;
-	public Sprite upLeftSprite;
-	public Sprite upRightSprite;
-
-	public float frameDuration = 0.16f;
+	//public float frameDuration = 0.16f;
 
 	public bool moveEnabled;
 	public bool turnEnabled;
@@ -38,66 +24,31 @@ public class PlayerMovement: MonoBehaviour {
 	public float volumeScale = 0.8f;
 	bool playingSound = false;
 
+	[HideInInspector] public Vector2 faceDirection;
+
     Vector2 moveVector;
     Rigidbody2D myRigidbody;
-	SpriteRenderer mySpriteRenderer;
 	InputDevice myInputDevice;
-
-
 	AudioSource myAudioSource;
+
+	FacingSpriteSwitcher _switcher;
+	FacingSpriteSwitcher switcher{
+		get{
+			if (_switcher == null)
+				_switcher = GetComponent<FacingSpriteSwitcher> ();
+			return _switcher;
+		}
+	}
 
 	// Use this for initialization
 	void Start () {
         myRigidbody = GetComponent<Rigidbody2D>();
-		mySpriteRenderer = GetComponent<SpriteRenderer> ();
 		myAudioSource = GetComponent<AudioSource> ();
 
 		moveEnabled = true;
 		turnEnabled = true;
 
-		// check if sprites with different facings is null
-		// if is null, replace it with the default sprite
-		Sprite defaultSprite = mySpriteRenderer.sprite;
-
-		downSprite = downSprite ?? defaultSprite;
-		downLeftSprite = downLeftSprite ?? defaultSprite;
-		downRightSprite = downRightSprite ?? defaultSprite;
-		leftSprite = leftSprite ?? defaultSprite;
-		rightSprite = rightSprite ?? defaultSprite;
-		upSprite = upSprite ?? defaultSprite;
-		upLeftSprite = upLeftSprite ?? defaultSprite;
-		upRightSprite = upRightSprite ?? defaultSprite;
-
-
-		switch(initialFacing){
-		case Direction.DOWN:
-			mySpriteRenderer.sprite = downSprite;
-			break;
-		case Direction.DOWNLEFT:
-			mySpriteRenderer.sprite = downLeftSprite;
-			break;
-		case Direction.DOWNRIGHT:
-			mySpriteRenderer.sprite = downRightSprite;
-			break;
-		case Direction.LEFT:
-			mySpriteRenderer.sprite = leftSprite;
-			break;
-		case Direction.RIGHT:
-			mySpriteRenderer.sprite = rightSprite;
-			break;
-		case Direction.UP:
-			mySpriteRenderer.sprite = upSprite;
-			break;
-		case Direction.UPLEFT:
-			mySpriteRenderer.sprite = upLeftSprite;
-			break;
-		case Direction.UPRIGHT:
-			mySpriteRenderer.sprite = upRightSprite;
-			break;
-		default:
-			mySpriteRenderer.sprite = downSprite;
-			break;
-		}
+		faceDirection = Direction2Vector (initialFacing);
 		
 	}
 
@@ -123,37 +74,12 @@ public class PlayerMovement: MonoBehaviour {
 
 
 		if (moveVector.magnitude != 0f) {
-			// change sprite according to moveVector
-			Direction currentDir = Vector2Direction (moveVector);
+			// update facedirection
+			faceDirection = moveVector.normalized;
 
-			switch(currentDir){
-			case Direction.DOWN:
-				mySpriteRenderer.sprite = downSprite;
-				break;
-			case Direction.DOWNLEFT:
-				mySpriteRenderer.sprite = downLeftSprite;
-				break;
-			case Direction.DOWNRIGHT:
-				mySpriteRenderer.sprite = downRightSprite;
-				break;
-			case Direction.LEFT:
-				mySpriteRenderer.sprite = leftSprite;
-				break;
-			case Direction.RIGHT:
-				mySpriteRenderer.sprite = rightSprite;
-				break;
-			case Direction.UP:
-				mySpriteRenderer.sprite = upSprite;
-				break;
-			case Direction.UPLEFT:
-				mySpriteRenderer.sprite = upLeftSprite;
-				break;
-			case Direction.UPRIGHT:
-				mySpriteRenderer.sprite = upRightSprite;
-				break;
-			default:
-				mySpriteRenderer.sprite = downSprite;
-				break;
+			// update facing
+			if(switcher){
+				switcher.facing = faceDirection;
 			}
 
 			// deal with sounds here
@@ -174,7 +100,8 @@ public class PlayerMovement: MonoBehaviour {
 		}
 		if (moveEnabled) {
 			if (myRigidbody.bodyType != RigidbodyType2D.Static) {
-				myRigidbody.velocity = moveVector * moveSpeed * Time.deltaTime * 10f;
+				// myRigidbody.velocity = moveVector * moveSpeed * Time.deltaTime * 10f;
+				myRigidbody.AddForce (moveVector * moveSpeed * Time.deltaTime * 100f);
 			}
 //			if(moveVector.magnitude != 0){
 //				transform.up = new Vector2 (-moveVector.x, -moveVector.y);
@@ -234,9 +161,42 @@ public class PlayerMovement: MonoBehaviour {
 			return Direction.RIGHT;
 		}
 
+	}
 
+	Vector2 Direction2Vector(Direction dir){
+		Vector2 dirvec = Vector2.zero;
 
-		//Debug.Log (angle);
+		switch(dir){
+		case Direction.DOWN:
+			dirvec = Vector2.down;
+			break;
+		case Direction.DOWNLEFT:
+			dirvec = Vector2.down + Vector2.left;
+			break;
+		case Direction.DOWNRIGHT:
+			dirvec = Vector2.down + Vector2.right;
+			break;
+		case Direction.LEFT:
+			dirvec = Vector2.left;
+			break;
+		case Direction.RIGHT:
+			dirvec = Vector2.right;
+			break;
+		case Direction.UP:
+			dirvec = Vector2.up;
+			break;
+		case Direction.UPLEFT:
+			dirvec = Vector2.up + Vector2.left;
+			break;
+		case Direction.UPRIGHT:
+			dirvec = Vector2.up + Vector2.right;
+			break;
+		default:
+			dirvec = Vector2.down;
+			break;
+		}
+
+		return dirvec.normalized;
 	}
 }
 

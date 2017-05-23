@@ -44,7 +44,7 @@ public class PlayerShoot : MonoBehaviour {
 			return;
 		}
 
-		if(myInputDevice.RightTrigger.WasPressed){
+		if(myInputDevice.Action1.WasPressed){
 			if (bulletPrefab != null && isCooledDown) {
 				if (energySys.UseEnergy(energyConsume)) {
 					// if we sucessfully used the energy, shoot wave

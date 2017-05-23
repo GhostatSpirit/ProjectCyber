@@ -13,31 +13,79 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Collections.ObjectModel;
+// added tweening effect when hurt
+using DG.Tweening;
 
 public class HealthSystem : MonoBehaviour {
 	public float maxHealth = 100f;
+
+	[Range(0f, Mathf.Infinity)]
+	public float hurtImmunePeriod = 1.5f;
+	public Color hurtColor = new Color32 (255, 107, 107, 255);
+	public int flashCount = 3;
 
 	public bool destoryOnDead = false;
 	public float destoryDelay = 1f;
 
 	public bool changeColor = true;
-	public Color newColor = Color.red;
+	public Color deadColor = Color.red;
 
 	public bool stopMovement = true;
 
 	public Text displayText;
 
+	public float hurtFlashPeriod = 1.5f;
+
+	[Range(0f, 1f)]
+	public float initialHealthPercentage = 1f;
+
 	// this object's current health
-	float objHealth;
+	[ReadOnly]public float objHealth;
+
 	// whether this object is currently immune or not
 	bool isImmune = false;
+	bool isHarmless = false;
+
+	bool _isDead = false;
+	bool isDead{
+		get{
+			return _isDead;
+		}
+		set{
+			bool oldIsDead = _isDead;
+			if(oldIsDead != value){
+				if(value == true){
+					// object become dead
+					DeathHandler ();
+				} else{
+					// object is revived
+					ReviveHandler ();
+				}
+				_isDead = value;
+			}
+		}
+	}
 
 	// this action is executed as soon as this object is dead
 	public event Action<Transform> OnObjectDead;
+	public event Action<Transform> OnObjectRevive;
 
+	public event Action<Transform> OnObjectHurt;
+
+
+	SpriteRenderer sr;
 	// Use this for initialization
 	void Start () {
-		objHealth = maxHealth;
+		sr = GetComponent<SpriteRenderer> ();
+
+		if(hurtColor == Color.white){
+			hurtColor = new Color32 (255, 107, 107, 255);
+		}
+
+//		Debug.Log (hurtColor);
+
+		objHealth = maxHealth * initialHealthPercentage;
+		InitDeathHandler ();
 	}
 	
 	// Update is called once per frame
@@ -47,73 +95,194 @@ public class HealthSystem : MonoBehaviour {
 		}
 	}
 
+	public Coroutine HurtCoroutine;
+
+	IEnumerator	HurtImmuneIE(){
+		// start the immune period
+		StartImmune (false);
+		if(sr){
+			// multiply flash count by 2 to ensure the color gets back to the original
+			sr.DOColor(hurtColor, hurtImmunePeriod).SetEase(Ease.OutFlash, 2 * flashCount, 0);
+		}
+		yield return new WaitForSeconds (hurtImmunePeriod);
+		EndImmune (false);
+		HurtCoroutine = null;
+	}
+
+
+
+	void StartHurtBehaviour(){
+		if(HurtCoroutine == null && hurtImmunePeriod > 0f){
+			HurtCoroutine = StartCoroutine (HurtImmuneIE ());
+		}
+	}
+
+	public Coroutine flashCoroutine;
+
+	IEnumerator HurtFlashIE(){
+		if(sr){
+			// multiply flash count by 2 to ensure the color gets back to the original
+			sr.DOColor(hurtColor, hurtFlashPeriod).SetEase(Ease.OutFlash, 2 * flashCount, 0);
+		}
+		yield return new WaitForSeconds (hurtFlashPeriod);
+		flashCoroutine = null;
+	}
+	void StartHurtFlash(){
+		if(flashCoroutine == null){
+			flashCoroutine = StartCoroutine (HurtFlashIE ());
+		}
+	}
+
 	/* public exposed methods for managing health */
 	/**********************************************/
 	public void Damage(float deltaHealth){
-		if(isImmune) {
-			return;
-		}
-
+		if(isImmune)	return;
+		if (isDead)		return;
+	
 		float tempHealth = objHealth;
 		tempHealth -= deltaHealth;
 		if(tempHealth <= 0f){
 			objHealth = 0f;
 			// the object is dead, call DeathHandler()
-			DeathHandler ();
+			isDead = true;
 		} else{
+			if(OnObjectHurt != null){
+				OnObjectHurt (this.transform);
+			}
+			if (hurtImmunePeriod > 0f) {
+				StartHurtBehaviour ();
+			}
+			else if(hurtImmunePeriod == 0f){
+				StartHurtFlash ();
+			}
 			objHealth = tempHealth;
 		}
 	}
 
 	public void Heal(float deltaHealth){
+		// we cannot heal a dead object, use revive instead
+		if (isDead)		return;
+
 		objHealth += deltaHealth;
 		if(objHealth > maxHealth){
 			objHealth = maxHealth;
 		}
 	}
 
+	public void Revive(float healthPercentage = 0.5f){
+		if (healthPercentage <= 0f || !isDead)
+			return;
+		if(healthPercentage > 1f){
+			healthPercentage = 1f;
+		}
+		// revive the object now, first add the health
+		objHealth += maxHealth * healthPercentage;
+		isDead = false;
+	}
+
+
 	/* instantly kill this object, making its health to 0 */
 	public void InstantDead(){
 		objHealth = 0f;
-		DeathHandler ();
-	}
+		isDead = true;
 
-	/* start the immune period, this object would not be hurt*/
-	public void StartImmune(){
-		// during immune, this obj cannot hurt others any more
+	}
+		
+	public void StartHarmless(bool setColor = true){
+		// during harmless, this obj cannot hurt others any more
 		HurtAndDamage hd = GetComponent<HurtAndDamage> ();
 		if(hd){
 			hd.canHurtOther = false;
 		}
-		if (GetComponent<SpriteRenderer> ().color == Color.white) {
-			GetComponent<SpriteRenderer> ().color = Color.green;
+		if (setColor) {
+			if (GetComponent<SpriteRenderer> ().color == Color.white) {
+				GetComponent<SpriteRenderer> ().color = Color.green;
+			}
 		}
-		isImmune = true;
+		isHarmless = true;
 	}
 
-	/* end the immune period, this object would be hurt again*/
-	public void EndImmune(){
+	/* end the harmless period, this object would be hurt again*/
+	public void EndHarmless(bool setColor = true){
 		HurtAndDamage hd = GetComponent<HurtAndDamage> ();
 		if(hd){
 			hd.canHurtOther = true;
 		}
-		if (GetComponent<SpriteRenderer> ().color == Color.green) {
-			GetComponent<SpriteRenderer> ().color = Color.white;
+		if (setColor) {
+			if (GetComponent<SpriteRenderer> ().color == Color.green) {
+				GetComponent<SpriteRenderer> ().color = Color.white;
+			}
+		}
+		isHarmless = false;
+	}
+
+	public void StartImmune(bool setColor = true){
+		HurtAndDamage hd = GetComponent<HurtAndDamage> ();
+		if(hd){
+			hd.canHurtSelf = false;
+		}
+		if (setColor) {
+			if (GetComponent<SpriteRenderer> ().color == Color.white) {
+				GetComponent<SpriteRenderer> ().color = Color.green;
+			}
+		}
+		isImmune = true;
+	}
+
+	public void EndImmune(bool setColor = true){
+		HurtAndDamage hd = GetComponent<HurtAndDamage> ();
+		if(hd){
+			hd.canHurtSelf = true;
+		}
+		if (setColor) {
+			if (GetComponent<SpriteRenderer> ().color == Color.green) {
+				GetComponent<SpriteRenderer> ().color = Color.white;
+			}
 		}
 		isImmune = false;
+	}
+
+
+
+	public Coroutine ImmuneCoroutine;
+
+	public void Immune(float period){
+		if(ImmuneCoroutine == null && period > 0f){
+			ImmuneCoroutine = StartCoroutine (ImmuneIE(period));
+		}
+	}
+
+	IEnumerator ImmuneIE(float period){
+		// start the immune period
+		StartImmune (false);
+		yield return new WaitForSeconds (period);
+		EndImmune (false);
+		ImmuneCoroutine = null;
+	}
+
+
+	bool IsHarmless(){
+		return this.isHarmless;
+	}
+
+	bool IsImmune(){
+		return this.isImmune;
 	}
 
 	public float GetHealth(){
 		return this.objHealth;
 	}
 
+	public bool IsDead(){
+		return this.isDead;
+	}
+
 
 	/**********************************************/
-
-
-	void DeathHandler(){
+	void InitDeathHandler(){
 		if(changeColor){
 			OnObjectDead += ChangeColor;
+			OnObjectRevive += ResetColor;
 		}
 		if(stopMovement){
 			OnObjectDead += StopMovement;
@@ -124,11 +293,19 @@ public class HealthSystem : MonoBehaviour {
 				StartCoroutine (DestroyObjectIE (trans, destoryDelay));
 			};
 		}
+	}
+
+	void DeathHandler(){
 		// execute the action
 		if(OnObjectDead != null){
 			OnObjectDead (this.transform);
 		}
+	}
 
+	void ReviveHandler(){
+		if(OnObjectRevive != null){
+			OnObjectRevive (this.transform);
+		}
 	}
 		
 	/* private methods for OnObjectDead()
@@ -138,14 +315,19 @@ public class HealthSystem : MonoBehaviour {
 	 * change the color of the SpriteRenderer to a given color
 	 */
 	void ChangeColor(Transform trans){
-		SpriteRenderer sr = GetComponent<SpriteRenderer> ();
 		if(sr != null){
-			sr.color = newColor;
+			sr.DOColor (deadColor, destoryDelay / 2f).SetEase (Ease.OutCubic);
+		}
+	}
+
+	void ResetColor(Transform trans){
+		if(sr != null){
+			sr.color = Color.white;
 		}
 	}
 
 	/* StopMovement:
-	 * stop this object froming moving by changing body type to "Static"
+	 * stop this object froming moving
 	 */
 	void StopMovement (Transform trans){
 		Rigidbody2D myRigidbody = GetComponent<Rigidbody2D> ();
