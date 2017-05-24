@@ -81,7 +81,7 @@ public class WallTransparency : MonoBehaviour {
 		if(coll == null){
 			return;
 		}
-		//Debug.Log (coll);
+		// Debug.Log (coll);
 		// Debug.Log (coll.IsTouchingLayers (moveableMask));
 		if(coll.IsTouchingLayers(moveableMask)){
 			SetAsTransparent ();
