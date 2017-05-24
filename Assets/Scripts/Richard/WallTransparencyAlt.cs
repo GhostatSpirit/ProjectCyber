@@ -85,14 +85,14 @@ public class WallTransparencyAlt : MonoBehaviour {
 		if(coll == null){
 			return;
 		}
-		Debug.Log (coll);
-		Debug.Log (coll.IsTouchingLayers (moveableMask));
+		// Debug.Log (coll);
+		// Debug.Log (coll.IsTouchingLayers (moveableMask));
 		if(coll.IsTouchingLayers(moveableMask)){
-            Debug.Log("Touching!");
+            // Debug.Log("Touching!");
 			SetAsTransparent ();
 		}
 		else{
-            Debug.Log("Not Touching!");
+            //Debug.Log("Not Touching!");
             SetAsSolid ();
 		}
 	}

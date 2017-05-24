@@ -43,7 +43,7 @@ public class MovableDepthSwitcher : MonoBehaviour {
 				continue;
 			}
 //			Debug.Log (targetColl.transform);
-			if (targetColl.GetComponent<WallTransparencyAlt> ()) {
+			if (targetColl.GetComponent<WallTransparency> () || targetColl.GetComponent<WallTransparencyAlt>()) {
 				// hit a wall
 				hitWallTrigger = true;
 			} else {
