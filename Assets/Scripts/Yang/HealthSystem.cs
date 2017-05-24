@@ -34,11 +34,6 @@ public class HealthSystem : MonoBehaviour {
 
 	public Text displayText;
 
-	public float hurtFlashPeriod = 1.5f;
-
-	[Range(0f, 1f)]
-	public float initialHealthPercentage = 1f;
-
 	// this object's current health
 	[ReadOnly]public float objHealth;
 
@@ -84,7 +79,7 @@ public class HealthSystem : MonoBehaviour {
 
 //		Debug.Log (hurtColor);
 
-		objHealth = maxHealth * initialHealthPercentage;
+		objHealth = maxHealth;
 		InitDeathHandler ();
 	}
 	
@@ -117,22 +112,6 @@ public class HealthSystem : MonoBehaviour {
 		}
 	}
 
-	public Coroutine flashCoroutine;
-
-	IEnumerator HurtFlashIE(){
-		if(sr){
-			// multiply flash count by 2 to ensure the color gets back to the original
-			sr.DOColor(hurtColor, hurtFlashPeriod).SetEase(Ease.OutFlash, 2 * flashCount, 0);
-		}
-		yield return new WaitForSeconds (hurtFlashPeriod);
-		flashCoroutine = null;
-	}
-	void StartHurtFlash(){
-		if(flashCoroutine == null){
-			flashCoroutine = StartCoroutine (HurtFlashIE ());
-		}
-	}
-
 	/* public exposed methods for managing health */
 	/**********************************************/
 	public void Damage(float deltaHealth){
@@ -151,9 +130,6 @@ public class HealthSystem : MonoBehaviour {
 			}
 			if (hurtImmunePeriod > 0f) {
 				StartHurtBehaviour ();
-			}
-			else if(hurtImmunePeriod == 0f){
-				StartHurtFlash ();
 			}
 			objHealth = tempHealth;
 		}
@@ -185,7 +161,6 @@ public class HealthSystem : MonoBehaviour {
 	public void InstantDead(){
 		objHealth = 0f;
 		isDead = true;
-
 	}
 		
 	public void StartHarmless(bool setColor = true){

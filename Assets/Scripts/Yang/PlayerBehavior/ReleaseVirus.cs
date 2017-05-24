@@ -68,10 +68,6 @@ public class ReleaseVirus : MonoBehaviour {
 						sc.OnChaseStart += SetReleaseParent;
 						sc.OnChaseStart += DisableLineRenderer;
 
-						HurtAndDamage hd = child.GetComponent<HurtAndDamage> ();
-						hd.isBullet = true;
-						hd.instantKillSelf = true;
-
 						sc.virusState = VirusStateControl.VirusState.Chase;
 
 						sc.OnChaseStart -= SetReleaseParent;
