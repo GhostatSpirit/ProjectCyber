@@ -10,7 +10,7 @@ public class RoombaRelease : StateMachineBehaviour {
 		roomba = animator.GetComponent<RoombaBehaviour> ();
 		hd = animator.GetComponent<HurtAndDamage> ();
 		hd.canHurtOther = true;
-		// decide where to shoot the laser at
+		// decide where to shoot the roomba at
 		Vector3 targetPos = roomba.targetLastPos;
 		// guess where the player might be at after fade seconds
 //		if(roomba.target){
