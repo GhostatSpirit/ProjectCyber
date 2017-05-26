@@ -31,7 +31,7 @@ public class MovableDepthSwitcher : MonoBehaviour {
 
 	// Update is called once per frame
 	void FixedUpdate(){
-		int collCount = coll.OverlapCollider (filter, colliders);
+        int collCount = coll.OverlapCollider (filter, colliders);
 		bool hitWallTrigger = false;
 //		Debug.Log (collCount);
 		if(collCount == 0){
@@ -43,7 +43,7 @@ public class MovableDepthSwitcher : MonoBehaviour {
 				continue;
 			}
 //			Debug.Log (targetColl.transform);
-			if (targetColl.GetComponent<WallTransparency> ()) {
+			if (targetColl.GetComponent<WallTransparency> () || targetColl.GetComponent<WallTransparencyAlt>()) {
 				// hit a wall
 				hitWallTrigger = true;
 			} else {

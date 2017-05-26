@@ -5,10 +5,13 @@ using UnityEngine;
 public class DoorMover : MonoBehaviour {
 
 	public enum DoorType {Topleft, Topright, Bottomleft, Bottomright};
+	public enum CameraAngle { FortyFive, Thirty };
+
 	public DoorType doorType = DoorType.Topleft;
+	public CameraAngle cameraAngle = CameraAngle.FortyFive;
 
 	public enum DoorStatus {Opening, Closing};
-	[ReadOnly]public DoorStatus doorStatus = DoorStatus.Closing;
+	public DoorStatus doorStatus = DoorStatus.Closing;
 
 	Vector3 closePos;
 	Vector3 openPos;
@@ -47,19 +50,37 @@ public class DoorMover : MonoBehaviour {
 		}
 		moveDist = doorWidth * moveDistanceFactor;
 
-		switch(doorType){
-		case DoorType.Topleft:
-			openPos = closePos + new Vector3 (-moveDist, moveDist, 0f);
-			break;
-		case DoorType.Bottomright:
-			openPos = closePos + new Vector3 (moveDist, -moveDist, 0f);
-			break;
-		case DoorType.Topright:
-			openPos = closePos + new Vector3(moveDist, moveDist, 0f);
-			break;
-		case DoorType.Bottomleft:
-			openPos = closePos + new Vector3(-moveDist, -moveDist, 0f);
-			break;
+
+		if (cameraAngle == CameraAngle.FortyFive) {
+			switch (doorType) {
+			case DoorType.Topleft:
+				openPos = closePos + new Vector3 (-moveDist, moveDist, 0f);
+				break;
+			case DoorType.Bottomright:
+				openPos = closePos + new Vector3 (moveDist, -moveDist, 0f);
+				break;
+			case DoorType.Topright:
+				openPos = closePos + new Vector3 (moveDist, moveDist, 0f);
+				break;
+			case DoorType.Bottomleft:
+				openPos = closePos + new Vector3 (-moveDist, -moveDist, 0f);
+				break;
+			}
+		} else {
+			switch (doorType) {
+			case DoorType.Topleft:
+				openPos = closePos + new Vector3 (-moveDist, moveDist / 2.0f, 0f);
+				break;
+			case DoorType.Bottomright:
+				openPos = closePos + new Vector3 (moveDist, -moveDist / 2.0f, 0f);
+				break;
+			case DoorType.Topright:
+				openPos = closePos + new Vector3 (moveDist, moveDist / 2.0f, 0f);
+				break;
+			case DoorType.Bottomleft:
+				openPos = closePos + new Vector3 (-moveDist, -moveDist / 2.0f, 0f);
+				break;
+			}
 		}
 
 
