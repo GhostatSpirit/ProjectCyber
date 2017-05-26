@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--Tiled2Unity generated xml data-->
+<!--Do not modify by hand-->
+<!--Last exported: 2017/5/26 23:00:36-->
+<Tiled2Unity version="1.0.11.2">
+  <AssignMaterial mesh="mesh_0001" material="Server_Wall" />
+  <AssignMaterial mesh="mesh_0002" material="Server_0" />
+  <AssignMaterial mesh="mesh_0003" material="Server_Wall" />
+  <Prefab name="MapF_F2" orientation="Isometric" staggerAxis="Y" staggerIndex="Odd" hexSideLength="0" numLayers="3" numTilesWide="200" numTilesHigh="200" tileWidth="256" tileHeight="128" exportScale="0.01" mapWidthInPixels="51200" mapHeightInPixels="25600" backgroundColor="#808080">
+    <GameObject name="块层 100" x="0" y="0" z="0">
+      <TileLayer opacity="1" offsetX="0" offsetY="0" />
+      <GameObject name="Server_Wall" copy="mesh_0001" sortingLayerName="" sortingOrder="0" opacity="1" />
+    </GameObject>
+    <GameObject name="Refl" x="0" y="0" z="0">
+      <TileLayer opacity="1" offsetX="0" offsetY="0" />
+      <GameObject name="Server_0" copy="mesh_0002" sortingLayerName="" sortingOrder="1" opacity="1" />
+    </GameObject>
+    <GameObject name="块层 2" x="0" y="0" z="0">
+      <TileLayer opacity="1" offsetX="0" offsetY="0" />
+      <GameObject name="Server_Wall" copy="mesh_0003" sortingLayerName="" sortingOrder="2" opacity="1" />
+    </GameObject>
+  </Prefab>
+  <ImportMesh filename="MapF_F2.obj">IyBXYXZlZnJvbnQgT0JKIGZpbGUgYXV0b21hdGljYWxseSBnZW5lcmF0ZWQgYnkgVGlsZWQyVW5pdHkNCg0KIyBWZXJ0aWNlcyAoQ291bnQgPSA2NCkNCnYgLTE5NC41NiAtODMuODQgMA0KdiAtMTk5LjY4IC04My44NCAwDQp2IC0xOTkuNjggLTc2LjE2IDANCnYgLTE5NC41NiAtNzYuMTYgMA0KdiAtMTkwLjcyIC04NS43NTk5OSAwDQp2IC0xOTUuODQgLTg1Ljc1OTk5IDANCnYgLTE5NS44NCAtNzguMDggMA0KdiAtMTkwLjcyIC03OC4wOCAwDQp2IC0xODYuODggLTg3LjY4IDANCnYgLTE5MiAtODcuNjggMA0KdiAtMTkyIC04MCAwDQp2IC0xODYuODggLTgwIDANCnYgLTE4My4wNCAtODkuNiAwDQp2IC0xODguMTYgLTg5LjYgMA0KdiAtMTg4LjE2IC04MS45MiAwDQp2IC0xODMuMDQgLTgxLjkyIDANCnYgLTE5NS44NCAtODkuNiAwDQp2IC0yMDAuOTYgLTg5LjYgMA0KdiAtMjAwLjk2IC04Ny4wNCAwDQp2IC0xOTUuODQgLTg3LjA0IDANCnYgLTIwNC44IC05NC4wNzk5OSAwDQp2IC0yMDkuOTIgLTk0LjA3OTk5IDANCnYgLTIwOS45MiAtOTEuNTIgMA0KdiAtMjA0LjggLTkxLjUyIDANCnYgLTE5MiAtOTEuNTIgMA0KdiAtMTk3LjEyIC05MS41MiAwDQp2IC0xOTcuMTIgLTg4Ljk2IDANCnYgLTE5MiAtODguOTYgMA0KdiAtMjAwLjk2IC05NiAwDQp2IC0yMDYuMDggLTk2IDANCnYgLTIwNi4wOCAtOTMuNDM5OTkgMA0KdiAtMjAwLjk2IC05My40Mzk5OSAwDQp2IC0xODguMTYgLTkzLjQzOTk5IDANCnYgLTE5My4yOCAtOTMuNDM5OTkgMA0KdiAtMTkzLjI4IC05MC44OCAwDQp2IC0xODguMTYgLTkwLjg4IDANCnYgLTE5Ny4xMiAtOTcuOTIgMA0KdiAtMjAyLjI0IC05Ny45MiAwDQp2IC0yMDIuMjQgLTk1LjM2IDANCnYgLTE5Ny4xMiAtOTUuMzYgMA0KdiAtMTg0LjMyIC05NS4zNiAwDQp2IC0xODkuNDQgLTk1LjM2IDANCnYgLTE4OS40NCAtOTIuOCAwDQp2IC0xODQuMzIgLTkyLjggMA0KdiAtMTkzLjI4IC05OS44NCAwDQp2IC0xOTguNCAtOTkuODQgMA0KdiAtMTk4LjQgLTk3LjI4IDANCnYgLTE5My4yOCAtOTcuMjggMA0KdiAtMjAzLjUyIC04OC4zMiAwDQp2IC0yMDguNjQgLTg4LjMyIDANCnYgLTIwOC42NCAtODAuNjQgMA0KdiAtMjAzLjUyIC04MC42NCAwDQp2IC0xOTkuNjggLTkwLjI0IDANCnYgLTIwNC44IC05MC4yNCAwDQp2IC0yMDQuOCAtODIuNTYgMA0KdiAtMTk5LjY4IC04Mi41NiAwDQp2IC0xOTUuODQgLTkyLjE2IDANCnYgLTIwMC45NiAtOTIuMTYgMA0KdiAtMjAwLjk2IC04NC40OCAwDQp2IC0xOTUuODQgLTg0LjQ4IDANCnYgLTE5MiAtOTQuMDc5OTkgMA0KdiAtMTk3LjEyIC05NC4wNzk5OSAwDQp2IC0xOTcuMTIgLTg2LjQgMA0KdiAtMTkyIC04Ni40IDANCg0KIyBUZXh0dXJlIGNvb3JpZGluYXRlcyAoQ291bnQgPSA2KQ0KdnQgMC4wMDAxMjIwNzAzIDAuNTAwMTIyMQ0KdnQgMC40OTk4Nzc5IDAuNTAwMTIyMQ0KdnQgMC40OTk4Nzc5IDAuOTk5ODc3OQ0KdnQgMC4wMDAxMjIwNzAzIDAuOTk5ODc3OQ0KdnQgMC45OTk4Nzc5IDAuNTAwMTIyMQ0KdnQgMC45OTk4Nzc5IDAuOTk5ODc3OQ0KDQojIE5vcm1hbA0Kdm4gMCAwIC0xDQoNCiMgR3JvdXBzIChDb3VudCA9IDMpDQoKZyBtZXNoXzAwMDEKZiAxLzEvMSAyLzIvMSAzLzMvMSA0LzQvMQpmIDUvMS8xIDYvMi8xIDcvMy8xIDgvNC8xCmYgOS8xLzEgMTAvMi8xIDExLzMvMSAxMi80LzEKZiAxMy8xLzEgMTQvMi8xIDE1LzMvMSAxNi80LzEKCmcgbWVzaF8wMDAyCmYgMTcvMS8xIDE4LzUvMSAxOS82LzEgMjAvNC8xCmYgMjEvMS8xIDIyLzUvMSAyMy82LzEgMjQvNC8xCmYgMjUvMS8xIDI2LzUvMSAyNy82LzEgMjgvNC8xCmYgMjkvMS8xIDMwLzUvMSAzMS82LzEgMzIvNC8xCmYgMzMvMS8xIDM0LzUvMSAzNS82LzEgMzYvNC8xCmYgMzcvMS8xIDM4LzUvMSAzOS82LzEgNDAvNC8xCmYgNDEvMS8xIDQyLzUvMSA0My82LzEgNDQvNC8xCmYgNDUvMS8xIDQ2LzUvMSA0Ny82LzEgNDgvNC8xCgpnIG1lc2hfMDAwMwpmIDQ5LzEvMSA1MC8yLzEgNTEvMy8xIDUyLzQvMQpmIDUzLzEvMSA1NC8yLzEgNTUvMy8xIDU2LzQvMQpmIDU3LzEvMSA1OC8yLzEgNTkvMy8xIDYwLzQvMQpmIDYxLzEvMSA2Mi8yLzEgNjMvMy8xIDY0LzQvMQoNCg==</ImportMesh>
+  <InternalTexture assetPath="Assets/Tiles/New_Wall/Tileset_Prototype/Server_Wall.png" materialName="Server_Wall" />
+  <InternalTexture assetPath="Assets/Tiles/New_Wall/Tileset_Prototype/Refl/Server_0.png" materialName="Server_0" />
+</Tiled2Unity>
