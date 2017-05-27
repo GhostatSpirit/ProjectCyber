@@ -31,7 +31,7 @@ public class ObjectIdentity : MonoBehaviour {
 
 	// define all obstacles that could block vision here
 	public static List<ObjectType> visionBlockers = new List<ObjectType>{
-		ObjectType.Wall
+		ObjectType.Wall, ObjectType.Interface, ObjectType.Door
 	};
 
 	public bool isControllable(){

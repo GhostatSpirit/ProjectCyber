@@ -1,6 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+
+
 
 public class RoombaBehaviour : MonoBehaviour {
 	public float thrust = 20f;
@@ -10,11 +14,16 @@ public class RoombaBehaviour : MonoBehaviour {
 	public SpritePair aimPointSP;
 	public ColorPair aimColorCP;
 
+	public GameObject explosion;
+	public Transform explosionParent;
+
 	[HideInInspector] public Rigidbody2D body;
 	FieldOfView fov;
 	[HideInInspector] public ControlStatus cs;
+	LineUpdate lu;
 	Animator animator;
 	HurtAndDamage hd;
+
 
 	public Controller controller{
 		get{
@@ -30,6 +39,7 @@ public class RoombaBehaviour : MonoBehaviour {
 		body = GetComponent<Rigidbody2D> ();
 		fov = GetComponent<FieldOfView> ();
 		cs = GetComponent<ControlStatus> ();
+		lu = GetComponent<LineUpdate> ();
 		animator = GetComponent<Animator> ();
 		hd = GetComponent<HurtAndDamage> ();
 
@@ -183,4 +193,29 @@ public class RoombaBehaviour : MonoBehaviour {
 	public void SetPlayerLink(Transform objTrans){
 		animator.SetTrigger ("playerLink");
 	}
+
+	public void EnableLine(){
+		lu.EnableLine ();
+	}
+	public void DisableLine(){
+		lu.DisableLine ();
+	}
+
+	// fields and functions for RoombaExplosion
+	[ReadOnly] public bool checkCollision = false;
+	ObjectType[] ignoredTypes = { ObjectType.HackerBullet, ObjectType.RobotBullet };
+	void OnCollisionEnter2D(Collision2D coll){
+		if(!checkCollision){
+			return;
+		}
+		// check if the colliding object is in the ignored list
+		ObjectIdentity oi = coll.collider.GetComponentInChildren<ObjectIdentity> ();
+		if (oi && ignoredTypes.Contains (oi.objType)){
+			return;
+		}
+		// if not, send a explode trigger to animator
+		animator.SetTrigger ("explode");
+		checkCollision = false;
+	}
+
 }
