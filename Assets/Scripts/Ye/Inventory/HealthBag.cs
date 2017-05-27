@@ -39,21 +39,27 @@ public class HealthBag : MonoBehaviour {
 		}
 
 		if (PlayerOI.objType == ObjectType.AI || PlayerOI.objType == ObjectType.Hacker) {
+			if(PlayerHS.GetHealth() == PlayerHS.maxHealth){
+				return;
+			}
+
 			if(PlayerHS)
 				PlayerHS.Heal (HealRatio * PlayerHS.maxHealth);
 
-			PlayerInteract interact = collision.transform.GetComponent<PlayerInteract> ();
-			Transform otherPlayer = interact.otherPlayer;
-			HealthSystem otherhs = otherPlayer.GetComponent<HealthSystem> ();
-			if(otherhs){
-				otherhs.Heal (HealRatio * PlayerHS.maxHealth);
-			}
+//			PlayerInteract interact = collision.transform.GetComponent<PlayerInteract> ();
+//			Transform otherPlayer = interact.otherPlayer;
+//			HealthSystem otherhs = otherPlayer.GetComponent<HealthSystem> ();
+//			if(otherhs){
+//				otherhs.Heal (HealRatio * PlayerHS.maxHealth);
+//			}
+
+			Destroy(gameObject);
 		}
         /*
         PlayerHS.Heal(HealRatio * PlayerHS.maxHealth);
         */
 
         // destory
-        Destroy(gameObject);
+
     }
 }

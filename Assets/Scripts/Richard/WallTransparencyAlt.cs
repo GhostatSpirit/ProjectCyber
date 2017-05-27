@@ -105,7 +105,10 @@ public class WallTransparencyAlt : MonoBehaviour {
             {
                 Color newColor = mesh.material.color;
                 newColor.a = opacity;
-                mesh.material.color = newColor;
+				if (mesh.material.HasProperty ("Color")) {
+					mesh.material.color = newColor;
+				}
+
             }
             //Color newColor = wallMesh.mater.color;
 			//newColor.a = opacity;
