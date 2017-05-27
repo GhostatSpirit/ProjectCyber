@@ -42,6 +42,9 @@ sysinfo.txt
 /Assets/PolyNav2D
 /Assets/PolyNav2D.meta
 
+# 2DDL
+/Assets/2DDL
+
 # AdvancedPolygonCollider
 /Assets/AdvancedPolygonCollider
 
