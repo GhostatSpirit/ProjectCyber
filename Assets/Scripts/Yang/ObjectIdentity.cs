@@ -16,7 +16,8 @@ public enum ObjectType
 	LaserCannon,
     BreakableWall,
 	DepthField,		// object enters this field will change its sorting layer accordingly
-	Roomba
+	Roomba,
+	GlassWall		// a breakable glass wall that won't block vision
 };
 
 

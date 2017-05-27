@@ -18,13 +18,13 @@ public class ExplosionDamage : MonoBehaviour {
 	public TypeDamagePair[] DamageOtherList;
 	Dictionary<ObjectType, float> DamageOtherDict = new Dictionary<ObjectType, float>();
 
-	Collider2D explosionArea;
+	//Collider2D explosionArea;
 
 	ContactFilter2D raycastFilter;
 
 	// Use this for initialization
 	IEnumerator Start () {
-		explosionArea = GetComponent<Collider2D> ();
+		//explosionArea = GetComponent<Collider2D> ();
 
 		foreach (TypeDamagePair pair in DamageOtherList){
 			DamageOtherDict.Add (pair.type, pair.damage);
@@ -53,7 +53,6 @@ public class ExplosionDamage : MonoBehaviour {
 			Physics2D.OverlapCircleAll (explosionCenter, radius, layerMask);
 		if (hitColliders.Length != 0) {
 			// we actually hit something here
-			float dist = Mathf.Infinity;
 			foreach (Collider2D coll in hitColliders) {
 				Transform target = coll.transform;
 				// if the target has a dynamic rigidbody
