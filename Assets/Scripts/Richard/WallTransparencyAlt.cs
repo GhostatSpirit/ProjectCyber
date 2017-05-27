@@ -34,7 +34,12 @@ public class WallTransparencyAlt : MonoBehaviour {
         wallMesh = transform.parent.transform.parent.GetComponentsInChildren<MeshRenderer> ();
         foreach(MeshRenderer child in wallMesh)
         {
-            defaultOpacity.Add(child.material.color.a);
+
+			if (child.material.HasProperty ("_Color")) {
+				defaultOpacity.Add(child.material.color.a);
+			} else if(child.material.HasProperty ("_Tint")){
+				defaultOpacity.Add(child.material.GetColor("_Tint").a);
+			}
         }
 
 		Collider2D[] colls = GetComponents<Collider2D> ();
@@ -103,10 +108,19 @@ public class WallTransparencyAlt : MonoBehaviour {
 		if (setTransparent) {
             foreach(MeshRenderer mesh in wallMesh)
             {
-                Color newColor = mesh.material.color;
+				Color newColor = new Color();
+
+				if (mesh.material.HasProperty ("_Color")) {
+					newColor = mesh.material.color;
+				} else if(mesh.material.HasProperty ("_Tint")){
+					newColor = mesh.material.GetColor("_Tint");
+				}
+
                 newColor.a = opacity;
-				if (mesh.material.HasProperty ("Color")) {
+				if (mesh.material.HasProperty ("_Color")) {
 					mesh.material.color = newColor;
+				} else if(mesh.material.HasProperty ("_Tint")){
+					mesh.material.SetColor ("_Tint", newColor);
 				}
 
             }
@@ -125,9 +139,20 @@ public class WallTransparencyAlt : MonoBehaviour {
             int i = 0;
             foreach (MeshRenderer mesh in wallMesh)
             {
-                Color newColor = mesh.material.color;
+				Color newColor = new Color();
+
+				if (mesh.material.HasProperty ("_Color")) {
+					newColor = mesh.material.color;
+				} else if(mesh.material.HasProperty ("_Tint")){
+					newColor = mesh.material.GetColor("_Tint");
+				}
+
                 newColor.a = defaultOpacity[i];
-                mesh.material.color = newColor;
+				if (mesh.material.HasProperty ("_Color")) {
+					mesh.material.color = newColor;
+				} else if(mesh.material.HasProperty ("_Tint")){
+					mesh.material.SetColor ("_Tint", newColor);
+				}
                 i++;
             }
         }
