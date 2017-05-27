@@ -44,7 +44,7 @@ public class LCEnemyShoot : StateMachineBehaviour {
 		}
 		shootDir = (shootPos - laserStart).normalized;
 		// the cannon at least can shoot $radius units 
-		maxDistance = Mathf.Max (maxDistance, state.fov.radius);
+		maxDistance = Mathf.Min (maxDistance, state.fov.radius);
 
 		state.ShootLaser (shootDir, maxDistance, fadeSeconds, lifeTime);
 

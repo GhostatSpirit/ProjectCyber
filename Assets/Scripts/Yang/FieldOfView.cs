@@ -308,8 +308,12 @@ public class FieldOfView : MonoBehaviour
 		foreach(RaycastHit2D hit in hits){
 			Transform hitTrans = hit.transform;
 
-			ObjectIdentity oi = hitTrans.GetComponent<ObjectIdentity> ();
+			if(hit.collider && hit.collider.isTrigger == false && 
+				hit.collider.gameObject.layer == LayerMask.NameToLayer("HighWall")){
+				return true;
+			}
 
+			ObjectIdentity oi = hitTrans.GetComponent<ObjectIdentity> ();
 			if (oi && oi.isVisionBlocker()) {
 				return true;
 			}

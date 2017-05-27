@@ -71,8 +71,8 @@ public class ExplosionDamage : MonoBehaviour {
 				if(oi){
 					float damage;
 					if(DamageOtherDict.TryGetValue(oi.objType, out damage)){
-						Debug.Log (oi);
-						Debug.Log (damage);
+//						Debug.Log (oi);
+//						Debug.Log (damage);
 						HealthSystem hs = coll.transform.GetComponent<HealthSystem> ();
 						if(hs){
 							hs.Damage (damage);
