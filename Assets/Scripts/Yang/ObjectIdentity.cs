@@ -17,7 +17,8 @@ public enum ObjectType
     BreakableWall,
 	DepthField,		// object enters this field will change its sorting layer accordingly
 	Roomba,
-	GlassWall		// a breakable glass wall that won't block vision
+	GlassWall,		// a breakable glass wall that won't block vision
+    HealthBox
 };
 
 
