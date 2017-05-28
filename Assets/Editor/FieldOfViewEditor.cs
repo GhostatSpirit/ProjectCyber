@@ -6,8 +6,18 @@ public class FieldOfViewEditor : Editor
 {
 	public float arrowSize = 1;
 
+	SerializedObject fovScript;
+	SerializedProperty radiusProp;
+
+	void OnEnable(){
+		fovScript = new SerializedObject (target);
+		radiusProp = fovScript.FindProperty ("radius");
+	}
+
 	void OnSceneGUI( )
 	{
+		serializedObject.Update ();
+
 		FieldOfView t = target as FieldOfView;
 
 		Handles.color = Color.blue;
@@ -35,10 +45,19 @@ public class FieldOfViewEditor : Editor
 		Handles.DrawSolidArc( t.transform.position, t.transform.forward, start,
 			t.angle, t.radius );
 
+
 		Handles.color = Color.white;
 		t.radius = Handles.ScaleValueHandle( t.radius,
 			t.transform.position + start * t.radius,
 			Quaternion.FromToRotation(t.transform.forward, start), 1, Handles.ConeHandleCap, 1 );
 			//t.transform.rotation, 1, Handles.ConeCap, 1 );
+
+		radiusProp.floatValue = t.radius;
+		fovScript.ApplyModifiedProperties ();
+
+
+		if (GUI.changed)
+			EditorUtility.SetDirty(target);
+
 	}
 }

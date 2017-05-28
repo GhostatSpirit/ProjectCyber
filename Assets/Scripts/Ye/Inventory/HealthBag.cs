@@ -52,7 +52,6 @@ public class HealthBag : MonoBehaviour {
 //			if(otherhs){
 //				otherhs.Heal (HealRatio * PlayerHS.maxHealth);
 //			}
-
 			Destroy(gameObject);
 		}
         /*
