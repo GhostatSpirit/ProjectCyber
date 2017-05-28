@@ -10,7 +10,7 @@ public class AimLaserUpdate : MonoBehaviour {
 	public string sortingLayerName = "ControlLine";
 	// Use this for initialization
 	void Start () {
-		lr = GetComponent<LineRenderer> ();
+		lr = GetComponentInChildren<LineRenderer> ();
 		lr.sortingLayerName = this.sortingLayerName;
 	}
 	
@@ -24,6 +24,12 @@ public class AimLaserUpdate : MonoBehaviour {
 			positions [0] = transform.position;
 			positions [1] = transform.parent.position;
 			lr.SetPositions (positions);
+
+//			Renderer r = lr.transform.GetComponent<Renderer> ();
+//			if(r){
+//				r.sortingLayerName = this.sortingLayerName;
+//				r.sortingOrder = 0;
+//			}
 		}
 	}
 
