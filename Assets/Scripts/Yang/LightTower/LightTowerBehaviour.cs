@@ -12,8 +12,13 @@ public class LightTowerBehaviour : MonoBehaviour {
 	public float showSpriteDuration = 1f;
 	public float lightDuration = 2f;
 
+    // ye added audio
+
+    AudioSource audioS;
+
 	// Use this for initialization
 	void Start () {
+        audioS = GetComponent<AudioSource>();
 		cs = GetComponent<ControlStatus> ();
 
 		cs.OnCutByPlayer += LightTower;
@@ -31,6 +36,10 @@ public class LightTowerBehaviour : MonoBehaviour {
 			Color newColor = fullLightSR.color;
 			newColor.a = 0f;
 			fullLightSR.color = newColor;
+
+            // ye added lightsound
+            audioS.PlayOneShot(audioS.clip);
+
 			// turn on spriteRenderer
 			fullLightSR.enabled = true;
 			// dotween
