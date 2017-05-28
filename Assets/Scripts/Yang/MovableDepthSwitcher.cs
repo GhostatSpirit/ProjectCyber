@@ -42,7 +42,7 @@ public class MovableDepthSwitcher : MonoBehaviour {
 			if(!targetColl){
 				continue;
 			}
-			Debug.Log (targetColl);
+//			Debug.Log (targetColl);
 			if(!targetColl.isTrigger){
 				continue;
 			}

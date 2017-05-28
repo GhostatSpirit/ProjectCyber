@@ -40,6 +40,7 @@ public class LightTowerBehaviour : MonoBehaviour {
 			float finalIntensity = sfLight.intensity;
 			sfLight.intensity = 0f;
 			sfLight.enabled = true;
+			sfLight.gameObject.SetActive (true);
 			// dotween
 			DOTween.To (() => sfLight.intensity, 
 						 x => sfLight.intensity = x, finalIntensity, lightDuration).
