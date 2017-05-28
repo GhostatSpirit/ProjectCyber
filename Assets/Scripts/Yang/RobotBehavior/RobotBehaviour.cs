@@ -22,7 +22,6 @@ public class RobotBehaviour : MonoBehaviour {
 		}
 	}
 
-
 	// Use this for initialization
 	IEnumerator Start () {
 		yield return new WaitUntil 

@@ -17,7 +17,11 @@ public class FacingSpriteSwitcher : MonoBehaviour {
 
 	Direction faceDirection{
 		get{
-			return Vector2Direction (facing);
+			if (newPerspective) {
+				return Vector2NewDirection (facing);
+			} else {
+				return Vector2Direction (facing);
+			}
 		}
 	}
 
@@ -32,6 +36,8 @@ public class FacingSpriteSwitcher : MonoBehaviour {
 	public Sprite upLeftSprite;
 	public Sprite upRightSprite;
 
+
+	public bool newPerspective = false;
 
 	SpriteRenderer mySpriteRenderer;
 	// Use this for initialization
@@ -139,6 +145,52 @@ public class FacingSpriteSwitcher : MonoBehaviour {
 			return Direction.DOWN;
 		}
 		else if (angle > 292.5f && angle <= 357.5f){
+			return Direction.DOWNRIGHT;
+		}
+		else{
+			return Direction.RIGHT;
+		}
+
+	}
+
+	Direction Vector2NewDirection(Vector2 vec){
+		if(vec.magnitude == 0f){
+			Debug.Log ("Warning: vec.magnitude == 0f");
+			return Direction.RIGHT;
+		}
+
+		Vector2 rightVector = new Vector2 (1f, 0f);
+
+		float angle = Vector2.Angle (rightVector, vec);
+
+		if(vec.y < 0f){
+			angle = 360f - angle;
+		}
+		// play "going upright" animation if angle between 22.5° and 67.5°
+		if (angle > 15f && angle <= 60f)
+		{
+			return Direction.UPRIGHT;
+		}
+		// play "going up" animation if angle between 67.5° and 112.5°
+		else if (angle > 60f && angle <= 120f)
+		{
+			return Direction.UP;
+		}
+		// play "going upleft" animation if angle between 225° and 315°
+		else if (angle > 120f && angle <= 165f)
+		{
+			return Direction.UPLEFT;// down
+		}
+		else if (angle > 165f && angle <= 195f){
+			return Direction.LEFT;
+		}
+		else if (angle > 195f && angle <= 240f){
+			return Direction.DOWNLEFT;
+		}
+		else if (angle > 240f && angle <= 300f){
+			return Direction.DOWN;
+		}
+		else if (angle > 300f && angle <= 345f){
 			return Direction.DOWNRIGHT;
 		}
 		else{
