@@ -178,7 +178,7 @@ public class LaserCannonState : MonoBehaviour {
 
 	// functions for the shooting laser
 	public void ShootLaser
-	(Vector3 direction, float maxDistance, float fadeSeconds, float lifeTime, bool rotating = true){
+	(Vector3 direction, float maxDistance, float fadeSeconds, float lifeTime, bool rotating = false){
 		if (shootLaserCoroutine == null) {
 			shootLaserCoroutine = 
 				StartCoroutine (ShootLaserIE (direction, maxDistance, fadeSeconds, lifeTime, rotating));
@@ -192,7 +192,8 @@ public class LaserCannonState : MonoBehaviour {
 		shootLaserLine.laserRotationEnabled = rotating;
 		shootLaserLine.OnLaserHitTriggered += HurtTarget;
 
-		yield return new WaitForEndOfFrame ();
+		yield return new WaitForFixedUpdate ();
+		yield return new WaitForFixedUpdate ();
 		shootLaserLine.SetLaserState (true);
 
 		damaging = true;

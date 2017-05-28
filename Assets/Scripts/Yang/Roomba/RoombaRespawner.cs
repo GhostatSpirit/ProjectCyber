@@ -11,6 +11,10 @@ public class RoombaRespawner : MonoBehaviour {
 	Collider2D areaTrigger;
 	public LayerMask movableMask;
 
+	bool hasOldRoomba = false;
+	float oldFovRadius = 1f;
+	bool oldIgnoreVisionBlock = false;
+
 	int roombaCount{
 		get{
 			int tempCount = 0;
@@ -18,6 +22,13 @@ public class RoombaRespawner : MonoBehaviour {
 				ObjectIdentity oi = child.GetComponent<ObjectIdentity> ();
 				if(oi && oi.objType == ObjectType.Roomba){
 					tempCount++;
+
+					FieldOfView fov = child.GetComponent<FieldOfView> ();
+					if(fov){
+						hasOldRoomba = true;
+						oldFovRadius = fov.radius;
+						oldIgnoreVisionBlock = fov.ignoreVisionBlock;
+					}
 				}
 			}
 			return tempCount;
@@ -97,5 +108,13 @@ public class RoombaRespawner : MonoBehaviour {
 			cs.Boss = this.transform;
 			cs.Hacker = hacker;
 		}
+		if (hasOldRoomba) {
+			FieldOfView fov = roombaGO.GetComponent<FieldOfView> ();
+			if(fov){
+				fov.radius = oldFovRadius;
+				fov.ignoreVisionBlock = oldIgnoreVisionBlock;
+			}
+		}
+
 	}
 }

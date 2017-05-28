@@ -16,7 +16,8 @@ public enum ObjectType
 	LaserCannon,
     BreakableWall,
 	DepthField,		// object enters this field will change its sorting layer accordingly
-	Roomba
+	Roomba,
+	GlassWall		// a breakable glass wall that won't block vision
 };
 
 
@@ -31,7 +32,7 @@ public class ObjectIdentity : MonoBehaviour {
 
 	// define all obstacles that could block vision here
 	public static List<ObjectType> visionBlockers = new List<ObjectType>{
-		ObjectType.Wall
+		ObjectType.Wall, ObjectType.Interface, ObjectType.Door, ObjectType.BreakableWall
 	};
 
 	public bool isControllable(){

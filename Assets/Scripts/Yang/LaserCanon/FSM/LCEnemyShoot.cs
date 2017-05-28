@@ -19,6 +19,8 @@ public class LCEnemyShoot : StateMachineBehaviour {
 	public float fadeSeconds = 0.5f;
 	public float lifeTime = 3f;
 
+	public float rotateLaserSpeed = 0.125f;
+
 //	bool damaging{
 //		get{
 //			if (state)
@@ -44,9 +46,9 @@ public class LCEnemyShoot : StateMachineBehaviour {
 		}
 		shootDir = (shootPos - laserStart).normalized;
 		// the cannon at least can shoot $radius units 
-		maxDistance = Mathf.Max (maxDistance, state.fov.radius);
+		maxDistance = Mathf.Min (maxDistance, state.fov.radius);
 
-		state.ShootLaser (shootDir, maxDistance, fadeSeconds, lifeTime);
+		state.ShootLaser (shootDir, maxDistance, fadeSeconds, lifeTime, false);
 
 	}
 
@@ -54,11 +56,13 @@ public class LCEnemyShoot : StateMachineBehaviour {
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		if(state.playerTarget){
-			state.shootLaserLine.targetGo = state.playerTarget.gameObject;
-		}
-		else{
-			state.shootLaserLine.targetGo = null;
+
+		Vector3 targetDir = (state.playerLastPos - state.shootLaser.position).normalized;
+
+		if(targetDir.magnitude != 0f){
+			float step = rotateLaserSpeed * Time.deltaTime;	
+			state.shootLaser.right = 
+				Vector3.RotateTowards(state.shootLaser.right, targetDir, step, Mathf.Infinity);
 		}
 			
 	}

@@ -6,10 +6,12 @@ public class BreakableWallAnim: MonoBehaviour
 {
 
     public float RecoverTime;
+	public bool turnOffSFPolygon = false;
 
 	HealthSystem hs;
     Animator anim;
-    
+	SFPolygon sfp;
+
 	// Use this for initialization
 	void Start ()
     {
@@ -18,9 +20,14 @@ public class BreakableWallAnim: MonoBehaviour
         anim.SetBool("Recover",false);
         
 		hs = GetComponent<HealthSystem> ();
+		sfp = GetComponent<SFPolygon> ();
 
 		hs.OnObjectDead += Break;
 		hs.OnObjectDead += StartRecover;
+		if(turnOffSFPolygon){
+			hs.OnObjectDead += TurnOffSFPolygon;
+			hs.OnObjectRevive += TurnOnSFPolygon;
+		}
 	}
 
     // Break Status
@@ -34,6 +41,14 @@ public class BreakableWallAnim: MonoBehaviour
 //        Debug.Log("broken!");
         GetComponentsInChildren<SpriteRenderer>()[1].enabled = false;
     }
+
+	void TurnOffSFPolygon (Transform wallTrans){
+		sfp.enabled = false;
+	}
+
+	void TurnOnSFPolygon (Transform wallTrans){
+		sfp.enabled = true;
+	}
 
 	Coroutine recoverCoroutine;
 	void StartRecover (Transform wallTrans){
