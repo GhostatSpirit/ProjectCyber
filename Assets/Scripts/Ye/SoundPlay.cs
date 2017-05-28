@@ -4,11 +4,21 @@ using UnityEngine;
 
 public class SoundPlay : MonoBehaviour {
 
+
+
+
     AudioSource audioSource;
     
     // Outer parameter bool a
     public bool soundPlay = false;
 
+
+
+    public void playSound(AudioClip clip)
+    {
+
+        GetComponent<AudioSource>().PlayOneShot(clip);
+    }
 
 	// Use this for initialization
 	void Start () {
