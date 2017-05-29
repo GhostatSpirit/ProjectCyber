@@ -5,6 +5,8 @@ using UnityEngine;
 public class VirusManager : MonoBehaviour {
 
 	public GameObject virusPrefab;
+	public Transform hacker;
+
 	// the amount of virus that would be respawned at one time
 	public int respawnCount = 4;
 
@@ -105,6 +107,12 @@ public class VirusManager : MonoBehaviour {
 				newVirus.transform.up = fov.facing;
 			}
 			newVirus.transform.parent = transform;
+
+			ControlStatus cs = newVirus.GetComponentInChildren<ControlStatus> ();
+			if(cs){
+				cs.Hacker = this.hacker;
+				cs.Boss = transform;
+			}
 
 			// stop the virus from changing its virusState until it is
 			// reaching the spreadRadius
