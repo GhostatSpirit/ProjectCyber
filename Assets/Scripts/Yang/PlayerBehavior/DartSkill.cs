@@ -86,6 +86,11 @@ public class DartSkill : MonoBehaviour {
         {
 
             // CAUTION: starting the darting skill
+
+            //ye added DartSound
+            GetComponent<DartSound>().StartDart();
+
+
             darting = true;
 			// AI can cut lines now
 			linecut.couldCut = true;
