@@ -19,7 +19,7 @@ public class HackerMovementAnim: MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        clip = GetComponent<AudioSource>().clip;
+        clip = GetComponents<AudioSource>()[0].clip;
         anim = GetComponent<Animator>();
 	}
 

@@ -72,6 +72,11 @@ public class PlayerShoot : MonoBehaviour {
 	}
 
 	void ShootWave(){
+
+        // ye added shootsound
+
+        GetComponentInParent<ShootSound>().hackShoot();
+
 		// instantiate the bullet prefabs
 
 		float midAngleZ = transform.rotation.eulerAngles.z;
