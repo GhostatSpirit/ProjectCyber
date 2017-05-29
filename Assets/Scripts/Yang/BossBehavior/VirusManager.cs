@@ -19,10 +19,10 @@ public class VirusManager : MonoBehaviour {
 			int count = 0;
 			foreach(Transform child in transform){
 				// does if have a objectIdentity and the identity is virus?
-				ObjectIdentity oi = child.GetComponent<ObjectIdentity> ();
+				ObjectIdentity oi = child.GetComponentInChildren<ObjectIdentity> ();
 				if(oi && oi.objType == ObjectType.Virus){
 					// append it to the virus list
-					ControlStatus cs = child.GetComponent<ControlStatus> ();
+					ControlStatus cs = oi.GetComponent<ControlStatus> ();
 					if (cs.controller == Controller.Boss) {
 						count++;
 					}
@@ -37,7 +37,7 @@ public class VirusManager : MonoBehaviour {
 			int count = 0;
 			foreach(Transform child in transform){
 				// does if have a objectIdentity and the identity is virus?
-				ObjectIdentity oi = child.GetComponent<ObjectIdentity> ();
+				ObjectIdentity oi = child.GetComponentInChildren<ObjectIdentity> ();
 				if(oi && oi.objType == ObjectType.Virus){
 					// append it to the virus list
 					count++;
@@ -104,7 +104,7 @@ public class VirusManager : MonoBehaviour {
 			GameObject newVirus = 
 				Instantiate (virusPrefab, transform.position, transform.rotation);
 			if(fov){
-				newVirus.transform.up = fov.facing;
+				newVirus.GetComponentInChildren<VirusPosReceiver>().transform.up = fov.facing;
 			}
 			newVirus.transform.parent = transform;
 
@@ -116,7 +116,7 @@ public class VirusManager : MonoBehaviour {
 
 			// stop the virus from changing its virusState until it is
 			// reaching the spreadRadius
-			VirusStateControl vsc = newVirus.GetComponent<VirusStateControl> ();
+			VirusStateControl vsc = newVirus.GetComponentInChildren<VirusStateControl> ();
 			vsc.enabled = false;
 			StartCoroutine (EnableStateChange (newVirus.transform));
 
@@ -150,7 +150,7 @@ public class VirusManager : MonoBehaviour {
 
 		yield return new WaitUntil (() => {return ReachingSpreadRadius(virusTrans);});
 		if (virusTrans) {
-			VirusStateControl vsc = virusTrans.GetComponent<VirusStateControl> ();
+			VirusStateControl vsc = virusTrans.GetComponentInChildren<VirusStateControl> ();
 			if (vsc) {
 				vsc.enabled = true;
 			}
@@ -158,7 +158,7 @@ public class VirusManager : MonoBehaviour {
 	}
 
 	bool ReachingSpreadRadius(Transform virusTrans){
-		VirusPosManager vpm = GetComponent<VirusPosManager>();
+		VirusPosManager vpm = virusTrans.GetComponentInChildren<VirusPosManager>();
 		float radius = 0f;
 		if(vpm){
 			radius = vpm.spreadRadius;

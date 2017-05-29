@@ -15,6 +15,8 @@ public class RoombaRespawner : MonoBehaviour {
 	float oldFovRadius = 1f;
 	bool oldIgnoreVisionBlock = false;
 
+	public bool uncontrolled = false;
+
 	int roombaCount{
 		get{
 			int tempCount = 0;
@@ -115,6 +117,9 @@ public class RoombaRespawner : MonoBehaviour {
 				fov.ignoreVisionBlock = oldIgnoreVisionBlock;
 			}
 		}
-
+		if(uncontrolled){
+			cs.controller = Controller.None;
+			cs.GetComponent<LineUpdate> ().DisableLine ();
+		}
 	}
 }

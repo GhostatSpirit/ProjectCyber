@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using UnityEngine;
+using System;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
 
 public class HurtAndDamage : MonoBehaviour {
 
@@ -24,6 +26,9 @@ public class HurtAndDamage : MonoBehaviour {
 
 	// bullet will kill itself on collision no matter what happens
 	public bool isBullet = false;
+
+	// if collide with a type in the ignoredTypeList, nothing would happen
+	public ObjectType[] ignoredTypeList;
 
 	HealthSystem selfHealthSystem;
 	// Use this for initialization
@@ -83,6 +88,14 @@ public class HurtAndDamage : MonoBehaviour {
 
 
 	void HurtDamageLogic(Collision2D coll){
+
+		ObjectIdentity oi = coll.transform.GetComponent<ObjectIdentity> ();
+		if(oi != null && ignoredTypeList.Contains(oi.objType)){
+			// the target is ignored
+			return;
+		}
+
+
 		if(instantKillOther && VerifyHurtOther(coll.transform)){
 			HealthSystem hs = coll.transform.GetComponent<HealthSystem> ();
 			if(hs){
@@ -97,7 +110,6 @@ public class HurtAndDamage : MonoBehaviour {
 		}
 
 		// get the type of the colliding object
-		ObjectIdentity oi = coll.transform.GetComponent<ObjectIdentity> ();
 		if(oi == null){
 			return;
 		}

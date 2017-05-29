@@ -88,7 +88,9 @@ public class DartSkill : MonoBehaviour {
             // CAUTION: starting the darting skill
 
             //ye added DartSound
-            GetComponent<DartSound>().StartDart();
+			if (GetComponent<DartSound> ()) {
+				GetComponent<DartSound> ().StartDart ();
+			}
 
 
             darting = true;

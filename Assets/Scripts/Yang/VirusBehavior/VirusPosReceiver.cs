@@ -11,6 +11,8 @@ public class VirusPosReceiver : MonoBehaviour {
 
 	public bool instantRot = false;
 
+	public bool usingStraight = false;
+
 	float rotSpeedFactor;
 	Rigidbody2D myRigidbody;
 
@@ -53,14 +55,30 @@ public class VirusPosReceiver : MonoBehaviour {
 		}
 
 		// set position
-		Vector3 newPos = 
-			Vector3.Lerp (transform.position, desiredPos, Time.fixedDeltaTime * moveSpeed);
-		if(myRigidbody){
-			myRigidbody.MovePosition (newPos);
+
+		
+
+
+		if(usingStraight){
+			Vector3 newPos = 
+				Vector3.Lerp (transform.parent.position, desiredPos, Time.fixedDeltaTime * moveSpeed);
+			transform.parent.position = newPos;
+		} else{
+			Vector3 newPos = 
+				Vector3.Lerp (transform.position, desiredPos, Time.fixedDeltaTime * moveSpeed);
+			if(myRigidbody){
+				myRigidbody.MovePosition (newPos);
+			}
+			else{
+				transform.position = newPos;
+			}
 		}
-		else{
-			transform.position = newPos;
-		}
+//		if(myRigidbody){
+//			myRigidbody.MovePosition (newPos);
+//		}
+//		else{
+//			transform.position = newPos;
+//		}
 	}
 
 }
