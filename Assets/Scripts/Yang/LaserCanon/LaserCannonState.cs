@@ -195,8 +195,11 @@ public class LaserCannonState : MonoBehaviour {
 		yield return new WaitForFixedUpdate ();
 		yield return new WaitForFixedUpdate ();
 		shootLaserLine.SetLaserState (true);
+        // ye added
 
-		damaging = true;
+        GetComponent<ItalianGunSound>().ShootSound(lifeTime);
+
+        damaging = true;
 		//		yield return new WaitForSeconds (fadeSeconds);
 		//		damaging = true;
 		//
@@ -208,6 +211,10 @@ public class LaserCannonState : MonoBehaviour {
 		damaging = false;
 		shootLaserLine.laserRotationEnabled = false;
 		shootLaserLine.SetLaserState (false);
+
+
+
+
 		shootLaserLine.OnLaserHitTriggered -= HurtTarget;
 
 		animator.SetTrigger ("finishShoot");
