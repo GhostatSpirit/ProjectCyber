@@ -16,7 +16,8 @@ public class LCEnemyAim : StateMachineBehaviour {
 			state.aimLaser.gameObject.SetActive (true);
 		}
 		if(status){
-			status.EnableServerLine (state.playerLastPos);
+			 status.EnableServerLine (state.playerLastPos);
+
 		}
 	}
 

@@ -238,4 +238,6 @@ public class LaserCannonState : MonoBehaviour {
 			animator.SetBool ("playerInSight", false);
 		}
 	}
+
+	public float rotateSpeedFactor = 1f;
 }
