@@ -17,14 +17,18 @@ public class BulletHit : MonoBehaviour {
 
 	bool reproduced = false;
 
+	[HideInInspector] public Vector3 initVelocity;
+
 	Rigidbody2D body;
 
 	void Start(){
+//		initVelocity = Vector3.zero;
 		body = GetComponent<Rigidbody2D> ();
 	}
 
 
 	void OnCollisionEnter2D(Collision2D coll){
+
 		ObjectIdentity oi = coll.transform.GetComponentInParent<ObjectIdentity> ();
 		if(oi == null){
 			return;
@@ -131,7 +135,8 @@ public class BulletHit : MonoBehaviour {
 			// it the door is not controlled by the boss...
 			RoombaBehaviour roomba = targetTrans.GetComponent<RoombaBehaviour> ();
 			if(roomba){
-				roomba.incomingVelocity = body.velocity;
+				Debug.Log (initVelocity);
+				roomba.incomingVelocity = initVelocity;
 			}
 
 			targetTrans.GetComponentInParent<ControlStatus> ().controller = Controller.Hacker;

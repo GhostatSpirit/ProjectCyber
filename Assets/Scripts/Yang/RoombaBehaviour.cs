@@ -37,16 +37,16 @@ public class RoombaBehaviour : MonoBehaviour {
 
 
 	[ReadOnly]public  Vector3 _incomingVelocity;
-	bool setIncomingVelocity = false;
+	[ReadOnly]public bool canSetIncomingVelocity = true;
 
 	public Vector3 incomingVelocity{
 		get{
 			return _incomingVelocity;
 		}
 		set{
-			if(!setIncomingVelocity){
+			if(canSetIncomingVelocity){
 				_incomingVelocity = value;
-				setIncomingVelocity = true;
+				canSetIncomingVelocity = false;
 			}
 		}
 	}
@@ -80,8 +80,11 @@ public class RoombaBehaviour : MonoBehaviour {
 			animator.SetTrigger ("enemyLink");
 		}
 
-		_incomingVelocity = Vector3.zero;
-		setIncomingVelocity = false;
+		if (_incomingVelocity == Vector3.zero) {
+			_incomingVelocity = Vector3.up;
+		}
+
+		canSetIncomingVelocity = true;
 	}
 	
 	// Update is called once per frame
@@ -285,7 +288,36 @@ public class RoombaBehaviour : MonoBehaviour {
 		}
 		// if not, send a explode trigger to animator
 		animator.SetTrigger ("explode");
+		Debug.Log ("explode set");
 		checkCollision = false;
 	}
 
+
+	public Vector3 GetLaserContact(Vector3 start, Vector3 end, LayerMask mask){
+		ContactFilter2D filter = new ContactFilter2D ();
+		filter.useTriggers = false;
+		filter.useLayerMask = true;
+		filter.useDepth = false;
+		filter.useNormalAngle = false;
+		filter.SetLayerMask (mask);
+
+		Vector3 dir = (end - start).normalized;
+		float dist = (end - start).magnitude;
+		RaycastHit2D[] hits = new RaycastHit2D[1];
+		int count = Physics2D.Raycast (start, dir, filter, hits, dist);
+
+		if(count == 0){
+			return end;
+		}
+		else{
+			return hits [0].point;
+		}
+	}
+
+
+	void OnDrawGizmos() {
+		Gizmos.color = Color.red;
+		Gizmos.DrawLine(transform.position, transform.position + incomingVelocity);
+
+	}
 }
