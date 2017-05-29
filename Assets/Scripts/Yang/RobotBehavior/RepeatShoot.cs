@@ -55,6 +55,11 @@ public class RepeatShoot : MonoBehaviour {
 		if(!bulletPrefab){
 			return;
 		}
+
+        // ye added shoot sound
+
+        GetComponent<RobotShootSound>().RobotShoot();
+
 		GameObject bullet = Instantiate (bulletPrefab, transform.position, transform.rotation);
 
 
