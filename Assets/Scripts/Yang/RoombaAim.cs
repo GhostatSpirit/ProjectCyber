@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class RoombaAim : StateMachineBehaviour {
 	RoombaBehaviour roomba;
+	FieldOfView fov;
 
 	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 		roomba = animator.GetComponent<RoombaBehaviour> ();
+		fov = animator.GetComponent<FieldOfView> ();
 		roomba.StartAim ();
 		// turn on aim laser
 		roomba.TurnOnAim ();
@@ -15,7 +17,9 @@ public class RoombaAim : StateMachineBehaviour {
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		roomba.UpdateAim ();
+		if (roomba.cs.controller == Controller.Boss) {
+			roomba.UpdateAim ();
+		}
 	}
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
