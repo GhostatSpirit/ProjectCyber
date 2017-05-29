@@ -86,6 +86,14 @@ public class PlayerShoot : MonoBehaviour {
 
 			// set init velocity of the bullet
 			bulletObj.GetComponent<Rigidbody2D> ().velocity = bulletObj.transform.up.normalized * initialVelocity;
+
+			BulletHit bulletHit = bulletObj.GetComponent<BulletHit> ();
+			if(bulletHit){
+				Debug.Log ("Set init velo");
+				bulletHit.initVelocity = transform.up.normalized;
+
+				// Debug.Log (bulletObj.transform.up.normalized);
+			}
 			// tell the bulletObj the init velocity
 			//bulletObj.GetComponent<BulletDeflect> ().initialVelocity = initialVelocity;
 		}

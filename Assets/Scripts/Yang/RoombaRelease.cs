@@ -24,8 +24,9 @@ public class RoombaRelease : StateMachineBehaviour {
 		if (roomba.cs.controller == Controller.Boss) {
 			targetDir = (targetPos - animator.transform.position).normalized;
 		} else if(roomba.cs.controller == Controller.Hacker) {
-			Debug.Log (targetDir);
+			
 			targetDir = roomba.incomingVelocity.normalized;
+			Debug.Log (targetDir);
 		}
 
 		roomba.body.velocity = targetDir * roomba.thrust;
