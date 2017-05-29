@@ -38,6 +38,7 @@ public class FacingSpriteSwitcher : MonoBehaviour {
 
 
 	public bool newPerspective = false;
+	public bool switchInUpdate = true;
 
 	SpriteRenderer mySpriteRenderer;
 	// Use this for initialization
@@ -60,6 +61,12 @@ public class FacingSpriteSwitcher : MonoBehaviour {
 		
 	// Update is called once per frame
 	void Update () {
+		if(facing.magnitude > 0f && switchInUpdate){
+			UpdateSprite (faceDirection);
+		}
+	}
+
+	public void UpdateSprite(){
 		if(facing.magnitude > 0f){
 			UpdateSprite (faceDirection);
 		}
