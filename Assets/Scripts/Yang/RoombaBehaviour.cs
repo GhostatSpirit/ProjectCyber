@@ -14,9 +14,9 @@ public class RoombaBehaviour : MonoBehaviour {
 	public SpritePair aimPointSP;
 	public ColorPair aimColorCP;
 
-	public GameObject explosion;
-	public Transform explosionParent;
-	public float explosionDelay = 1f;
+//	public GameObject explosion;
+//	public Transform explosionParent;
+//	public float explosionDelay = 1f;
 
 	[HideInInspector] public Rigidbody2D body;
 	FieldOfView fov;
@@ -209,42 +209,42 @@ public class RoombaBehaviour : MonoBehaviour {
 		lu.DisableLine ();
 	}
 
-	Coroutine explosionCoroutine;
-
-	public void StartExplosion(){
-		if(explosionCoroutine == null){
-			explosionCoroutine = StartCoroutine (StartExplosionIE());
-		}
-	}
-
-	public void StopExplosion(){
-		if(explosionCoroutine != null){
-			StopCoroutine (explosionCoroutine);
-			explosionCoroutine = null;
-		}
-	}
-
-	IEnumerator StartExplosionIE(){
-		// stop the roomba from moving
-		body.velocity = Vector3.zero;
-
-		yield return new WaitForSeconds (explosionDelay);
-
-		if(explosion != null){
-			DisableLine ();
-			GameObject explosionGO = Instantiate (explosion, transform.position, 
-				Quaternion.Euler (0f, 0f, 0f), explosionParent);
-			ParticleLayerSetter setter = explosionGO.GetComponentInChildren<ParticleLayerSetter> ();
-			SpriteRenderer sr = animator.GetComponent<SpriteRenderer> ();
-
-			if(setter && sr){
-				setter.SetSortingLayer (sr.sortingLayerID);
-			}
-			Destroy (animator.gameObject);
-		}
-
-		explosionCoroutine = null;
-	}
+//	Coroutine explosionCoroutine;
+//
+//	public void StartExplosion(){
+//		if(explosionCoroutine == null){
+//			explosionCoroutine = StartCoroutine (StartExplosionIE());
+//		}
+//	}
+//
+//	public void StopExplosion(){
+//		if(explosionCoroutine != null){
+//			StopCoroutine (explosionCoroutine);
+//			explosionCoroutine = null;
+//		}
+//	}
+//
+//	IEnumerator StartExplosionIE(){
+//		// stop the roomba from moving
+//		body.velocity = Vector3.zero;
+//
+//		yield return new WaitForSeconds (explosionDelay);
+//
+//		if(explosion != null){
+//			DisableLine ();
+//			GameObject explosionGO = Instantiate (explosion, transform.position, 
+//				Quaternion.Euler (0f, 0f, 0f), explosionParent);
+//			ParticleLayerSetter setter = explosionGO.GetComponentInChildren<ParticleLayerSetter> ();
+//			SpriteRenderer sr = animator.GetComponent<SpriteRenderer> ();
+//
+//			if(setter && sr){
+//				setter.SetSortingLayer (sr.sortingLayerID);
+//			}
+//			Destroy (animator.gameObject);
+//		}
+//
+//		explosionCoroutine = null;
+//	}
 
 	// fields and functions for RoombaExplosion
 	[ReadOnly] public bool checkCollision = false;

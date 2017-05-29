@@ -6,7 +6,7 @@ public class RobotMovementAnim : MonoBehaviour {
 
     bool moveBool;
     Animator anim;
-    Vector2 moveVector = new Vector2(0, 0);
+//    Vector2 moveVector = new Vector2(0, 0);
 
 	Vector3 lastFramePos;
 
@@ -15,14 +15,14 @@ public class RobotMovementAnim : MonoBehaviour {
 
 	[ReadOnly] public float moveSpeed = 0f;
 
-	FacingSpriteSwitcher switcher;
+//	FacingSpriteSwitcher switcher;
 
     // Use this for initialization
     void Start () {
         anim = GetComponentInParent<Animator>();
 		lastFramePos = transform.position;
 
-		switcher = GetComponent<FacingSpriteSwitcher> ();
+		//switcher = GetComponent<FacingSpriteSwitcher> ();
     }
 
     // updated version

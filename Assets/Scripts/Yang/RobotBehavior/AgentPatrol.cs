@@ -98,11 +98,17 @@ public class AgentPatrol : MonoBehaviour {
 	void OnEnable(){
 		agent.OnDestinationReached += ReachedNodeTrigger;
 		agent.OnDestinationInvalid += PrintDestInvalid;
+		agent.OnDestinationInvalid += ForceReachedDest;
 	}
 
 	void OnDisable(){
 		agent.OnDestinationReached -= ReachedNodeTrigger;
 		agent.OnDestinationInvalid -= PrintDestInvalid;
+		agent.OnDestinationInvalid -= ForceReachedDest;
+	}
+
+	void ForceReachedDest(){
+		animator.SetTrigger ("reachedDest");
 	}
 
 	public void ReachedNodeTrigger(){
