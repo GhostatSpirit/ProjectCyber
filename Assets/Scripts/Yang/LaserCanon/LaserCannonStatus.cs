@@ -58,6 +58,8 @@ public class LaserCannonStatus : MonoBehaviour {
 			cs.Boss = picker.GetFarthestFrom (lastPlayerPos);
 		}
 		StartCoroutine (EnableLineIE ());
+
+		lineUpdate.DisableLine ();
 	}
 
 	public void DisableServerLine(){

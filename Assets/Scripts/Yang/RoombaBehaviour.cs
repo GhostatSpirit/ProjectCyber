@@ -14,9 +14,9 @@ public class RoombaBehaviour : MonoBehaviour {
 	public SpritePair aimPointSP;
 	public ColorPair aimColorCP;
 
-	public GameObject explosion;
-	public Transform explosionParent;
-	public float explosionDelay = 1f;
+//	public GameObject explosion;
+//	public Transform explosionParent;
+	public float explosionDelay = 0.5f;
 
 	[HideInInspector] public Rigidbody2D body;
 	FieldOfView fov;
@@ -34,6 +34,23 @@ public class RoombaBehaviour : MonoBehaviour {
 				return cs.controller;
 		}
 	}
+
+
+	[ReadOnly]public  Vector3 _incomingVelocity;
+	bool setIncomingVelocity = false;
+
+	public Vector3 incomingVelocity{
+		get{
+			return _incomingVelocity;
+		}
+		set{
+			if(!setIncomingVelocity){
+				_incomingVelocity = value;
+				setIncomingVelocity = true;
+			}
+		}
+	}
+
 
 	// Use this for initialization
 	void Start () {
@@ -62,6 +79,9 @@ public class RoombaBehaviour : MonoBehaviour {
 		if(cs.controller == Controller.Boss){
 			animator.SetTrigger ("enemyLink");
 		}
+
+		_incomingVelocity = Vector3.zero;
+		setIncomingVelocity = false;
 	}
 	
 	// Update is called once per frame
@@ -105,14 +125,26 @@ public class RoombaBehaviour : MonoBehaviour {
 			StartCoroutine (TurnOnAimIE ());
 			break;
 		case Controller.Hacker:
-			SetPlayerAim ();
-			aimPointSP.trans.GetComponent<AimLaserUpdate> ().targetPos = targetLastPos;
-			aimPointSP.trans.GetComponent<AimLaserUpdate> ().SnapPosition ();
-			aimPointSP.trans.position = targetLastPos;
-			StartCoroutine (TurnOnAimIE ());
-			break;
+			{
+//			SetPlayerAim ();
+//			aimPointSP.trans.GetComponent<AimLaserUpdate> ().targetPos = targetLastPos;
+//			aimPointSP.trans.GetComponent<AimLaserUpdate> ().SnapPosition ();
+//			aimPointSP.trans.position = targetLastPos;
+//			StartCoroutine (TurnOnAimIE ());
+				SetPlayerAim ();
+				// calculate the aim position through incoming velocity
+				Vector3 newAimPos = transform.position + incomingVelocity.normalized * fov.radius;
+				aimPointSP.trans.GetComponent<AimLaserUpdate> ().targetPos = newAimPos;
+				aimPointSP.trans.GetComponent<AimLaserUpdate> ().SnapPosition ();
+				aimPointSP.trans.position = newAimPos;
+				StartCoroutine (TurnOnAimIE ());
+				break;
+			}
 		}
 	}
+
+	
+
 
 	IEnumerator TurnOnAimIE(){
 		yield return new WaitForFixedUpdate ();
@@ -210,8 +242,8 @@ public class RoombaBehaviour : MonoBehaviour {
 	}
 
 	Coroutine explosionCoroutine;
-
-	public void StartExplosion(){
+//
+	public void TryStartExplosion(){
 		if(explosionCoroutine == null){
 			explosionCoroutine = StartCoroutine (StartExplosionIE());
 		}
@@ -230,17 +262,10 @@ public class RoombaBehaviour : MonoBehaviour {
 
 		yield return new WaitForSeconds (explosionDelay);
 
-		if(explosion != null){
+		HealthSystem hs = GetComponent<HealthSystem> ();
+		if(hs){
 			DisableLine ();
-			GameObject explosionGO = Instantiate (explosion, transform.position, 
-				Quaternion.Euler (0f, 0f, 0f), explosionParent);
-			ParticleLayerSetter setter = explosionGO.GetComponentInChildren<ParticleLayerSetter> ();
-			SpriteRenderer sr = animator.GetComponent<SpriteRenderer> ();
-
-			if(setter && sr){
-				setter.SetSortingLayer (sr.sortingLayerID);
-			}
-			Destroy (animator.gameObject);
+			hs.InstantDead ();
 		}
 
 		explosionCoroutine = null;

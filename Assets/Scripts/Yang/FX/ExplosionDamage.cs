@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using System.Collections.ObjectModel;
 
 
 public class ExplosionDamage : MonoBehaviour {
@@ -10,6 +12,8 @@ public class ExplosionDamage : MonoBehaviour {
 
 	public float magnitude = 100f;
 
+	public event Action<Transform> OnExplosionEnd;
+
 	[Range(0f, 5f)]
 	public float delay = 0f;
 	[Range(0f, 10f)]
@@ -18,13 +22,13 @@ public class ExplosionDamage : MonoBehaviour {
 	public TypeDamagePair[] DamageOtherList;
 	Dictionary<ObjectType, float> DamageOtherDict = new Dictionary<ObjectType, float>();
 
-	//Collider2D explosionArea;
+	CircleCollider2D explosionArea;
 
 	ContactFilter2D raycastFilter;
 
 	// Use this for initialization
 	IEnumerator Start () {
-		//explosionArea = GetComponent<Collider2D> ();
+		explosionArea = GetComponent<CircleCollider2D> ();
 
 		foreach (TypeDamagePair pair in DamageOtherList){
 			DamageOtherDict.Add (pair.type, pair.damage);
@@ -42,15 +46,25 @@ public class ExplosionDamage : MonoBehaviour {
 
 	IEnumerator EndExplosionIE(){
 		yield return new WaitForSeconds (duration);
+		if(OnExplosionEnd != null){
+			OnExplosionEnd (this.transform);
+		}
 		enabled = false;
 	}
 
 	void FixedUpdate(){
-		Vector3 tempOffset = new Vector3 (offset.x, offset.y, 0f);
-		Vector3 explosionCenter = transform.position + tempOffset;
+		Vector3 localOffset = new Vector3 (explosionArea.offset.x, explosionArea.offset.y, 0f);
+		float localRadius = explosionArea.radius;
+		Vector3 localRadiusVec = new Vector3 (localRadius, 0f, 0f);
+
+		Vector3 globalOffset = transform.TransformVector (localOffset);
+		float globalRadius = transform.TransformVector (localRadiusVec).x;
+
+		Vector3 explosionCenter = transform.position + globalOffset;
+
 
 		Collider2D[] hitColliders = 
-			Physics2D.OverlapCircleAll (explosionCenter, radius, layerMask);
+			Physics2D.OverlapCircleAll (explosionCenter, globalRadius, layerMask);
 		if (hitColliders.Length != 0) {
 			// we actually hit something here
 			foreach (Collider2D coll in hitColliders) {

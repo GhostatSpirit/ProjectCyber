@@ -38,7 +38,9 @@ public class LightTowerBehaviour : MonoBehaviour {
 			fullLightSR.color = newColor;
 
             // ye added lightsound
-            audioS.PlayOneShot(audioS.clip);
+			if (audioS) {
+				audioS.PlayOneShot (audioS.clip);
+			}
 
 			// turn on spriteRenderer
 			fullLightSR.enabled = true;

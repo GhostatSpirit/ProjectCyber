@@ -60,7 +60,7 @@ public class LCEnemyShoot : StateMachineBehaviour {
 		Vector3 targetDir = (state.playerLastPos - state.shootLaser.position).normalized;
 
 		if(targetDir.magnitude != 0f){
-			float step = rotateLaserSpeed * Time.deltaTime;	
+			float step = rotateLaserSpeed * Time.deltaTime * state.rotateSpeedFactor;	
 			state.shootLaser.right = 
 				Vector3.RotateTowards(state.shootLaser.right, targetDir, step, Mathf.Infinity);
 		}

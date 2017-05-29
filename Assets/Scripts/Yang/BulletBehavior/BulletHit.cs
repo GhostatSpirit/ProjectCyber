@@ -17,6 +17,12 @@ public class BulletHit : MonoBehaviour {
 
 	bool reproduced = false;
 
+	Rigidbody2D body;
+
+	void Start(){
+		body = GetComponent<Rigidbody2D> ();
+	}
+
 
 	void OnCollisionEnter2D(Collision2D coll){
 		ObjectIdentity oi = coll.transform.GetComponentInParent<ObjectIdentity> ();
@@ -46,6 +52,11 @@ public class BulletHit : MonoBehaviour {
 				DefaultBehaviour (coll);
 				break;
 			}
+		case ObjectType.Roomba:{
+				HitRoombaBehaviour (coll);
+				break;
+			}
+		
 		default:{
 				DefaultBehaviour (coll);
 				break;
@@ -106,6 +117,24 @@ public class BulletHit : MonoBehaviour {
 		}
 		else{
 			coll.transform.GetComponent<Animator> ().SetTrigger ("paralyzed");
+		}
+	}
+
+	void HitRoombaBehaviour(Collision2D coll){
+		Transform targetTrans = coll.transform;
+
+		ControlStatus cs = targetTrans.GetComponentInParent<ControlStatus> ();
+		if(!cs){
+			return;
+		}
+		if (NotControlled (targetTrans)){
+			// it the door is not controlled by the boss...
+			RoombaBehaviour roomba = targetTrans.GetComponent<RoombaBehaviour> ();
+			if(roomba){
+				roomba.incomingVelocity = body.velocity;
+			}
+
+			targetTrans.GetComponentInParent<ControlStatus> ().controller = Controller.Hacker;
 		}
 	}
 		

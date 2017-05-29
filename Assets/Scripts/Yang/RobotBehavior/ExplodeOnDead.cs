@@ -11,6 +11,10 @@ public class ExplodeOnDead : MonoBehaviour {
 
 	public bool stopMovement = true;
 
+	public bool scaleExplosion = false;
+	[Range(1f, 2f)]
+	public float radiusFactor = 1f;
+
 	HealthSystem hs;
 	Rigidbody2D body;
 	LineUpdate lu;
@@ -52,9 +56,15 @@ public class ExplodeOnDead : MonoBehaviour {
 			}
 
 			GameObject explosionGO = Instantiate (explosion, transform.position, 
-				Quaternion.Euler (0f, 0f, 0f), explosionParent);
+				Quaternion.Euler (0f, 0f, 0f), null);
 			ParticleLayerSetter setter = explosionGO.GetComponentInChildren<ParticleLayerSetter> ();
 			SpriteRenderer sr = GetComponent<SpriteRenderer> ();
+
+			if (scaleExplosion) {
+				explosionGO.transform.localScale = transform.lossyScale;
+			}
+
+			explosionGO.transform.parent = explosionParent;
 
 			if(setter && sr){
 				setter.SetSortingLayer (sr.sortingLayerID);

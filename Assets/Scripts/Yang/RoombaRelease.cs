@@ -20,7 +20,13 @@ public class RoombaRelease : StateMachineBehaviour {
 //				targetPos = shootPos + (Vector3)(rb.velocity * fadeSeconds);
 //			}
 //		}
-		Vector3 targetDir = (targetPos - animator.transform.position).normalized;
+		Vector3 targetDir = animator.transform.up;
+		if (roomba.cs.controller == Controller.Boss) {
+			targetDir = (targetPos - animator.transform.position).normalized;
+		} else if(roomba.cs.controller == Controller.Hacker) {
+			Debug.Log (targetDir);
+			targetDir = roomba.incomingVelocity.normalized;
+		}
 
 		roomba.body.velocity = targetDir * roomba.thrust;
 

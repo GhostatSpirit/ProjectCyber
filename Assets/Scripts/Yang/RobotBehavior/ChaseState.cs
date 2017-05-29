@@ -6,6 +6,7 @@ public class ChaseState : StateMachineBehaviour {
 	AgentPatrol ap;
 	PolyNavAgent agent;
 	RepeatShoot shoot;
+
 	[Range(0f, 45f)]
 	public float startShootAngle = 5f;
 
@@ -41,7 +42,6 @@ public class ChaseState : StateMachineBehaviour {
 		// SetNewAgent ();
 
 		agent.SetDestination (ap.playerLastPos);
-
 
 		if(shoot){
 			UpdateTargetPos ();
@@ -136,6 +136,15 @@ public class ChaseState : StateMachineBehaviour {
 	void UpdateTargetPos(){
 		shoot.targetPos = ap.playerLastPos;
 	}
+
+
+//	void JumpToWaitStatus(){
+//		Animator savedAnimator = agent.transform.GetComponent<Animator> ();
+//		if(savedAnimator){
+//			savedAnimator.SetTrigger ("reachedDest");
+//		}
+//	}
+
 	// OnStateMove is called right after Animator.OnAnimatorMove(). Code that processes and affects root motion should be implemented here
 	//override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 	//

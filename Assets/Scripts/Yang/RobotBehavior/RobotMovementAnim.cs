@@ -6,11 +6,23 @@ public class RobotMovementAnim : MonoBehaviour {
 
     bool moveBool;
     Animator anim;
-    Vector2 moveVector = new Vector2(0, 0);
+//    Vector2 moveVector = new Vector2(0, 0);
+
+	Vector3 lastFramePos;
+
+	public float speedFactor = 1f;
+	public float minMoveSpeed = 0.1f;
+
+	[ReadOnly] public float moveSpeed = 0f;
+
+//	FacingSpriteSwitcher switcher;
 
     // Use this for initialization
     void Start () {
         anim = GetComponentInParent<Animator>();
+		lastFramePos = transform.position;
+
+		//switcher = GetComponent<FacingSpriteSwitcher> ();
     }
 
     // updated version
@@ -72,6 +84,10 @@ public class RobotMovementAnim : MonoBehaviour {
     void Update()
     {
 
+		moveSpeed = Vector3.Distance (lastFramePos, transform.position) / Time.deltaTime * speedFactor;
+
+		// Debug.Log (speed);
+
         // float horizontal = myInputDevice.LeftStickX;
         // float vertical = myInputDevice.LeftStickY;
 
@@ -86,11 +102,12 @@ public class RobotMovementAnim : MonoBehaviour {
         }
         */
         // Magnitude != 0, set moving 
-        if (transform)
+		if (moveSpeed >= 0f)
         {
             // GetComponent<FacingSpriteSwitcher>().enabled = false;
             // Set moving
             anim.SetBool("Moving", true);
+			anim.SetFloat ("moveSpeed", moveSpeed);
 
             Direction dir = Vector2NewDirection ( GetComponent<FacingSpriteSwitcher>().facing );
             switch (dir)
@@ -129,7 +146,10 @@ public class RobotMovementAnim : MonoBehaviour {
                     break;
             }
 
-        }
+		} 
+
+		lastFramePos = transform.position;
+
         /*
         if (moveVector.magnitude == 0)
         {
