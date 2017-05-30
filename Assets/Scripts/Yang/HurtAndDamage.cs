@@ -89,6 +89,12 @@ public class HurtAndDamage : MonoBehaviour {
 
 	void HurtDamageLogic(Collision2D coll){
 
+		if(isBullet && selfHealthSystem ){
+			selfHealthSystem.isImmune = false;
+			selfHealthSystem.InstantDead ();
+		}
+
+
 		ObjectIdentity oi = coll.transform.GetComponent<ObjectIdentity> ();
 		if(oi != null && ignoredTypeList.Contains(oi.objType)){
 			// the target is ignored
@@ -144,10 +150,7 @@ public class HurtAndDamage : MonoBehaviour {
 			}
 		}
 
-		if(isBullet && selfHealthSystem && VerifyHurtSelf(coll.transform) ){
-			
-			selfHealthSystem.InstantDead ();
-		}
+
 
 	}
 

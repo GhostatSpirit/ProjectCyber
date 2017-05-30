@@ -248,6 +248,11 @@ public class RoombaBehaviour : MonoBehaviour {
 //
 	public void TryStartExplosion(){
 		if(explosionCoroutine == null){
+			Rigidbody2D body = GetComponent<Rigidbody2D> ();
+			if(body){
+				body.velocity = Vector3.zero;
+			}
+
 			explosionCoroutine = StartCoroutine (StartExplosionIE());
 		}
 	}
