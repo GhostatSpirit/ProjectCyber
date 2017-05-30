@@ -13,11 +13,15 @@ public class VirusPosReceiver : MonoBehaviour {
 
 	public bool usingStraight = false;
 
+	FieldOfView fov;
+
 	float rotSpeedFactor;
 	Rigidbody2D myRigidbody;
 
 	// Use this for initialization
 	void Start () {
+		fov = GetComponent<FieldOfView> ();
+
 		if(transform.parent != null){
 			desiredPos = transform.parent.position;
 		}
@@ -44,35 +48,45 @@ public class VirusPosReceiver : MonoBehaviour {
 	void FixedUpdate(){
 		// set rotation
 		// float finalRotSpeed = rotSpeed * rotSpeedFactor * Time.fixedDeltaTime;
-		if(instantRot){
-			transform.rotation = desiredRot;
+		if (!usingStraight) {
+			if (instantRot) {
+				transform.rotation = desiredRot;
+			} else {
+				transform.rotation = 
+					Quaternion.Lerp (transform.rotation, desiredRot, Time.fixedDeltaTime * rotSpeed);
+				//transform.rotation =
+				//	Quaternion.RotateTowards (transform.rotation, desiredRot, finalRotSpeed);
+			}
 		}
-		else{
-			transform.rotation = 
-				Quaternion.Lerp (transform.rotation, desiredRot, Time.fixedDeltaTime * rotSpeed);
-			//transform.rotation =
-			//	Quaternion.RotateTowards (transform.rotation, desiredRot, finalRotSpeed);
+		else {
+			if(fov){
+				Quaternion targetRot;
+				if (instantRot) {
+					targetRot = desiredRot;
+				} else {
+					targetRot = 
+						Quaternion.Lerp (transform.rotation, desiredRot, Time.fixedDeltaTime * rotSpeed);
+					//transform.rotation =
+					//	Quaternion.RotateTowards (transform.rotation, desiredRot, finalRotSpeed);
+				}
+				Vector3 newFacing = targetRot * Vector3.up;
+				fov.facing = newFacing;
+			}
 		}
 
 		// set position
 
 		
 
-
-		if(usingStraight){
-			Vector3 newPos = 
-				Vector3.Lerp (transform.parent.position, desiredPos, Time.fixedDeltaTime * moveSpeed);
-			transform.parent.position = newPos;
-		} else{
-			Vector3 newPos = 
-				Vector3.Lerp (transform.position, desiredPos, Time.fixedDeltaTime * moveSpeed);
-			if(myRigidbody){
-				myRigidbody.MovePosition (newPos);
-			}
-			else{
-				transform.position = newPos;
-			}
+		Vector3 newPos = 
+			Vector3.Lerp (transform.position, desiredPos, Time.fixedDeltaTime * moveSpeed);
+		if(myRigidbody){
+			myRigidbody.MovePosition (newPos);
 		}
+		else{
+			transform.position = newPos;
+		}
+
 //		if(myRigidbody){
 //			myRigidbody.MovePosition (newPos);
 //		}

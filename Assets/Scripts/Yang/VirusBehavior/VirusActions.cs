@@ -90,11 +90,13 @@ public class VirusActions : MonoBehaviour {
 		cs.OnCutByPlayer += StopMovement;
 		//cs.OnCutByPlayer += ChangeLayerToFriend;
 		cs.OnCutByPlayer += StartImmune;
+		cs.OnCutByPlayer += UnsetIsBullet;
 
 		//OnCutByEnemy = null;
 		cs.OnCutByEnemy += ChaseNone;
 		cs.OnCutByEnemy += StopMovement;
 		cs.OnCutByEnemy += StartImmune;
+		cs.OnCutByEnemy += UnsetIsBullet;
 
 		//OnLinkedByPlayer = null;
 		cs.OnLinkedByPlayer += ChaseBoss;
@@ -255,5 +257,7 @@ public class VirusActions : MonoBehaviour {
 		this.transform.SetParent(cs.Boss);
 	}
 
-
+	void UnsetIsBullet(Transform objTrans){
+		hd.isBullet = false;
+	}
 }

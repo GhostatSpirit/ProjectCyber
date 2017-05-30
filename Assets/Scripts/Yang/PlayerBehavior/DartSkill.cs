@@ -45,6 +45,7 @@ public class DartSkill : MonoBehaviour {
 	LineCut linecut;
 	// HeathSys class, enabling immune when darting
 	HealthSystem healthSys;
+	HurtAndDamage hd;
 	public float extraImmuneTime = 0.5f;
 
     // add for charging dart
@@ -62,6 +63,7 @@ public class DartSkill : MonoBehaviour {
 
 		linecut = GetComponent<LineCut> ();
 		healthSys = GetComponent<HealthSystem>();
+		hd = GetComponent<HurtAndDamage> ();
 	}
 	
 	// Update is called once per frame
@@ -118,6 +120,10 @@ public class DartSkill : MonoBehaviour {
 				healthSys.StartImmune();
 				healthSys.StartHarmless ();
 			}
+
+			if(hd){
+				hd.canHurtOther = false;
+			}
 		}
 
 		timer += Time.deltaTime;
@@ -153,6 +159,10 @@ public class DartSkill : MonoBehaviour {
 
 			// end the immune buff 
 			Invoke ("EndImmune", extraImmuneTime);
+
+			if(hd){
+				hd.canHurtOther = true;
+			}
 		}
 
 	}

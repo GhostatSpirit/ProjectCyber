@@ -19,6 +19,8 @@ using DG.Tweening;
 public class HealthSystem : MonoBehaviour {
 	public float maxHealth = 100f;
 
+	public bool hasImmunuePeriod = true;
+
 	[Range(0f, Mathf.Infinity)]
 	public float hurtImmunePeriod = 1.5f;
 	public Color hurtColor = new Color32 (255, 107, 107, 255);
@@ -94,23 +96,30 @@ public class HealthSystem : MonoBehaviour {
 
 	IEnumerator	HurtImmuneIE(){
 		// start the immune period
-		StartImmune (false);
+		if (hasImmunuePeriod) {
+			StartImmune (false);
+		}
 		if(sr){
 			// multiply flash count by 2 to ensure the color gets back to the original
 			sr.DOColor(hurtColor, hurtImmunePeriod).SetEase(Ease.OutFlash, 2 * flashCount, 0);
 		}
 		yield return new WaitForSeconds (hurtImmunePeriod);
-		EndImmune (false);
+
+		if (hasImmunuePeriod) {
+			EndImmune (false);
+		}
+
 		HurtCoroutine = null;
 	}
-
-
+		
 
 	void StartHurtBehaviour(){
 		if(HurtCoroutine == null && hurtImmunePeriod > 0f){
 			HurtCoroutine = StartCoroutine (HurtImmuneIE ());
 		}
 	}
+
+
 
 	/* public exposed methods for managing health */
 	/**********************************************/
@@ -159,8 +168,10 @@ public class HealthSystem : MonoBehaviour {
 
 	/* instantly kill this object, making its health to 0 */
 	public void InstantDead(){
-		objHealth = 0f;
-		isDead = true;
+		if (!isImmune) {
+			objHealth = 0f;
+			isDead = true;
+		}
 	}
 		
 	public void StartHarmless(bool setColor = true){

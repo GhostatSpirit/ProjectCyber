@@ -93,6 +93,9 @@ public class VirusStateControl : MonoBehaviour {
 	public float stopRotAngle = 20f;
 
 
+	public float rotMoveSpeedFactor = 0.2f;
+	public float rotRotSpeedFactor = 2f;
+
 	Vector3 releasePos;
 
 	void ResetActions(){
@@ -307,8 +310,8 @@ public class VirusStateControl : MonoBehaviour {
 	void StartRot(Transform virusTrans){
 		if(ct != null){
 			ct.enabled = true;
-			ct.rotationSpeed = defaultRotSpeed;
-			ct.moveSpeed = defaultMoveSpeed / 10f;
+			ct.rotationSpeed = defaultRotSpeed * rotRotSpeedFactor;
+			ct.moveSpeed = defaultMoveSpeed * rotMoveSpeedFactor;
 		}
 	}
 
