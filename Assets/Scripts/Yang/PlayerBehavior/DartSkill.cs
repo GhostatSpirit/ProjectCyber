@@ -33,7 +33,7 @@ public class DartSkill : MonoBehaviour {
 	float newColliderWidth;
 
 	// how much energy will one dart consume?
-	float energyConsume = 10f;
+	public float energyConsume = 10f;
 	PlayerEnergy energySys;
 
 	bool coolDown = true;
