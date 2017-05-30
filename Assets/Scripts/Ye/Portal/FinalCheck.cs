@@ -14,12 +14,13 @@ public class FinalCheck : MonoBehaviour {
         portal = transform.GetChild(0).gameObject;
         portal.SetActive(false);
         bossHS = boss.GetComponent<HealthSystem>();
+		bossHS.OnObjectDead += portalable;
         
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        bossHS.OnObjectDead += portalable;
+        
 	}
 
     Coroutine routine;

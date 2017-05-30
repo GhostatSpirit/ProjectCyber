@@ -232,9 +232,9 @@ public class HackerMovementAnim: MonoBehaviour {
             anim.SetBool("Moving", false);
 			anim.SetFloat ("moveSpeed", 0f);
 
-			switcher.enabled = true;
-			switcher.facing = lastFrameFacing;
-			switcher.UpdateSprite ();
+//			switcher.enabled = true;
+//			switcher.facing = lastFrameFacing;
+//			switcher.UpdateSprite ();
         }
     }
 
