@@ -111,11 +111,29 @@ public class HealthSystem : MonoBehaviour {
 
 		HurtCoroutine = null;
 	}
-		
+
+	public Coroutine HurtWithoutImmnueCoroutine;
+
+	IEnumerator HurtWithoutImmnueIE(){
+		if(sr){
+			// multiply flash count by 2 to ensure the color gets back to the original
+			sr.DOColor(hurtColor, hurtImmunePeriod).SetEase(Ease.OutFlash, 4 * flashCount, 0);
+		}
+		yield return new WaitForSeconds (hurtImmunePeriod);
+
+		HurtWithoutImmnueCoroutine = null;
+	}
+
 
 	void StartHurtBehaviour(){
 		if(HurtCoroutine == null && hurtImmunePeriod > 0f){
 			HurtCoroutine = StartCoroutine (HurtImmuneIE ());
+		}
+	}
+
+	void StartHurtWithoutImmnueBehaviour(){
+		if(HurtWithoutImmnueCoroutine == null && hurtImmunePeriod > 0f){
+			HurtWithoutImmnueCoroutine = StartCoroutine (HurtWithoutImmnueIE ());
 		}
 	}
 
@@ -143,6 +161,28 @@ public class HealthSystem : MonoBehaviour {
 			objHealth = tempHealth;
 		}
 	}
+
+	public void DamageWithoutImmnue(float deltaHealth){
+		if(isImmune)	return;
+		if (isDead)		return;
+
+		float tempHealth = objHealth;
+		tempHealth -= deltaHealth;
+		if(tempHealth <= 0f){
+			objHealth = 0f;
+			// the object is dead, call DeathHandler()
+			isDead = true;
+		} else{
+			if(OnObjectHurt != null){
+				OnObjectHurt (this.transform);
+			}
+			if (hurtImmunePeriod > 0f) {
+				StartHurtWithoutImmnueBehaviour ();
+			}
+			objHealth = tempHealth;
+		}
+	}
+
 
 	public void Heal(float deltaHealth){
 		// we cannot heal a dead object, use revive instead

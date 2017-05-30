@@ -16,7 +16,7 @@ public class HealthBag : MonoBehaviour {
     AudioSource audioS;
     // Collision2D collision;
 
-	private void OnCollisionEnter2D(Collision2D collision)
+	private void OnTriggerEnter2D(Collider2D collision)
 	{
 		// heal
 		PlayerHS = collision.gameObject.GetComponent<HealthSystem>();
@@ -44,13 +44,23 @@ public class HealthBag : MonoBehaviour {
 				}
 
 				PlayerHS.Heal (HealRatio * PlayerHS.maxHealth);
+
+
+				PlayerInteract interact = collision.transform.GetComponent<PlayerInteract> ();
+				Transform otherPlayer = interact.otherPlayer;
+				HealthSystem otherhs = otherPlayer.GetComponent<HealthSystem> ();
+				if(otherhs){
+					otherhs.Heal (HealRatio * PlayerHS.maxHealth);
+				}
+
+
 			}
 
 			Destroy(gameObject);
 		}
 		/*
-        PlayerHS.Heal(HealRatio * PlayerHS.maxHealth);
-        */
+//        PlayerHS.Heal(HealRatio * PlayerHS.maxHealth);
+//        */
 
 		// destory
 

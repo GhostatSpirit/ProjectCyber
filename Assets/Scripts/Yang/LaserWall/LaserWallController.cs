@@ -22,7 +22,7 @@ public class LaserWallController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		cs = GetComponent<ControlStatus> ();
-		wallLaser = laserWall.GetComponent<WallLaser> ();
+		wallLaser = laserWall.GetComponentInChildren<WallLaser> ();
 		if (laserWall != null) {
 			StartCoroutine (BindLaserWallActionIE ());
 		}
