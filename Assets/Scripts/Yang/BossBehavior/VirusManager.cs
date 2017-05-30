@@ -13,6 +13,8 @@ public class VirusManager : MonoBehaviour {
 	public float respawnRadius = 3f;
 
 	public float respawnDelay = 5f;
+
+	public float rotateFacingSpeed = 10f;
 	// the amount of virus that is alive for now
 	public int controlCount{
 		get{
@@ -54,36 +56,60 @@ public class VirusManager : MonoBehaviour {
 	void Start () {
 		fov = GetComponent<FieldOfView> ();
 
+		targetLastPos = transform.position + fov.facing * fov.radius;
+
 		if(totalCount == 0){
 			Respawn ();
 		}
 
 	}
-	
 	// Update is called once per frame
 	void Update () {
-		// set the facing
-		float dist = Mathf.Infinity;
-		Transform target = null;
-		foreach(Transform trans in targets){
-			float newDist = Vector3.Distance (trans.position, transform.position);
-			if(newDist < dist){
-				//Debug.Log ("iterating target");
-				dist = newDist;
-				target = trans;
-			}
-		}
-		if(target != null && fov != null){
-			//Debug.Log ("set facing");
-			Vector3 dir = target.position - transform.position;
-			dir.Normalize ();
-			fov.facing = dir;
-		}
+//		// set the facing
+//		float dist = Mathf.Infinity;
+//		Transform target = null;
+//		foreach(Transform trans in targets){
+//			float newDist = Vector3.Distance (trans.position, transform.position);
+//			if(newDist < dist){
+//				//Debug.Log ("iterating target");
+//				dist = newDist;
+//				target = trans;
+//			}
+//		}
+//		if(target != null && fov != null){
+//			//Debug.Log ("set facing");
+//			Vector3 dir = target.position - transform.position;
+//			dir.Normalize ();
+//			fov.facing = dir;
+//		}
 
 		if(respawnCoroutine == null){
 			if (controlCount == 0 && totalCount <= 3) {
 				respawnCoroutine = StartCoroutine (DelayRespawnIE (respawnDelay));
 			}
+		}
+	}
+
+	[ReadOnly]public Transform target;
+	[ReadOnly]public Vector3 targetLastPos;
+	[ReadOnly]public bool targetInSight = false;
+	void FixedUpdate(){
+		target = fov.ScanLeastRotationInSight (targets);
+
+		if(target){
+			targetLastPos = target.position;
+			targetInSight = true;
+		} else {
+			targetInSight = false;
+		}
+
+		// rotate towards the direction of the target
+		Vector3 targetDir = (targetLastPos - transform.position).normalized;
+
+		if(targetDir.magnitude != 0f){
+			float step = rotateFacingSpeed * Time.deltaTime;
+			fov.facing = 
+				Vector3.RotateTowards(fov.facing, targetDir, step, Mathf.Infinity);
 		}
 	}
 

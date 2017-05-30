@@ -10,6 +10,7 @@ public class VirusPosReceiver : MonoBehaviour {
 	public float rotSpeed = 80f;
 
 	public bool instantRot = false;
+	public bool instantMove = false;
 
 	public bool usingStraight = false;
 
@@ -75,11 +76,13 @@ public class VirusPosReceiver : MonoBehaviour {
 		}
 
 		// set position
-
-		
-
-		Vector3 newPos = 
-			Vector3.Lerp (transform.position, desiredPos, Time.fixedDeltaTime * moveSpeed);
+		Vector3 newPos;
+		if (instantMove) {
+			newPos = desiredPos;
+		} else {
+			newPos = 
+				Vector3.Lerp (transform.position, desiredPos, Time.fixedDeltaTime * moveSpeed);
+		}
 		if(myRigidbody){
 			myRigidbody.MovePosition (newPos);
 		}

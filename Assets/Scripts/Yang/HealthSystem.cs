@@ -40,7 +40,7 @@ public class HealthSystem : MonoBehaviour {
 	[ReadOnly]public float objHealth;
 
 	// whether this object is currently immune or not
-	bool isImmune = false;
+	[ReadOnly] public bool isImmune = false;
 	bool isHarmless = false;
 
 	bool _isDead = false;

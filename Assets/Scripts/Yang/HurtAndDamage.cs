@@ -145,6 +145,7 @@ public class HurtAndDamage : MonoBehaviour {
 		}
 
 		if(isBullet && selfHealthSystem && VerifyHurtSelf(coll.transform) ){
+			
 			selfHealthSystem.InstantDead ();
 		}
 
