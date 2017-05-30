@@ -160,9 +160,6 @@ public class DartSkill : MonoBehaviour {
 			// end the immune buff 
 			Invoke ("EndImmune", extraImmuneTime);
 
-			if(hd){
-				hd.canHurtOther = true;
-			}
 		}
 
 	}
@@ -197,14 +194,14 @@ public class DartSkill : MonoBehaviour {
         dartDuration = MinDuration;
 	}
 
-	void OnCollisionEnter2D(Collision2D coll){
-		if(coll.gameObject.tag == "AIEnemy" && darting){
-			// let the enemy die
-			coll.gameObject.GetComponent<DeathHandler> ().LetDead ();
-			// add the kill count by one
-			killCount++;
-		}
-
-	}
+//	void OnCollisionEnter2D(Collision2D coll){
+//		if(coll.gameObject.tag == "AIEnemy" && darting){
+//			// let the enemy die
+//			coll.gameObject.GetComponent<DeathHandler> ().LetDead ();
+//			// add the kill count by one
+//			killCount++;
+//		}
+//
+//	}
 
 }
