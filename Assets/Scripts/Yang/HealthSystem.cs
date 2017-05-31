@@ -19,6 +19,8 @@ using DG.Tweening;
 public class HealthSystem : MonoBehaviour {
 	public float maxHealth = 100f;
 
+	public bool hasImmunuePeriod = true;
+
 	[Range(0f, Mathf.Infinity)]
 	public float hurtImmunePeriod = 1.5f;
 	public Color hurtColor = new Color32 (255, 107, 107, 255);
@@ -38,7 +40,7 @@ public class HealthSystem : MonoBehaviour {
 	[ReadOnly]public float objHealth;
 
 	// whether this object is currently immune or not
-	bool isImmune = false;
+	[ReadOnly] public bool isImmune = false;
 	bool isHarmless = false;
 
 	bool _isDead = false;
@@ -94,16 +96,33 @@ public class HealthSystem : MonoBehaviour {
 
 	IEnumerator	HurtImmuneIE(){
 		// start the immune period
-		StartImmune (false);
+		if (hasImmunuePeriod) {
+			StartImmune (false);
+		}
 		if(sr){
 			// multiply flash count by 2 to ensure the color gets back to the original
 			sr.DOColor(hurtColor, hurtImmunePeriod).SetEase(Ease.OutFlash, 2 * flashCount, 0);
 		}
 		yield return new WaitForSeconds (hurtImmunePeriod);
-		EndImmune (false);
+
+		if (hasImmunuePeriod) {
+			EndImmune (false);
+		}
+
 		HurtCoroutine = null;
 	}
 
+	public Coroutine HurtWithoutImmnueCoroutine;
+
+	IEnumerator HurtWithoutImmnueIE(){
+		if(sr){
+			// multiply flash count by 2 to ensure the color gets back to the original
+			sr.DOColor(hurtColor, hurtImmunePeriod).SetEase(Ease.OutFlash, 4 * flashCount, 0);
+		}
+		yield return new WaitForSeconds (hurtImmunePeriod);
+
+		HurtWithoutImmnueCoroutine = null;
+	}
 
 
 	void StartHurtBehaviour(){
@@ -111,6 +130,14 @@ public class HealthSystem : MonoBehaviour {
 			HurtCoroutine = StartCoroutine (HurtImmuneIE ());
 		}
 	}
+
+	void StartHurtWithoutImmnueBehaviour(){
+		if(HurtWithoutImmnueCoroutine == null && hurtImmunePeriod > 0f){
+			HurtWithoutImmnueCoroutine = StartCoroutine (HurtWithoutImmnueIE ());
+		}
+	}
+
+
 
 	/* public exposed methods for managing health */
 	/**********************************************/
@@ -134,6 +161,28 @@ public class HealthSystem : MonoBehaviour {
 			objHealth = tempHealth;
 		}
 	}
+
+	public void DamageWithoutImmnue(float deltaHealth){
+		if(isImmune)	return;
+		if (isDead)		return;
+
+		float tempHealth = objHealth;
+		tempHealth -= deltaHealth;
+		if(tempHealth <= 0f){
+			objHealth = 0f;
+			// the object is dead, call DeathHandler()
+			isDead = true;
+		} else{
+			if(OnObjectHurt != null){
+				OnObjectHurt (this.transform);
+			}
+			if (hurtImmunePeriod > 0f) {
+				StartHurtWithoutImmnueBehaviour ();
+			}
+			objHealth = tempHealth;
+		}
+	}
+
 
 	public void Heal(float deltaHealth){
 		// we cannot heal a dead object, use revive instead
@@ -159,8 +208,10 @@ public class HealthSystem : MonoBehaviour {
 
 	/* instantly kill this object, making its health to 0 */
 	public void InstantDead(){
-		objHealth = 0f;
-		isDead = true;
+		if (!isImmune) {
+			objHealth = 0f;
+			isDead = true;
+		}
 	}
 		
 	public void StartHarmless(bool setColor = true){

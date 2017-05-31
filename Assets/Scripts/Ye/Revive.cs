@@ -11,6 +11,8 @@ public class Revive : MonoBehaviour {
     public GameObject revivePoint;
     Transform[] DesList;
 
+	public Transform[] MoveableBlockFathers;
+
     ProCamera2DTransitionsFX reviveFx;
 
     HealthSystem hackerHS;
@@ -54,11 +56,23 @@ public class Revive : MonoBehaviour {
         AI.transform.position = DesList[1].position;
         hacker.transform.position = DesList[2].position;
 
+		// move moveable blocks
+		if(MoveableBlockFathers != null){
+			foreach(Transform father in MoveableBlockFathers){
+				if(father.GetChild(0) != null){
+					father.GetChild (0).position = father.position;
+				}
+			}
+		}
+
+
         // wait for transition
         yield return new WaitForSeconds(0.5f);
 
         // camera enter
         reviveFX.TransitionEnter();
+
+
 
         // AI and Hacker can move when transition end
         AIPC.canControl = true;

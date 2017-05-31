@@ -197,7 +197,9 @@ public class LaserCannonState : MonoBehaviour {
 		shootLaserLine.SetLaserState (true);
         // ye added
 
-        GetComponent<ItalianGunSound>().ShootSound(lifeTime);
+		if (GetComponent<ItalianGunSound> ()) {
+			GetComponent<ItalianGunSound> ().ShootSound (lifeTime);
+		}
 
         damaging = true;
 		//		yield return new WaitForSeconds (fadeSeconds);

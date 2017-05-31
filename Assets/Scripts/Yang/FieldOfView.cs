@@ -96,6 +96,72 @@ public class FieldOfView : MonoBehaviour
 
 		return new_target;
 	}
+
+
+	public Transform ScanTargetInSight(Transform[] targets){
+		Transform new_target = null;
+
+		if (targets.Length != 0 && targets != null) {
+			float dist = Mathf.Infinity;
+			foreach (Transform trans in targets) {
+				if(CheckTarget(trans)){
+					// check if vision blocker
+					if(HasVisionBlock(trans))  continue;
+					if (IsDead (trans))  continue;
+					if (!IsEnemy (trans))  continue;
+
+					float newDist = Vector3.Distance (this.transform.position, trans.position);
+					if (newDist < dist) {
+						dist = newDist;
+						new_target = trans;
+					}
+				}
+			}
+		} else {
+			new_target = null;
+		}
+
+		//		if(new_target == null){
+		//			Debug.Log ("not in sight");
+		//		}else{
+		//			Debug.Log ("target in sight");
+		//		}
+
+		return new_target;
+	}
+
+	public Transform ScanLeastRotationInSight(Transform[] targets){
+		Transform new_target = null;
+
+		if (targets.Length != 0 && targets != null) {
+			float angle = Mathf.Infinity;
+			foreach (Transform trans in targets) {
+				if(CheckTarget(trans)){
+					// check if vision blocker
+					if(HasVisionBlock(trans))  continue;
+					if (IsDead (trans))  continue;
+					if (!IsEnemy (trans))  continue;
+
+					Vector3 selfToTarget = trans.position - transform.position;
+					selfToTarget.Normalize ();
+
+					float newAngle = Vector3.Angle (selfToTarget, facing);
+					newAngle = Mathf.Abs (newAngle);
+
+					if (newAngle < angle) {
+						angle = newAngle;
+						new_target = trans;
+					}
+				}
+			}
+		} else {
+			new_target = null;
+		}
+
+		return new_target;
+	}
+
+
 		
 
 	public Transform ScanTargetInSight(ObjectType[] targetTypes, float angleFactor = 1f){
@@ -443,6 +509,10 @@ public class FieldOfView : MonoBehaviour
 		return dirvec.normalized;
 	}
 
+	void OnDrawGizmos() {
+		Gizmos.color = Color.red;
+		Gizmos.DrawLine(transform.position, transform.position + facing * radius);
+	}
 
 }
 
@@ -456,5 +526,7 @@ public class TargetMeta{
 		distance = _dist;
 		deltaAngle = _deltaAng;
 	}
+
+
 
 }

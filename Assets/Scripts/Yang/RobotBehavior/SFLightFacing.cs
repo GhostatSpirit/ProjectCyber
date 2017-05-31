@@ -10,6 +10,8 @@ public class SFLightFacing : MonoBehaviour {
 	float initRadius;
 	public bool angledLight = false;
 
+	public bool useTransformRotation = false;
+
 	[Range(0f, 1f)]
 	public float radiusFactor = 0.95f;
 	// Use this for initialization
@@ -24,11 +26,19 @@ public class SFLightFacing : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		Vector3 facing = fov.facing;
-		lightRect.up = facing;
+
+		if (useTransformRotation == false) {
+			lightRect.up = facing;
+		}
 
 		if (angledLight) {
 			// change the height of the rect depending on the angle
-			float angleDeg = lightRect.rotation.eulerAngles.z;
+			float angleDeg = 0f;
+			if (useTransformRotation == false) {
+				angleDeg = lightRect.rotation.eulerAngles.z;
+			} else{
+				angleDeg = transform.rotation.eulerAngles.z;
+			}
 			float angleRad = Mathf.Deg2Rad * angleDeg;
 
 			float factor = Mathf.Sqrt (4.0f / (1 + 3 * Mathf.Cos (angleRad) * Mathf.Cos (angleRad)));

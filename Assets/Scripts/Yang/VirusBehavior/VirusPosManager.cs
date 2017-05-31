@@ -17,6 +17,7 @@ public class VirusPosManager : MonoBehaviour {
 
 	[HideInInspector]public Vector3 facing;
 
+
 	// the amount of virus that is alive for now
 	int virusCount = 0;
 
@@ -44,17 +45,17 @@ public class VirusPosManager : MonoBehaviour {
 		// get all childs which is a virus
 		foreach(Transform child in transform){
 			// does if have a objectIdentity and the identity is virus?
-			ObjectIdentity oi = child.GetComponent<ObjectIdentity> ();
+			ObjectIdentity oi = child.GetComponentInChildren<ObjectIdentity> ();
 			if(oi && oi.objType == ObjectType.Virus){
 				// append it to the virus list
 				// only append idle and controlling
-				VirusStateControl sc = child.GetComponent<VirusStateControl> ();
-				ControlStatus cs = child.GetComponent<ControlStatus> ();
+				VirusStateControl sc = oi.transform.GetComponent<VirusStateControl> ();
+				ControlStatus cs = oi.transform.GetComponent<ControlStatus> ();
 				bool controlling = (cs.controller != Controller.None);
 				bool nowIdle = (sc.virusState == VirusStateControl.VirusState.Idle);
 
 				if (sc && controlling && nowIdle) {
-					virusList.Add (child);
+					virusList.Add (oi.transform);
 				}
 			}
 		}
@@ -91,6 +92,8 @@ public class VirusPosManager : MonoBehaviour {
 				Vector3 newPos = transform.position + dirToVirus * spreadRadius;
 				//Debug.Log (newPos);
 				receiver.desiredPos = newPos;
+
+
 
 				// set child virus speed
 				receiver.moveSpeed = moveSpeed;

@@ -74,8 +74,9 @@ public class PlayerShoot : MonoBehaviour {
 	void ShootWave(){
 
         // ye added shootsound
-
-        GetComponentInParent<ShootSound>().hackShoot();
+		if (GetComponentInParent<ShootSound> ()) {
+			GetComponentInParent<ShootSound> ().hackShoot ();
+		}
 
 		// instantiate the bullet prefabs
 

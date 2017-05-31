@@ -12,6 +12,8 @@ public class ReleaseVirus : MonoBehaviour {
 
 	public PlayerHintUI hintUI;
 
+	public float moveSpeedFactor = 3f;
+
 	int virusCount{
 		get{
 			int tempCount = 0;
@@ -69,6 +71,14 @@ public class ReleaseVirus : MonoBehaviour {
 						sc.OnChaseStart += DisableLineRenderer;
 
 						sc.virusState = VirusStateControl.VirusState.Chase;
+
+						// WTF? hack to stop virus from lingering on the wall
+						HurtAndDamage hd = sc.GetComponent<HurtAndDamage> ();
+						if(hd){
+							hd.instantKillSelf = true;
+						}
+						ChaseTarget ct = sc.GetComponent<ChaseTarget> ();
+						ct.moveSpeed = ct.moveSpeed * moveSpeedFactor;
 
 						sc.OnChaseStart -= SetReleaseParent;
 						sc.OnChaseStart -= DisableLineRenderer;

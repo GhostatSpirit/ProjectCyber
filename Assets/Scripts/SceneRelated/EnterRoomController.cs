@@ -86,8 +86,10 @@ public class EnterRoomController : MonoBehaviour {
 		if(roombaBaseParent == null){
 			return;
 		}
-		foreach(Transform roombaBase in roombaBaseParent){
-			RoombaRespawner respawner = roombaBase.GetComponent<RoombaRespawner> ();
+
+		RoombaRespawner[] respawners = roombaBaseParent.GetComponentsInChildren<RoombaRespawner> ();
+
+		foreach(RoombaRespawner respawner in respawners){
 			if(respawner){
 				respawner.enabled = true;
 			}
