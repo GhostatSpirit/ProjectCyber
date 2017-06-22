@@ -17,6 +17,8 @@ public class MenuScripts : MonoBehaviour {
 
     public GameObject eventSys;
 
+    // public AudioSource audioSource;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -29,18 +31,41 @@ public class MenuScripts : MonoBehaviour {
 
     public void ChangeScene(string sceneName)
     {
-		Time.timeScale = 1f;
-        SceneManager.LoadScene(sceneName);
+        StartCoroutine(delayedForChangeScene());
     }
 
-    public void Resume()
+    IEnumerator delayedForChangeScene()
     {
+        yield return new WaitForSecondsRealtime(0.5f);
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(sceneName);
+
+    }
+
+    public void Resume(AudioSource audioSource)
+    {
+        // audioSource.Play();
         // Debug.Log("time start");
+        StartCoroutine(delayedSound(audioSource));
+        
+    }
+
+    IEnumerator delayedSound(AudioSource audioSource)
+    {
+        // sound play
+        audioSource.Play();
+        yield return new WaitForSecondsRealtime(0.5f);
+        // time start flow
         Time.timeScale = 1;
         menu.SetActive(false);
-        StartCoroutine(nowControl(transform));
+        eventSys.GetComponent<InControlInputModule>().enabled = false;
+        yield return new WaitForSeconds(0.1f);
+        // ai and hacker can control now
+        hacker.GetComponent<PlayerControl>().canControl = true;
+        ai.GetComponent<PlayerControl>().canControl = true;
         ai.GetComponent<ControlPauseMenu>().pauseTime = 0;
         hacker.GetComponent<ControlPauseMenu>().pauseTime = 0;
+        yield return null;
     }
 
     IEnumerator nowControl(Transform trans)
@@ -50,6 +75,11 @@ public class MenuScripts : MonoBehaviour {
         yield return new WaitForSeconds(0.1f);
         hacker.GetComponent<PlayerControl>().canControl = true;
         ai.GetComponent<PlayerControl>().canControl = true;
+        yield return null;
     }
 
+    public void ButtonSound(AudioSource audioSource)
+    {
+        audioSource.Play();
+    }
 }
