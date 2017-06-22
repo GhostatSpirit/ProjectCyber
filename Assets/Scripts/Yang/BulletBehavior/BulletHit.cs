@@ -19,11 +19,11 @@ public class BulletHit : MonoBehaviour {
 
 	[HideInInspector] public Vector3 initVelocity;
 
-	Rigidbody2D body;
+//	Rigidbody2D body;
 
 	void Start(){
 //		initVelocity = Vector3.zero;
-		body = GetComponent<Rigidbody2D> ();
+//		body = GetComponent<Rigidbody2D> ();
 	}
 
 
@@ -141,6 +141,7 @@ public class BulletHit : MonoBehaviour {
 
 			targetTrans.GetComponentInParent<ControlStatus> ().controller = Controller.Hacker;
 		}
+			
 	}
 		
 

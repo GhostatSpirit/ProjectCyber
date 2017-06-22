@@ -19,12 +19,24 @@ public class HackerMovementAnim: MonoBehaviour {
     AudioClip clip;
 
 	Rigidbody2D body;
+	PlayerMovement playerMove;
 
 	//    Vector2 moveVector = new Vector2(0, 0);
 
 	Vector3 lastFrameFacing;
 
-	public float speedFactor = 1f;
+	[HideInInspector]public float playSpeedFactor = 1f;
+	public float playSpeed = 1f;
+
+	void OnEnable(){
+		if(anim)
+			anim.speed = 1f;
+	}
+	void OnDisable(){
+		if(anim)
+			anim.speed = 0f;
+	}
+
 
     // Use this for initialization
     void Start ()
@@ -34,6 +46,8 @@ public class HackerMovementAnim: MonoBehaviour {
         clip = GetComponents<AudioSource>()[0].clip;
         anim = GetComponent<Animator>();
 
+		playerMove = GetComponent<PlayerMovement> ();
+
 		HealthSystem hs = GetComponent<HealthSystem> ();
 		if(hs){
 			hs.OnObjectDead += SetDeadAsTrue;
@@ -42,123 +56,12 @@ public class HackerMovementAnim: MonoBehaviour {
 
 	}
 
-    // translate a Direction enum to a normalized Vector3
     
-    Direction Vector2Direction(Vector2 vec)
-    {
-        
-        if (vec.magnitude == 0f)
-        {
-            Debug.Log("Warning: vec.magnitude == 0f");
-            return Direction.RIGHT;
-        }
-        
-        Vector2 rightVector = new Vector2(1f, 0f);
-
-        float angle = Vector2.Angle(rightVector, vec);
-
-        if (vec.y < 0f)
-        {
-            angle = 360f - angle;
-        }
-        // play "going upright" animation if angle between 22.5° and 67.5°
-        if (angle > 22.5f && angle <= 67.5f)
-        {
-            return Direction.UPRIGHT;// up
-        }
-        // play "going up" animation if angle between 67.5° and 112.5°
-        else if (angle > 67.5f && angle <= 112.5f)
-        {
-            return Direction.UP;// left
-        }
-        // play "going upleft" animation if angle between 225° and 315°
-        else if (angle > 112.5f && angle <= 157.5f)
-        {
-            return Direction.UPLEFT;// down
-        }
-        else if (angle > 157.5f && angle <= 202.5f)
-        {
-            return Direction.LEFT;
-        }
-        else if (angle > 202.5f && angle <= 247.5f)
-        {
-            return Direction.DOWNLEFT;
-        }
-        else if (angle > 247.5f && angle <= 292.5f)
-        {
-            return Direction.DOWN;
-        }
-        else if (angle > 292.5f && angle <= 357.5f)
-        {
-            return Direction.DOWNRIGHT;
-        }
-        else
-        {
-            return Direction.RIGHT;
-        }
-
-    }
-    
-
-    // updated version
-    Direction Vector2NewDirection(Vector2 vec)
-    {
-        if (vec.magnitude == 0f)
-        {
-            Debug.Log("Warning: vec.magnitude == 0f");
-            return Direction.RIGHT;
-        }
-
-        Vector2 rightVector = new Vector2(1f, 0f);
-
-        float angle = Vector2.Angle(rightVector, vec);
-
-        if (vec.y < 0f)
-        {
-            angle = 360f - angle;
-        }
-        // play "going upright" animation if angle between 22.5° and 67.5°
-        if (angle > 15f && angle <= 60f)
-        {
-            return Direction.UPRIGHT;
-        }
-        // play "going up" animation if angle between 67.5° and 112.5°
-        else if (angle > 60f && angle <= 120f)
-        {
-            return Direction.UP;
-        }
-        // play "going upleft" animation if angle between 225° and 315°
-        else if (angle > 120f && angle <= 165f)
-        {
-            return Direction.UPLEFT;// down
-        }
-        else if (angle > 165f && angle <= 195f)
-        {
-            return Direction.LEFT;
-        }
-        else if (angle > 195f && angle <= 240f)
-        {
-            return Direction.DOWNLEFT;
-        }
-        else if (angle > 240f && angle <= 300f)
-        {
-            return Direction.DOWN;
-        }
-        else if (angle > 300f && angle <= 345f)
-        {
-            return Direction.DOWNRIGHT;
-        }
-        else
-        {
-            return Direction.RIGHT;
-        }
-
-    }
 
     // Update is called once per frame
     void Update()
     {
-        // moveBool = anim.GetBool("Moving");
+        moveBool = anim.GetBool("Moving");
         myInputDevice = GetComponent<DeviceReceiver>().GetDevice();
 
         if (myInputDevice == null)
@@ -168,7 +71,8 @@ public class HackerMovementAnim: MonoBehaviour {
         float horizontal = myInputDevice.LeftStickX;
         float vertical = myInputDevice.LeftStickY;
 
-        moveVector = new Vector2(horizontal, vertical);
+		moveVector = new Vector2(horizontal, vertical);
+
 
         // If magnitude > 1, normalize
         if (moveVector.magnitude > 1f)
@@ -177,13 +81,14 @@ public class HackerMovementAnim: MonoBehaviour {
         }
 
         // Magnitude != 0, set moving 
-        if ( moveVector.magnitude != 0f )
+		if ( moveVector.magnitude != 0f && playerMove.finalMoveVector.magnitude != 0f)
         {
             // GetComponent<FacingSpriteSwitcher>().enabled = false;
             // Set moving
-            //anim.SetBool("Moving", true);
+            anim.SetBool("Moving", true);
 			switcher.enabled = false;
-			anim.SetFloat ("moveSpeed", moveVector.magnitude * speedFactor);
+			anim.SetFloat ("moveSpeed", moveVector.magnitude * playSpeed);
+
 
 			lastFrameFacing = moveVector.normalized;
 
@@ -225,8 +130,10 @@ public class HackerMovementAnim: MonoBehaviour {
             }
             
         }
-        if ( moveVector.magnitude == 0 )
+		else
         {
+			// target is not moving
+
             // GetComponent<FacingSpriteSwitcher>().enabled = true;
             // GetComponent<FacingSpriteSwitcher>().facing = new Vector3(anim.GetFloat("SpeedX"),anim.GetFloat("SpeedY"),0);
             anim.SetBool("Moving", false);
@@ -245,4 +152,119 @@ public class HackerMovementAnim: MonoBehaviour {
 	void SetDeadAsFalse(Transform trans){
 		anim.SetBool ("dead", false);
 	}
+
+
+	// translate a Direction enum to a normalized Vector3
+
+	Direction Vector2Direction(Vector2 vec)
+	{
+
+		if (vec.magnitude == 0f)
+		{
+			Debug.Log("Warning: vec.magnitude == 0f");
+			return Direction.RIGHT;
+		}
+
+		Vector2 rightVector = new Vector2(1f, 0f);
+
+		float angle = Vector2.Angle(rightVector, vec);
+
+		if (vec.y < 0f)
+		{
+			angle = 360f - angle;
+		}
+		// play "going upright" animation if angle between 22.5° and 67.5°
+		if (angle > 22.5f && angle <= 67.5f)
+		{
+			return Direction.UPRIGHT;// up
+		}
+		// play "going up" animation if angle between 67.5° and 112.5°
+		else if (angle > 67.5f && angle <= 112.5f)
+		{
+			return Direction.UP;// left
+		}
+		// play "going upleft" animation if angle between 225° and 315°
+		else if (angle > 112.5f && angle <= 157.5f)
+		{
+			return Direction.UPLEFT;// down
+		}
+		else if (angle > 157.5f && angle <= 202.5f)
+		{
+			return Direction.LEFT;
+		}
+		else if (angle > 202.5f && angle <= 247.5f)
+		{
+			return Direction.DOWNLEFT;
+		}
+		else if (angle > 247.5f && angle <= 292.5f)
+		{
+			return Direction.DOWN;
+		}
+		else if (angle > 292.5f && angle <= 357.5f)
+		{
+			return Direction.DOWNRIGHT;
+		}
+		else
+		{
+			return Direction.RIGHT;
+		}
+
+	}
+
+
+	// updated version
+	Direction Vector2NewDirection(Vector2 vec)
+	{
+		if (vec.magnitude == 0f)
+		{
+			Debug.Log("Warning: vec.magnitude == 0f");
+			return Direction.RIGHT;
+		}
+
+		Vector2 rightVector = new Vector2(1f, 0f);
+
+		float angle = Vector2.Angle(rightVector, vec);
+
+		if (vec.y < 0f)
+		{
+			angle = 360f - angle;
+		}
+		// play "going upright" animation if angle between 22.5° and 67.5°
+		if (angle > 15f && angle <= 60f)
+		{
+			return Direction.UPRIGHT;
+		}
+		// play "going up" animation if angle between 67.5° and 112.5°
+		else if (angle > 60f && angle <= 120f)
+		{
+			return Direction.UP;
+		}
+		// play "going upleft" animation if angle between 225° and 315°
+		else if (angle > 120f && angle <= 165f)
+		{
+			return Direction.UPLEFT;// down
+		}
+		else if (angle > 165f && angle <= 195f)
+		{
+			return Direction.LEFT;
+		}
+		else if (angle > 195f && angle <= 240f)
+		{
+			return Direction.DOWNLEFT;
+		}
+		else if (angle > 240f && angle <= 300f)
+		{
+			return Direction.DOWN;
+		}
+		else if (angle > 300f && angle <= 345f)
+		{
+			return Direction.DOWNRIGHT;
+		}
+		else
+		{
+			return Direction.RIGHT;
+		}
+
+	}
+
 }

@@ -2,30 +2,46 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RoombaAim : StateMachineBehaviour {
-	RoombaBehaviour roomba;
-	FieldOfView fov;
+public class ATFieldChargingState : StateMachineBehaviour {
 
-	 // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
+	HackerFieldControl control;
+
+	bool canceled = false;
+
+	// OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		roomba = animator.GetComponent<RoombaBehaviour> ();
-		fov = animator.GetComponent<FieldOfView> ();
-		roomba.StartAim ();
-		// turn on aim laser
-		roomba.TurnOnAim ();
+		control = animator.transform.GetComponent<HackerFieldControl> ();
+		control.SetChargeMoveSpeed ();
+		canceled = false;
+		animator.SetFloat ("chargeSpeed", 1.0f);
 	}
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		if (roomba.cs.controller == Controller.Boss) {
-			roomba.UpdateAim ();
+		if(control.isButtonReleased && !canceled){
+			// player released the button, cancel charging
+			animator.SetFloat ("chargeSpeed", -0.5f);
+			// animator.SetTrigger ("exitCharge");
+			control.chargeCanceled = true;
+			canceled = true;
+		}
+
+		// if charge has not been canceled, try consume energy
+		if (!canceled) {
+			if (!control.ConsumeEnergy ()) {
+				// not enough energy, force canceling
+				// player released the button, cancel charging
+				animator.SetFloat ("chargeSpeed", -0.5f);
+				// animator.SetTrigger ("exitCharge");
+				control.chargeCanceled = true;
+				canceled = true;
+			}
 		}
 	}
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state
 	override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-		roomba.EndAim ();
-		roomba.TurnOffAim ();
+		// control.chargeCanceled = false;
 	}
 
 	// OnStateMove is called right after Animator.OnAnimatorMove(). Code that processes and affects root motion should be implemented here
