@@ -93,7 +93,7 @@ public class PlayerControl : MonoBehaviour {
 		// Debug.Log(
 		foreach(MonoBehaviour behaviour in behaviours){
 			if (behaviour != null)
-				Debug.Log ("started: " + behaviour.ToString ());
+				//Debug.Log ("started: " + behaviour.ToString ());
 				behaviour.enabled = true;
 		}
 	}
@@ -101,7 +101,7 @@ public class PlayerControl : MonoBehaviour {
 	void StopControls(){
 		foreach(MonoBehaviour behaviour in behaviours){
 			if (behaviour != null) {
-				Debug.Log ("stopped: " + behaviour.ToString ());
+				//Debug.Log ("stopped: " + behaviour.ToString ());
 				behaviour.enabled = false;
 			}
 		}
