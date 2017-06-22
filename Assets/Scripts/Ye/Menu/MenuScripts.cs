@@ -29,6 +29,7 @@ public class MenuScripts : MonoBehaviour {
 
     public void ChangeScene(string sceneName)
     {
+		Time.timeScale = 1f;
         SceneManager.LoadScene(sceneName);
     }
 

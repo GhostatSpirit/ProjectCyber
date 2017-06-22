@@ -35,17 +35,20 @@ public class HackerFieldCollide : MonoBehaviour {
 		Collider2D[] hitColliders = new Collider2D[maxHitCount];
 		int hitCount = fieldCollider.OverlapCollider (filter, hitColliders);
 
-//		Debug.Log (hitCount);
+		//Debug.Log (hitCount);
 
 		for(int i = 0; i < hitCount; ++i){
+			//Debug.Log ("int i is: " + i.ToString());
 			Collider2D hitCollider = hitColliders [i];
+
 
 			ObjectIdentity oi = hitCollider.transform.GetComponentInParent<ObjectIdentity> ();
 			if(oi == null){
-				return;
+				Debug.Log (hitCollider.transform.parent);
+				continue;
 			}
 
-//			Debug.Log ("ATField hits: " + oi.objType.ToString ());
+			//Debug.Log ("ATField hits: " + oi.objType.ToString ());
 
 			switch(oi.objType){
 			case ObjectType.Virus:{
