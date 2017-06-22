@@ -12,6 +12,8 @@ public class HackerFieldCollide : MonoBehaviour {
 
 	public float paralyzeTime = 2f;
 
+	public string friendlyVirusLayerName = "PlayerHover";
+
 	// Use this for initialization
 	void Start () {
 		fieldCollider = GetComponent<Collider2D> ();
@@ -23,6 +25,11 @@ public class HackerFieldCollide : MonoBehaviour {
 		filter.useNormalAngle = false;
 		filter.SetLayerMask (targetMask);
 	}
+
+	void OnEnable(){
+		
+	}
+
 
 	void FixedUpdate(){
 		Collider2D[] hitColliders = new Collider2D[maxHitCount];
@@ -99,7 +106,7 @@ public class HackerFieldCollide : MonoBehaviour {
 			targetCS.controller = Controller.Hacker;
 
 			// modify layer so it wont collide
-			coll.gameObject.layer = this.gameObject.layer;
+			coll.gameObject.layer = LayerMask.NameToLayer(friendlyVirusLayerName);
 
 		}
 	}

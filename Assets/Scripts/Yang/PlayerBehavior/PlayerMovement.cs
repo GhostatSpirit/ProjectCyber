@@ -10,6 +10,8 @@ public class PlayerMovement: MonoBehaviour {
 
     public float moveSpeed = 50f;
 
+	[Range(0f, 1f)]
+	[ReadOnly]public float moveSpeedFactor = 1f;
 
 	public Direction initialFacing = Direction.DOWN;
 
@@ -25,8 +27,17 @@ public class PlayerMovement: MonoBehaviour {
 	bool playingSound = false;
 
 	[HideInInspector] public Vector2 faceDirection;
+	[HideInInspector] public float lastFrameSpeed = 0f;
 
     Vector2 moveVector;
+
+	Vector2 _finalMoveVector;
+	public Vector2 finalMoveVector{
+		get{
+			return _finalMoveVector;
+		}
+	}
+//
     Rigidbody2D myRigidbody;
 	InputDevice myInputDevice;
 	AudioSource myAudioSource;
@@ -49,7 +60,8 @@ public class PlayerMovement: MonoBehaviour {
 		turnEnabled = true;
 
 		faceDirection = Direction2Vector (initialFacing);
-		
+
+		_finalMoveVector = Vector3.zero;
 	}
 
 	// Update is called once per frame
@@ -101,7 +113,8 @@ public class PlayerMovement: MonoBehaviour {
 		if (moveEnabled) {
 			if (myRigidbody.bodyType != RigidbodyType2D.Static) {
 				// myRigidbody.velocity = moveVector * moveSpeed * Time.deltaTime * 10f;
-				myRigidbody.AddForce (moveVector * moveSpeed * Time.deltaTime * 100f);
+				_finalMoveVector = moveVector * moveSpeed * moveSpeedFactor * Time.deltaTime * 100f;
+				myRigidbody.AddForce (_finalMoveVector);
 			}
 //			if(moveVector.magnitude != 0){
 //				transform.up = new Vector2 (-moveVector.x, -moveVector.y);

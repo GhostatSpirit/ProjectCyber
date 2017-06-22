@@ -11,15 +11,13 @@ public class ATFieldChargingState : StateMachineBehaviour {
 	// OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
 	override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
 		control = animator.transform.GetComponent<HackerFieldControl> ();
+		control.SetChargeMoveSpeed ();
 		canceled = false;
 		animator.SetFloat ("chargeSpeed", 1.0f);
 	}
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
 	override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-
-
-
 		if(control.isButtonReleased && !canceled){
 			// player released the button, cancel charging
 			animator.SetFloat ("chargeSpeed", -0.5f);
@@ -28,6 +26,17 @@ public class ATFieldChargingState : StateMachineBehaviour {
 			canceled = true;
 		}
 
+		// if charge has not been canceled, try consume energy
+		if (!canceled) {
+			if (!control.ConsumeEnergy ()) {
+				// not enough energy, force canceling
+				// player released the button, cancel charging
+				animator.SetFloat ("chargeSpeed", -0.5f);
+				// animator.SetTrigger ("exitCharge");
+				control.chargeCanceled = true;
+				canceled = true;
+			}
+		}
 	}
 
 	// OnStateExit is called when a transition ends and the state machine finishes evaluating this state

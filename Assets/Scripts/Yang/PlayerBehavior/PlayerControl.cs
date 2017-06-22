@@ -70,10 +70,15 @@ public class PlayerControl : MonoBehaviour {
 //
 	public List<MonoBehaviour> behaviours;
 
+	public List<Animator> animators;
+
 	// Use this for initialization
 	void Start () {
 		if(behaviours == null){
 			behaviours = new List<MonoBehaviour> ();
+		}
+		if(animators == null){
+			animators = new List<Animator> ();
 		}
 //		pm = GetComponentInChildren<PlayerMovement> ();
 //		if (pm)  behaviours.Add (pm);
@@ -92,9 +97,15 @@ public class PlayerControl : MonoBehaviour {
 	void StartControls(){
 		// Debug.Log(
 		foreach(MonoBehaviour behaviour in behaviours){
-			if (behaviour != null)
+			if (behaviour != null) {
 				Debug.Log ("started: " + behaviour.ToString ());
 				behaviour.enabled = true;
+			}
+		}
+		foreach(Animator animator in animators){
+			if(animator != null){
+				animator.enabled = true;
+			}
 		}
 	}
 
@@ -103,6 +114,11 @@ public class PlayerControl : MonoBehaviour {
 			if (behaviour != null) {
 				Debug.Log ("stopped: " + behaviour.ToString ());
 				behaviour.enabled = false;
+			}
+		}
+		foreach(Animator animator in animators){
+			if(animator != null){
+				animator.enabled = false;
 			}
 		}
 	}
