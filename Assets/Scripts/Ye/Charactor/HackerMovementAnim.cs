@@ -29,10 +29,12 @@ public class HackerMovementAnim: MonoBehaviour {
 	public float playSpeed = 1f;
 
 	void OnEnable(){
-		anim.speed = 1f;
+		if(anim)
+			anim.speed = 1f;
 	}
 	void OnDisable(){
-		anim.speed = 0f;
+		if(anim)
+			anim.speed = 0f;
 	}
 
 
@@ -83,7 +85,7 @@ public class HackerMovementAnim: MonoBehaviour {
         {
             // GetComponent<FacingSpriteSwitcher>().enabled = false;
             // Set moving
-            //anim.SetBool("Moving", true);
+            anim.SetBool("Moving", true);
 			switcher.enabled = false;
 			anim.SetFloat ("moveSpeed", moveVector.magnitude * playSpeed);
 

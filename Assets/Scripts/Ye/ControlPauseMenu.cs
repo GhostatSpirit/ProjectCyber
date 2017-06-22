@@ -15,6 +15,9 @@ public class ControlPauseMenu : MonoBehaviour {
     public GameObject pauseMenu;
     public GameObject EventSys;
 
+	public PlayerControl hackerControl;
+	public PlayerControl aiControl;
+
     // time for open and close pause menu
     [HideInInspector] public float pauseTime = 0;
 
@@ -66,8 +69,8 @@ public class ControlPauseMenu : MonoBehaviour {
                 // EventSys.GetComponent<InputModuleActionAdapter>();
                 Time.timeScale = 1;
                 
-                GetComponent<PlayerControl>().canControl = true;
-                Debug.Log(GetComponent<PlayerControl>().canControl);
+				TurnOnControl ();
+                // Debug.Log(GetComponent<PlayerControl>().canControl);
                 pauseTime = 0;
             }
             else if (pauseMenu.activeInHierarchy == false && openTime >= minTime)
@@ -78,8 +81,8 @@ public class ControlPauseMenu : MonoBehaviour {
                 EventSys.GetComponent<InControlInputModule>().enabled = true;
                 Time.timeScale = 0;
 
-                GetComponent<PlayerControl>().canControl = false;
-                Debug.Log(GetComponent<PlayerControl>().canControl);
+				TurnOffControl ();
+                // Debug.Log(GetComponent<PlayerControl>().canControl);
                 pauseMenu.SetActive(true);
                 openTime = 0;
             }
@@ -87,7 +90,19 @@ public class ControlPauseMenu : MonoBehaviour {
         }
     }
 
+	void TurnOnControl(){
+		if (hackerControl)
+			hackerControl.canControl = true;
+		if (aiControl)
+			aiControl.canControl = true;
+	}
 
+	void TurnOffControl(){
+		if (hackerControl)
+			hackerControl.canControl = false;
+		if (aiControl)
+			aiControl.canControl = false;
+	}
 
 
     IEnumerator OpenMenu(GameObject pauseMenu)
