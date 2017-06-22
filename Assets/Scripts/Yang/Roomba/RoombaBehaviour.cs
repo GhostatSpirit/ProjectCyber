@@ -293,7 +293,7 @@ public class RoombaBehaviour : MonoBehaviour {
 		}
 		// if not, send a explode trigger to animator
 		animator.SetTrigger ("explode");
-		Debug.Log ("explode set");
+//		Debug.Log ("explode set");
 		checkCollision = false;
 	}
 
