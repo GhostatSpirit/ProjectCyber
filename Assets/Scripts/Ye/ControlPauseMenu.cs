@@ -4,15 +4,16 @@ using UnityEngine;
 using InControl;
 using UnityEngine.EventSystems;
 
+[RequireComponent(typeof(DeviceReceiver))]
+
 public class ControlPauseMenu : MonoBehaviour {
 
-    //for joystick
-    public Transform deviceAssigner;
+    // for joystick
+    
     InputDevice myInputDevice;
-    public int playerIndex = 0;
-
+    
     public GameObject pauseMenu;
-    public GameObject standAlone;
+    public GameObject EventSys;
 
     // time for open and close pause menu
     [HideInInspector] public float pauseTime = 0;
@@ -24,17 +25,15 @@ public class ControlPauseMenu : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		
+        
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
-        
         // Debug.Log("  open:  "+openTime + "  pause:   " + pauseTime);
+
         // check for Incontrol
-        myInputDevice = deviceAssigner.
-        GetComponent<DeviceAssigner>().GetPlayerDevice(playerIndex);
+        myInputDevice = GetComponent<DeviceReceiver>().GetDevice();
         if (myInputDevice == null)
         {
             return;
@@ -45,7 +44,6 @@ public class ControlPauseMenu : MonoBehaviour {
         {
             // Debug.Log("pause and not response");
             pauseTime += Time.unscaledDeltaTime;
-
         }
 
         // for open response
@@ -58,43 +56,38 @@ public class ControlPauseMenu : MonoBehaviour {
         {
             // Debug.Log("press");
             
-
             if (pauseMenu.activeInHierarchy == true && pauseTime >= minTime)
             {
                 // resume
                 // Debug.Log("pause stop");
                 pauseMenu.SetActive(false);
-                standAlone.GetComponent<StandaloneInputModule>().enabled = true;
+                //EventSys.GetComponent<StandaloneInputModule>().enabled = true;
+                EventSys.GetComponent<InControlInputModule>().enabled = false;
+                // EventSys.GetComponent<InputModuleActionAdapter>();
                 Time.timeScale = 1;
+                
                 GetComponent<PlayerControl>().canControl = true;
+                Debug.Log(GetComponent<PlayerControl>().canControl);
                 pauseTime = 0;
             }
             else if (pauseMenu.activeInHierarchy == false && openTime >= minTime)
             {
                 // pause 
                 // Debug.Log("pause start");
-                standAlone.GetComponent<StandaloneInputModule>().enabled = false;
+                //EventSys.GetComponent<StandaloneInputModule>().enabled = false;
+                EventSys.GetComponent<InControlInputModule>().enabled = true;
                 Time.timeScale = 0;
+
                 GetComponent<PlayerControl>().canControl = false;
+                Debug.Log(GetComponent<PlayerControl>().canControl);
                 pauseMenu.SetActive(true);
                 openTime = 0;
             }
 
         }
-
-
-
-
-
-        //if (myInputDevice.Command.IsPressed == true)
-        //{
-        //    GetComponent<PlayerControl>().canControl = false;
-        //    Time.timeScale = 0;
-        //    pauseMenu.SetActive(true);
-        //}
-
-
     }
+
+
 
 
     IEnumerator OpenMenu(GameObject pauseMenu)

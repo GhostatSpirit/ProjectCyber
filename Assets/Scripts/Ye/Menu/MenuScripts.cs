@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using InControl;
 
 public class MenuScripts : MonoBehaviour {
 
@@ -24,7 +25,6 @@ public class MenuScripts : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        
 	}
 
     public void ChangeScene(string sceneName)
@@ -35,7 +35,6 @@ public class MenuScripts : MonoBehaviour {
     public void Resume()
     {
         // Debug.Log("time start");
-
         Time.timeScale = 1;
         menu.SetActive(false);
         StartCoroutine(nowControl(transform));
@@ -45,7 +44,8 @@ public class MenuScripts : MonoBehaviour {
 
     IEnumerator nowControl(Transform trans)
     {
-        eventSys.GetComponent<StandaloneInputModule>().enabled = true;
+        //eventSys.GetComponent<StandaloneInputModule>().enabled = true;
+        eventSys.GetComponent<InControlInputModule>().enabled = false;
         yield return new WaitForSeconds(0.1f);
         hacker.GetComponent<PlayerControl>().canControl = true;
         ai.GetComponent<PlayerControl>().canControl = true;
