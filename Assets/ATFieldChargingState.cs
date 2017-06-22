@@ -14,6 +14,9 @@ public class ATFieldChargingState : StateMachineBehaviour {
 		control.SetChargeMoveSpeed ();
 		canceled = false;
 		animator.SetFloat ("chargeSpeed", 1.0f);
+
+		control.PlayForward ();
+		control.PlayChargeSound ();
 	}
 
 	// OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -24,6 +27,9 @@ public class ATFieldChargingState : StateMachineBehaviour {
 			// animator.SetTrigger ("exitCharge");
 			control.chargeCanceled = true;
 			canceled = true;
+
+			control.PlayBackward ();
+			// control.StopChargeSound ();
 		}
 
 		// if charge has not been canceled, try consume energy
@@ -35,6 +41,9 @@ public class ATFieldChargingState : StateMachineBehaviour {
 				// animator.SetTrigger ("exitCharge");
 				control.chargeCanceled = true;
 				canceled = true;
+
+				control.PlayBackward ();
+				// control.StopChargeSound ();
 			}
 		}
 	}
