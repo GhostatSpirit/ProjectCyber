@@ -28,6 +28,13 @@ public class HackerMovementAnim: MonoBehaviour {
 	[HideInInspector]public float playSpeedFactor = 1f;
 	public float playSpeed = 1f;
 
+	void OnEnable(){
+		anim.speed = 1f;
+	}
+	void OnDisable(){
+		anim.speed = 0f;
+	}
+
 
     // Use this for initialization
     void Start ()

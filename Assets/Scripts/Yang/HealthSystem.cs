@@ -220,11 +220,11 @@ public class HealthSystem : MonoBehaviour {
 		if(hd){
 			hd.canHurtOther = false;
 		}
-		if (setColor) {
-			if (GetComponent<SpriteRenderer> ().color == Color.white) {
-				GetComponent<SpriteRenderer> ().color = Color.green;
-			}
-		}
+//		if (setColor) {
+//			if (GetComponent<SpriteRenderer> ().color == Color.white) {
+//				GetComponent<SpriteRenderer> ().color = Color.green;
+//			}
+//		}
 		isHarmless = true;
 	}
 
@@ -234,11 +234,11 @@ public class HealthSystem : MonoBehaviour {
 		if(hd){
 			hd.canHurtOther = true;
 		}
-		if (setColor) {
-			if (GetComponent<SpriteRenderer> ().color == Color.green) {
-				GetComponent<SpriteRenderer> ().color = Color.white;
-			}
-		}
+//		if (setColor) {
+//			if (GetComponent<SpriteRenderer> ().color == Color.green) {
+//				GetComponent<SpriteRenderer> ().color = Color.white;
+//			}
+//		}
 		isHarmless = false;
 	}
 
@@ -247,11 +247,11 @@ public class HealthSystem : MonoBehaviour {
 		if(hd){
 			hd.canHurtSelf = false;
 		}
-		if (setColor) {
-			if (GetComponent<SpriteRenderer> ().color == Color.white) {
-				GetComponent<SpriteRenderer> ().color = Color.green;
-			}
-		}
+//		if (setColor) {
+//			if (GetComponent<SpriteRenderer> ().color == Color.white) {
+//				GetComponent<SpriteRenderer> ().color = Color.green;
+//			}
+//		}
 		isImmune = true;
 	}
 
@@ -260,11 +260,11 @@ public class HealthSystem : MonoBehaviour {
 		if(hd){
 			hd.canHurtSelf = true;
 		}
-		if (setColor) {
-			if (GetComponent<SpriteRenderer> ().color == Color.green) {
-				GetComponent<SpriteRenderer> ().color = Color.white;
-			}
-		}
+//		if (setColor) {
+//			if (GetComponent<SpriteRenderer> ().color == Color.green) {
+//				GetComponent<SpriteRenderer> ().color = Color.white;
+//			}
+//		}
 		isImmune = false;
 	}
 
