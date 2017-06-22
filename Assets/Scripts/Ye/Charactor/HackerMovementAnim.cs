@@ -11,20 +11,39 @@ public class HackerMovementAnim: MonoBehaviour {
 
     bool moveBool;
 
+	FacingSpriteSwitcher switcher;
+
     Animator anim;
     InputDevice myInputDevice;
     Vector2 moveVector = new Vector2(0, 0);
     AudioClip clip;
 
+	Rigidbody2D body;
+
+	//    Vector2 moveVector = new Vector2(0, 0);
+
+	Vector3 lastFrameFacing;
+
+	public float speedFactor = 1f;
+
     // Use this for initialization
     void Start ()
     {
+		switcher = GetComponent<FacingSpriteSwitcher> ();
+
         clip = GetComponents<AudioSource>()[0].clip;
         anim = GetComponent<Animator>();
+
+		HealthSystem hs = GetComponent<HealthSystem> ();
+		if(hs){
+			hs.OnObjectDead += SetDeadAsTrue;
+			hs.OnObjectRevive += SetDeadAsFalse;
+		}
+
 	}
 
     // translate a Direction enum to a normalized Vector3
-    /*
+    
     Direction Vector2Direction(Vector2 vec)
     {
         
@@ -79,7 +98,7 @@ public class HackerMovementAnim: MonoBehaviour {
         }
 
     }
-    */
+    
 
     // updated version
     Direction Vector2NewDirection(Vector2 vec)
@@ -162,9 +181,13 @@ public class HackerMovementAnim: MonoBehaviour {
         {
             // GetComponent<FacingSpriteSwitcher>().enabled = false;
             // Set moving
-            anim.SetBool("Moving", true);
+            //anim.SetBool("Moving", true);
+			switcher.enabled = false;
+			anim.SetFloat ("moveSpeed", moveVector.magnitude * speedFactor);
 
-            Direction dir = Vector2NewDirection(moveVector);
+			lastFrameFacing = moveVector.normalized;
+
+            Direction dir = Vector2Direction(moveVector);
             switch (dir)
             {
                 case Direction.DOWN:
@@ -207,6 +230,19 @@ public class HackerMovementAnim: MonoBehaviour {
             // GetComponent<FacingSpriteSwitcher>().enabled = true;
             // GetComponent<FacingSpriteSwitcher>().facing = new Vector3(anim.GetFloat("SpeedX"),anim.GetFloat("SpeedY"),0);
             anim.SetBool("Moving", false);
+			anim.SetFloat ("moveSpeed", 0f);
+
+//			switcher.enabled = true;
+//			switcher.facing = lastFrameFacing;
+//			switcher.UpdateSprite ();
         }
     }
+
+	void SetDeadAsTrue(Transform trans){
+		anim.SetBool ("dead", true);
+	}
+
+	void SetDeadAsFalse(Transform trans){
+		anim.SetBool ("dead", false);
+	}
 }

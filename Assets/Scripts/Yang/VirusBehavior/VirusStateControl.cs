@@ -93,6 +93,9 @@ public class VirusStateControl : MonoBehaviour {
 	public float stopRotAngle = 20f;
 
 
+	public float rotMoveSpeedFactor = 0.2f;
+	public float rotRotSpeedFactor = 2f;
+
 	Vector3 releasePos;
 
 	void ResetActions(){
@@ -108,12 +111,16 @@ public class VirusStateControl : MonoBehaviour {
 		OnChaseStart += StartChase;
 		OnChaseStart += SetTargetToNull;
 		OnChaseStart += SetReleasePos;
+		OnChaseStart += SetIsBullet;
 		OnChaseEnd = null;
+		OnChaseEnd += UnsetIsBullet;
 
 		OnReturnStart = null;
 		OnReturnStart += StartReturn;
+		OnReturnStart += ReturnIsBulletLogic;
 		OnReturnEnd = null;
 		OnReturnEnd += BreakEndRot;
+		OnReturnEnd += UnsetIsBullet;
 
 		OnParalyzeStart = null;
 		OnParalyzeStart += StartParalyze;
@@ -121,9 +128,15 @@ public class VirusStateControl : MonoBehaviour {
 		OnParalyzeEnd += BreakEndParalyze;
 	}
 
+	HurtAndDamage hd;
+	ControlStatus cs;
+
 	// Use this for initialization
 	void Start () {
 		ct = GetComponent<ChaseTarget> ();
+		cs = GetComponent<ControlStatus> ();
+		hd = GetComponent<HurtAndDamage> ();
+
 		if(ct){
 			defaultRotSpeed = ct.rotationSpeed;
 			defaultMoveSpeed = ct.moveSpeed;
@@ -140,7 +153,6 @@ public class VirusStateControl : MonoBehaviour {
 		tp = GetComponent<VirusTargetPicker> ();
 		vpm = transform.parent.GetComponent<VirusPosManager> ();
 
-		ControlStatus cs = GetComponent<ControlStatus> ();
 		if(cs){
 			cs.OnCutByEnemy += StopStateControl;
 			cs.OnCutByPlayer += StopStateControl;
@@ -155,7 +167,6 @@ public class VirusStateControl : MonoBehaviour {
 	VirusPosManager vpm;
 	// logic for switching states
 	void Update () {
-		ControlStatus cs = transform.GetComponent<ControlStatus> ();
 		//ObjectIdentity oi = transform.parent.GetComponent<ObjectIdentity> ();
 
 
@@ -299,8 +310,8 @@ public class VirusStateControl : MonoBehaviour {
 	void StartRot(Transform virusTrans){
 		if(ct != null){
 			ct.enabled = true;
-			ct.rotationSpeed = defaultRotSpeed;
-			ct.moveSpeed = defaultMoveSpeed / 10f;
+			ct.rotationSpeed = defaultRotSpeed * rotRotSpeedFactor;
+			ct.moveSpeed = defaultMoveSpeed * rotMoveSpeedFactor;
 		}
 	}
 
@@ -401,5 +412,20 @@ public class VirusStateControl : MonoBehaviour {
 		}
 	}
 
+	void SetIsBullet(Transform target){
+		hd.isBullet = true;
+	}
+
+	void UnsetIsBullet(Transform target){
+		hd.isBullet = false;
+	}
+
+	void ReturnIsBulletLogic(Transform target){
+		if(cs.controller == Controller.Boss){
+			hd.isBullet = true;
+		} else {
+			hd.isBullet = false;
+		}
+	}
 
 }

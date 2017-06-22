@@ -11,9 +11,17 @@ public class SpriteSwitcher : MonoBehaviour {
 	public Controller defaultController = Controller.Boss;
 
 	SpriteRenderer spRenderer;
+
+	public bool findRendererInParent = false;
+
 	// Use this for initialization
 	void Start () {
-		spRenderer = GetComponent<SpriteRenderer> ();
+		if (findRendererInParent) {
+			spRenderer = transform.parent.GetComponent<SpriteRenderer> ();
+		} else {
+			spRenderer = GetComponent<SpriteRenderer> ();
+		}
+
 		if (spRenderer) {
 			switch (defaultController) {
 			case Controller.Boss:
@@ -44,7 +52,7 @@ public class SpriteSwitcher : MonoBehaviour {
 	}
 
 	public void SpriteToBoss(Transform virusTrans){
-		spRenderer = virusTrans.GetComponent<SpriteRenderer> ();
+		//spRenderer = virusTrans.GetComponent<SpriteRenderer> ();
 //		Debug.Log ("Changing Sprite to Boss");
 		if(spRenderer && BossControlSprite){
 			spRenderer.sprite = BossControlSprite;
@@ -52,7 +60,7 @@ public class SpriteSwitcher : MonoBehaviour {
 	}
 
 	public void SpriteToHacker(Transform virusTrans){
-		spRenderer = virusTrans.GetComponent<SpriteRenderer> ();
+		//spRenderer = virusTrans.GetComponent<SpriteRenderer> ();
 //		Debug.Log ("Changing Sprite to hacker");
 		if(spRenderer && HackerControlSprite){
 			spRenderer.sprite = HackerControlSprite;
@@ -60,7 +68,7 @@ public class SpriteSwitcher : MonoBehaviour {
 	}
 
 	public void SpriteToNone(Transform virusTrans){
-		spRenderer = virusTrans.GetComponent<SpriteRenderer> ();
+		//spRenderer = virusTrans.GetComponent<SpriteRenderer> ();
 //		Debug.Log ("Changing Sprite to none");
 		if(spRenderer && NoneControlSprite){
 			spRenderer.sprite = NoneControlSprite;

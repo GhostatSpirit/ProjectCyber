@@ -33,7 +33,7 @@ public class DartSkill : MonoBehaviour {
 	float newColliderWidth;
 
 	// how much energy will one dart consume?
-	float energyConsume = 10f;
+	public float energyConsume = 10f;
 	PlayerEnergy energySys;
 
 	bool coolDown = true;
@@ -45,6 +45,7 @@ public class DartSkill : MonoBehaviour {
 	LineCut linecut;
 	// HeathSys class, enabling immune when darting
 	HealthSystem healthSys;
+	HurtAndDamage hd;
 	public float extraImmuneTime = 0.5f;
 
     // add for charging dart
@@ -62,6 +63,7 @@ public class DartSkill : MonoBehaviour {
 
 		linecut = GetComponent<LineCut> ();
 		healthSys = GetComponent<HealthSystem>();
+		hd = GetComponent<HurtAndDamage> ();
 	}
 	
 	// Update is called once per frame
@@ -88,7 +90,9 @@ public class DartSkill : MonoBehaviour {
             // CAUTION: starting the darting skill
 
             //ye added DartSound
-            GetComponent<DartSound>().StartDart();
+			if (GetComponent<DartSound> ()) {
+				GetComponent<DartSound> ().StartDart ();
+			}
 
 
             darting = true;
@@ -115,6 +119,10 @@ public class DartSkill : MonoBehaviour {
 			if(healthSys){
 				healthSys.StartImmune();
 				healthSys.StartHarmless ();
+			}
+
+			if(hd){
+				hd.canHurtOther = false;
 			}
 		}
 
@@ -151,6 +159,7 @@ public class DartSkill : MonoBehaviour {
 
 			// end the immune buff 
 			Invoke ("EndImmune", extraImmuneTime);
+
 		}
 
 	}
@@ -185,14 +194,14 @@ public class DartSkill : MonoBehaviour {
         dartDuration = MinDuration;
 	}
 
-	void OnCollisionEnter2D(Collision2D coll){
-		if(coll.gameObject.tag == "AIEnemy" && darting){
-			// let the enemy die
-			coll.gameObject.GetComponent<DeathHandler> ().LetDead ();
-			// add the kill count by one
-			killCount++;
-		}
-
-	}
+//	void OnCollisionEnter2D(Collision2D coll){
+//		if(coll.gameObject.tag == "AIEnemy" && darting){
+//			// let the enemy die
+//			coll.gameObject.GetComponent<DeathHandler> ().LetDead ();
+//			// add the kill count by one
+//			killCount++;
+//		}
+//
+//	}
 
 }
