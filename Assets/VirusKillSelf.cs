@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class VirusKillSelf : MonoBehaviour {
-	HealthSystem hs;
+//	HealthSystem hs;
 
 	void Start(){
-		hs = GetComponent<HealthSystem>();
+//		hs = GetComponent<HealthSystem>();
 	}
 
 	// Use this for initialization

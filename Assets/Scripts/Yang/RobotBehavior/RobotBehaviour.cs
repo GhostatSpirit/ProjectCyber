@@ -34,7 +34,7 @@ public class RobotBehaviour : MonoBehaviour {
 		cs.OnCutByPlayer += SetLineCut;
 
 		cs.OnLinkedByPlayer += DisableLine;
-		cs.OnLinkedByPlayer += SetBulletHit;
+		cs.OnLinkedByPlayer += SetInstantDead;
 
 		cs.OnLinkedByEnemy += EnableLine;
 	}
@@ -43,8 +43,8 @@ public class RobotBehaviour : MonoBehaviour {
 		animator.SetTrigger ("lineCut");
 	}
 
-	void SetBulletHit(Transform objTrans){
-		animator.SetTrigger ("hackerBulletHit");
+	void SetInstantDead(Transform objTrans){
+		animator.GetComponent<HealthSystem> ().InstantDead ();
 	}
 
 	void DisableLine(Transform objTrans){

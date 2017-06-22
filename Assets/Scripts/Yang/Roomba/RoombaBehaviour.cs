@@ -297,6 +297,21 @@ public class RoombaBehaviour : MonoBehaviour {
 		checkCollision = false;
 	}
 
+	void OnCollisionStay2D(Collision2D coll){
+		if(!checkCollision){
+			return;
+		}
+		// check if the colliding object is in the ignored list
+		ObjectIdentity oi = coll.collider.GetComponentInChildren<ObjectIdentity> ();
+		if (oi && ignoredTypes.Contains (oi.objType)){
+			return;
+		}
+		// if not, send a explode trigger to animator
+		animator.SetTrigger ("explode");
+		Debug.Log ("explode set");
+		checkCollision = false;
+	}
+
 
 	public Vector3 GetLaserContact(Vector3 start, Vector3 end, LayerMask mask){
 		ContactFilter2D filter = new ContactFilter2D ();
