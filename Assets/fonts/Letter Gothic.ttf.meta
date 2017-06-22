@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 5f0ed3e17f640d945a7ce8cb5078e4b6
+timeCreated: 1498130822
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Letter Gothic
+  fontNames:
+  - Letter Gothic
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -5,14 +5,14 @@ using UnityEngine;
 public class FinalCheck : MonoBehaviour {
 
     public GameObject boss;
-    GameObject portal;
+    GameObject finalObeject;
     HealthSystem bossHS;
     public float showTime;
 
 	// Use this for initialization
 	void Start () {
-        portal = transform.GetChild(0).gameObject;
-        portal.SetActive(false);
+        finalObeject = transform.GetChild(0).gameObject;
+        finalObeject.SetActive(false);
         bossHS = boss.GetComponent<HealthSystem>();
 		bossHS.OnObjectDead += portalable;
         
@@ -24,18 +24,19 @@ public class FinalCheck : MonoBehaviour {
 	}
 
     Coroutine routine;
+
     void portalable(Transform trans )
     {
        if(routine == null)
         {
-            routine = StartCoroutine(portalIE());
+            routine = StartCoroutine(finalObejectIE());
         }
     }
 
-    IEnumerator portalIE()
+    IEnumerator finalObejectIE()
     {
         yield return new WaitForSeconds(showTime);
-        portal.SetActive(true);
+        finalObeject.SetActive(true);
     }
     
      
