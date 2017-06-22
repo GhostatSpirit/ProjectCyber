@@ -21,7 +21,7 @@ public class HackerFieldControl : MonoBehaviour {
 		// update input device every frame
 		myInputDevice = GetComponentInParent<DeviceReceiver>().GetDevice();
 
-		Debug.Log (this.chargeCanceled);
+		// Debug.Log (this.chargeCanceled);
 	}
 
 	public bool wasButtonPressed{
