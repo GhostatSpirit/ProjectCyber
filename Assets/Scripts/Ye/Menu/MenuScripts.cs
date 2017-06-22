@@ -17,6 +17,8 @@ public class MenuScripts : MonoBehaviour {
 
     public GameObject eventSys;
 
+    // public AudioSource audioSource;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -29,6 +31,12 @@ public class MenuScripts : MonoBehaviour {
 
     public void ChangeScene(string sceneName)
     {
+        StartCoroutine(delayedForChangeScene());
+    }
+
+    IEnumerator delayedForChangeScene()
+    {
+        yield return new WaitForSeconds(1f);
         SceneManager.LoadScene(sceneName);
     }
 
@@ -49,6 +57,13 @@ public class MenuScripts : MonoBehaviour {
         yield return new WaitForSeconds(0.1f);
         hacker.GetComponent<PlayerControl>().canControl = true;
         ai.GetComponent<PlayerControl>().canControl = true;
+    }
+
+    public void ButtonSound(AudioSource audioSource)
+    {
+        // audioSource = GetComponent<AudioSource>();
+        audioSource.Play();
+        // DontDestroyOnLoad(gameObject);
     }
 
 }

@@ -29,10 +29,12 @@ public class FinalDialogueSystem : MonoBehaviour {
     InputDevice device0;
     InputDevice device1;
 
+    AudioSource audioSource;
 
 
 	// Use this for initialization
 	void Start () {
+        audioSource = GetComponent<AudioSource>();
 		if(dialogues == null)
         {
             dialogues = new Image[0];
@@ -69,6 +71,7 @@ public class FinalDialogueSystem : MonoBehaviour {
             continuePrompt.enabled = true;
 
             yield return new WaitUntil(() => buttonPressed == true);
+            audioSource.Play();
             continuePrompt.enabled = false;
 
             tempImage.DOFade(0f, switchDelay);
