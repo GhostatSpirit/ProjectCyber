@@ -7,7 +7,7 @@ using InControl;
 
 public class MenuScripts : MonoBehaviour {
 
-    public string sceneName;
+    // public string sceneName;
 
     public GameObject menu;
 
@@ -31,10 +31,10 @@ public class MenuScripts : MonoBehaviour {
 
     public void ChangeScene(string sceneName)
     {
-        StartCoroutine(delayedForChangeScene());
+        StartCoroutine(delayedForChangeScene(sceneName));
     }
 
-    IEnumerator delayedForChangeScene()
+    IEnumerator delayedForChangeScene(string sceneName)
     {
         yield return new WaitForSecondsRealtime(0.5f);
         Time.timeScale = 1f;
