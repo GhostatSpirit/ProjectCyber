@@ -88,12 +88,17 @@ public class ExplosionDamage : MonoBehaviour {
 //						Debug.Log (damage);
 						HealthSystem hs = coll.transform.GetComponent<HealthSystem> ();
 						if(hs){
-							hs.Damage (damage);
+							if(hs.hasImmunuePeriod)
+								hs.Damage (damage);
+							else{
+								hs.Damage (damage * 60f * Time.fixedDeltaTime);
+							}
 						}
 					}
 				}
 			}
 		}
+
 	}
 
 	// check if there is a vison blocker between the target and this object

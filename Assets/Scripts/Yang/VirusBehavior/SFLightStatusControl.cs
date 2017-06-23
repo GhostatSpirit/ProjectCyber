@@ -8,11 +8,11 @@ public class SFLightStatusControl : MonoBehaviour {
 	public Color hackerColor;
 
 	ControlStatus cs;
-	SFLight light;
+	SFLight lightsf;
 	// Use this for initialization
 	void Start () {
 		cs = GetComponentInParent<ControlStatus> ();
-		light = GetComponent<SFLight> ();
+		lightsf = GetComponent<SFLight> ();
 
 		if(cs){
 			cs.OnCutByEnemy += TurnOffLight;
@@ -27,19 +27,19 @@ public class SFLightStatusControl : MonoBehaviour {
 	}
 
 	public void SetBossColor(Transform trans){
-		light.color = bossColor;
+		lightsf.color = bossColor;
 	}
 
 	public void SetHackerColor(Transform trans){
-		light.color = hackerColor;
+		lightsf.color = hackerColor;
 	}
 
 	public void TurnOnLight(Transform trans){
-		light.enabled = true;
+		lightsf.enabled = true;
 	}
 
 	public void TurnOffLight(Transform trans){
-		light.enabled = false;
+		lightsf.enabled = false;
 	}
 
 	// Update is called once per frame

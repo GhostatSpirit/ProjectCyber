@@ -113,6 +113,7 @@ public class EnterRoomController : MonoBehaviour {
 
 
 	void FixedUpdate(){
+		Debug.Log (Time.fixedDeltaTime);
 		if(!hackerCollider || !aiCollider || !roomTrigger){
 			return;
 		}
