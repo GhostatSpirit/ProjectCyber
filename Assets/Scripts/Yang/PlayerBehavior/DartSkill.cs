@@ -46,6 +46,8 @@ public class DartSkill : MonoBehaviour {
 	// HeathSys class, enabling immune when darting
 	HealthSystem healthSys;
 	HurtAndDamage hd;
+	PlayerMovement movement;
+
 	public float extraImmuneTime = 0.5f;
 
     // add for charging dart
@@ -64,6 +66,8 @@ public class DartSkill : MonoBehaviour {
 		linecut = GetComponent<LineCut> ();
 		healthSys = GetComponent<HealthSystem>();
 		hd = GetComponent<HurtAndDamage> ();
+
+		movement = GetComponent<PlayerMovement> ();
 	}
 	
 	// Update is called once per frame
@@ -107,7 +111,10 @@ public class DartSkill : MonoBehaviour {
 			}
 
 			// get the dart Direction
-			dartDirection = myRigidbody.velocity.normalized;
+			// dartDirection = myRigidbody.velocity.normalized;
+			dartDirection = movement.faceDirection.normalized;
+
+
 			// reset the timer
 			timer = 0f;
 			// amplify the size of the collider

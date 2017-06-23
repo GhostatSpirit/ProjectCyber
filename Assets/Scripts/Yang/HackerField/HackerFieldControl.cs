@@ -21,6 +21,7 @@ public class HackerFieldControl : MonoBehaviour {
 
 	PlayerMovement playerMove;
 	PlayerEnergy playerEnergy;
+	AudioSource audioS;
 	//HackerMovementAnim moveAnim;
 
 	// Use this for initialization
@@ -30,6 +31,7 @@ public class HackerFieldControl : MonoBehaviour {
 		playerMove = GetComponentInParent<PlayerMovement> ();
 		oldSpeedFactor = playerMove.moveSpeedFactor;
 		playerEnergy = GetComponentInParent<PlayerEnergy> ();
+		audioS = GetComponent<AudioSource> ();
 		// moveAnim = GetComponentInParent<HackerMovementAnim> ();
 
 	}
@@ -93,5 +95,21 @@ public class HackerFieldControl : MonoBehaviour {
 
 	public bool ConsumeEnergy(){
 		return playerEnergy.UseEnergy (energyConsume * Time.deltaTime);
+	}
+
+	public void PlayChargeSound(){
+		audioS.Play ();
+	}
+
+	public void StopChargeSound(){
+		audioS.Stop ();
+	}
+
+	public void PlayForward(){
+		audioS.pitch = 1f;
+	}
+
+	public void PlayBackward(){
+		audioS.pitch = -0.75f;
 	}
 }

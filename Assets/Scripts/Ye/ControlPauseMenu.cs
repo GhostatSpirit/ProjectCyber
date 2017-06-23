@@ -66,7 +66,7 @@ public class ControlPauseMenu : MonoBehaviour {
                 pauseMenu.SetActive(false);
                 //EventSys.GetComponent<StandaloneInputModule>().enabled = true;
                 EventSys.GetComponent<InControlInputModule>().enabled = false;
-                // EventSys.GetComponent<InputModuleActionAdapter>();
+				EventSys.GetComponent<InputModuleActionAdapter>().enabled = false;
                 Time.timeScale = 1;
                 
 				TurnOnControl ();
@@ -79,6 +79,7 @@ public class ControlPauseMenu : MonoBehaviour {
                 // Debug.Log("pause start");
                 //EventSys.GetComponent<StandaloneInputModule>().enabled = false;
                 EventSys.GetComponent<InControlInputModule>().enabled = true;
+				EventSys.GetComponent<InputModuleActionAdapter>().enabled = true;
                 Time.timeScale = 0;
 
 				TurnOffControl ();

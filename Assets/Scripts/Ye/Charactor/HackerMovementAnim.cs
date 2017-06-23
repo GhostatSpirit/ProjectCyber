@@ -162,7 +162,7 @@ public class HackerMovementAnim: MonoBehaviour {
 		if (vec.magnitude == 0f)
 		{
 			Debug.Log("Warning: vec.magnitude == 0f");
-			return Direction.RIGHT;
+			return Direction.DOWN;
 		}
 
 		Vector2 rightVector = new Vector2(1f, 0f);

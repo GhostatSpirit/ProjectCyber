@@ -7,6 +7,8 @@ public class VirusManager : MonoBehaviour {
 	public GameObject virusPrefab;
 	public Transform hacker;
 
+
+
 	// the amount of virus that would be respawned at one time
 	public int respawnCount = 4;
 
@@ -52,9 +54,11 @@ public class VirusManager : MonoBehaviour {
 	public Transform[] targets;
 
 	FieldOfView fov;
+	HealthSystem hs;
 	// Use this for initialization
 	void Start () {
 		fov = GetComponent<FieldOfView> ();
+		hs = GetComponentInParent<HealthSystem> ();
 
 		targetLastPos = transform.position + fov.facing * fov.radius;
 
@@ -126,6 +130,10 @@ public class VirusManager : MonoBehaviour {
 
 	// Respawn the virus around a circle with the radius of respawnRadius
 	void Respawn(){
+		if(hs && hs.IsDead()){
+			return;
+		}
+
 		for(int i = 0; i < respawnCount; ++i){
 			GameObject newVirus = 
 				Instantiate (virusPrefab, transform.position, transform.rotation);
