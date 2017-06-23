@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Com.LuisPedroFonseca.ProCamera2D;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 [HideInInspector]public enum BrainStatus { active, negative };
 
@@ -13,6 +14,8 @@ public class FinalBrain : MonoBehaviour {
     public GameObject Hacker;
     public int targetSceneNum = 2;
     int counter = 1;
+
+	public AudioSource bgmSource;
 
     // Use this for initialization
     
@@ -45,6 +48,10 @@ public class FinalBrain : MonoBehaviour {
 
         // camera exit
         transFX.TransitionExit();
+
+		if(bgmSource){
+			bgmSource.DOFade (0f, 1f);
+		}
 
         // wait for transition
         yield return new WaitForSeconds(1f);
