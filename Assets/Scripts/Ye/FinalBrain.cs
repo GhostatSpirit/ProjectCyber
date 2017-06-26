@@ -13,13 +13,15 @@ public class FinalBrain : MonoBehaviour {
     public GameObject AI;
     public GameObject Hacker;
     public int targetSceneNum = 2;
-    int counter = 1;
+
+	bool started = false;
 
 	public AudioSource bgmSource;
 
     // Use this for initialization
     
     [HideInInspector]public BrainStatus BS = BrainStatus.negative;
+
 
     ProCamera2DTransitionsFX transFX;
 
@@ -30,15 +32,17 @@ public class FinalBrain : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         transFX = cam.GetComponent<ProCamera2DTransitionsFX>();
-        if ( BS == BrainStatus.active && counter == 1)
+		if ( started == false && BS == BrainStatus.active )
         {
-            StartCoroutine(BrainAction(transFX));
+//            SceneManager.LoadScene("End");
+			StartCoroutine (BrainAction (transFX));
+            started = true;
+            this.enabled = false;
         }
 	}
 
     IEnumerator BrainAction(ProCamera2DTransitionsFX transFX)
     {
-        counter++;
         // AI and Hacker can't move when transition start
         AI.GetComponent<PlayerControl>().canControl = false;
         Hacker.GetComponent<PlayerControl>().canControl = false;
@@ -49,9 +53,9 @@ public class FinalBrain : MonoBehaviour {
         // camera exit
         transFX.TransitionExit();
 
-		if(bgmSource){
-			bgmSource.DOFade (0f, 1f);
-		}
+//		if(bgmSource){
+//			bgmSource.DOFade (0f, 1f);
+//		}
 
         // wait for transition
         yield return new WaitForSeconds(1f);

@@ -137,8 +137,16 @@ public class WallTransparencyAlt : MonoBehaviour {
         if (setTransparent)
         {
             int i = 0;
+			if(wallMesh == null){
+				return;
+			}
+
             foreach (MeshRenderer mesh in wallMesh)
             {
+				if(mesh == null){
+					continue;
+				}
+
 				Color newColor = new Color();
 
 				if (mesh.material.HasProperty ("_Color")) {
@@ -147,7 +155,7 @@ public class WallTransparencyAlt : MonoBehaviour {
 					newColor = mesh.material.GetColor("_Tint");
 				}
 
-                newColor.a = defaultOpacity[i];
+                newColor.a = 1f;
 				if (mesh.material.HasProperty ("_Color")) {
 					mesh.material.color = newColor;
 				} else if(mesh.material.HasProperty ("_Tint")){
